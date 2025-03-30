@@ -6,3 +6,4 @@ django-crispy-forms==2.3
 psycopg
 psycopg-binary
 gunicorn
+faker
