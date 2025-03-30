@@ -60,6 +60,8 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+**/staticfiles/
+**/mediafiles/
 
 # Flask stuff:
 instance/
@@ -175,3 +177,15 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# If you are using PyCharm # 
+# User-specific stuff
+.idea
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Project
+**/mock/
