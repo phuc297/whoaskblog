@@ -12,88 +12,14 @@
           <p class="text-xl text-gray-600">Manage your activities, explore categories, and engage with the community!</p>
           <div class="flex justify-center space-x-4 mt-8">
             <a href="/profile/" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600">View Profile</a>
-            <a href="{% url 'logout' %}" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600">Logout</a>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600">Logout</button>
+            </form>
+
           </div>
         </div>
 
-        <!-- Forum Section -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <h2 class="text-2xl font-bold mb-4">Trending Posts</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">How to optimize Django performance?</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">user123</span> on Jan 5, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">I'm looking for best practices to improve the performance of my Django application...</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 12</span>
-                <span class="text-gray-500 text-xs">💬 5 comments</span>
-                <span class="text-blue-500 bg-blue-100 px-2 py-1 rounded text-xs">#Django</span>
-              </div>
-            </div>
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">What's new in Python 3.11?</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">pythonista</span> on Jan 3, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">Python 3.11 has some exciting new features and performance improvements...</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 8</span>
-                <span class="text-gray-500 text-xs">💬 3 comments</span>
-                <span class="text-yellow-500 bg-yellow-100 px-2 py-1 rounded text-xs">#Python</span>
-              </div>
-            </div>
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">Best frontend frameworks in 2025?</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">devguru</span> on Jan 1, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">I'm curious about which frontend frameworks are gaining popularity this year...</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 15</span>
-                <span class="text-gray-500 text-xs">💬 7 comments</span>
-                <span class="text-purple-500 bg-purple-100 px-2 py-1 rounded text-xs">#Frontend</span>
-              </div>
-            </div>
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">Is AI going to replace developers?</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">techguru</span> on Jan 7, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">With the rise of AI tools, what does the future hold for software developers?</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 20</span>
-                <span class="text-gray-500 text-xs">💬 10 comments</span>
-                <span class="text-red-500 bg-red-100 px-2 py-1 rounded text-xs">#AI</span>
-              </div>
-            </div>
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">Top 10 VSCode extensions in 2025</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">coderlife</span> on Jan 6, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">Here are the must-have extensions for efficient coding in VSCode...</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 18</span>
-                <span class="text-gray-500 text-xs">💬 8 comments</span>
-                <span class="text-green-500 bg-green-100 px-2 py-1 rounded text-xs">#VSCode</span>
-              </div>
-            </div>
-            <div class="p-3 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105 cursor-pointer">
-              <h3 class="text-sm font-semibold mb-1">Cybersecurity trends to watch in 2025</h3>
-              <p class="text-gray-600 text-xs">
-                Posted by <span class="font-medium">securitypro</span> on Jan 2, 2025
-              </p>
-              <p class="mt-1 text-gray-700 text-xs">Stay updated with the latest security challenges and best practices...</p>
-              <div class="flex justify-between items-center mt-2 border-t pt-2">
-                <span class="text-green-500 text-xs">🔼 25</span>
-                <span class="text-gray-500 text-xs">💬 15 comments</span>
-                <span class="text-blue-500 bg-blue-100 px-2 py-1 rounded text-xs">#Security</span>
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- Latest Posts Section -->
         <div class="bg-white p-6 mt-8 rounded-lg shadow-md mb-6">
           <h2 class="text-2xl font-bold mb-4">Latest Posts</h2>
@@ -104,12 +30,14 @@
             {% for post in posts %}
               <div class="flex items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform">
                 <div class="flex-shrink-0">
-                  <a href="/posts/{{ post.id }}"><img src="https://loremflickr.com/200/200?random={{ post.id }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer" /></a>
+                  <a href="/posts/{{ post.id }}"><img src="https://loremflickr.com/200/200?random={{ post.id }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer"/></a>
                 </div>
                 <div class="ml-4 flex-1">
-                  <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer">{{ post.title }}</h3></a>
+                  <a href="/posts/{{ post.id }}">
+                    <h3 class="text-lg font-semibold mb-1 cursor-pointer">{{ post.title }}</h3></a>
                   <p class="text-sm text-gray-600">
-                    Posted by <a href="/users/profile/{{ post.author.id }}"><span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span></a> {{ post.created_at }}
+                    Posted by
+                    <a href="{% url 'profile' post.author.profile.id %}"><span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span></a> {{ post.created_at }}
                   </p>
                   <p class="mt-1 text-gray-700 text-sm">{{ post.description|safe }}</p>
                 </div>
