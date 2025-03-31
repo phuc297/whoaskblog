@@ -9,11 +9,7 @@
     <div class="w-full max-w-5xl">
       <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="flex items-center space-x-6 mb-8">
-          <img src="
-
-
-
-              {{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300"/>
+          <img src="{{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300"/>
           <div>
             <h2 class="text-3xl font-bold">{{ profile.user.username }}</h2>
             <p class="text-gray-600">{{ profile.bio|default:'No bio available.' }}</p>
