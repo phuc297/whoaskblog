@@ -9,9 +9,13 @@
     <div class="w-full max-w-5xl">
       <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="flex items-center space-x-6 mb-8">
-          <img src="{{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300" />
+          <img src="
+
+
+
+              {{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300"/>
           <div>
-            <h2 class="text-3xl font-bold">{{ profile.username }}</h2>
+            <h2 class="text-3xl font-bold">{{ profile.user.username }}</h2>
             <p class="text-gray-600">{{ profile.bio|default:'No bio available.' }}</p>
             <div class="mt-3 flex space-x-4">
               <div class="text-center">
@@ -40,10 +44,10 @@
         <!-- Posts Section -->
         <div id="posts" class="mt-6">
           <h2 class="text-2xl font-bold mb-4">User Posts</h2>
-          {% if user.posts %}
+          {% if posts_list %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {% for post in user.posts %}
-                <div class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform hover:scale-105">
+              {% for post in posts_list %}
+                <div class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg">
                   <h3 class="text-sm font-semibold mb-1">{{ post.title }}</h3>
                   <p class="text-gray-600 text-xs">Posted on {{ post.date }}</p>
                   <p class="mt-1 text-gray-700 text-sm">{{ post.content|truncatewords:15 }}</p>
@@ -62,30 +66,34 @@
         <!-- Followers Section -->
         <div id="followers" class="mt-8">
           <h2 class="text-2xl font-bold mb-4">Followers</h2>
-          {% if user.followers %}
+          {% if user.profile.followers %}
             <ul class="space-y-3">
-              {% for follower in followers_list %}
-                <li class="flex items-center space-x-4">
-                  <img src="{{ follower.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
-                  <span class="font-medium">{{ follower.username }}</span>
-                </li>
+              {% for followers in followers_list %}
+                <a href="{% url 'profile' followers.id %}">
+                  <li class="flex items-center space-x-4">
+                    <img src="{{ followers.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full"/>
+                    <span class="font-semibold">{{ followers.user.username }}</span>
+                  </li>
+                </a>
               {% endfor %}
             </ul>
           {% else %}
-            <p class="text-gray-600">No followers yet.</p>
+            <p class="text-gray-600">Not following anyone yet.</p>
           {% endif %}
         </div>
 
         <!-- Following Section -->
-        <div id="following" class="mt-8">
+        <div id="following" class="mt-8 grid">
           <h2 class="text-2xl font-bold mb-4">Following</h2>
-          {% if user.following %}
+          {% if user.profile.following %}
             <ul class="space-y-3">
               {% for following in following_list %}
-                <li class="flex items-center space-x-4">
-                  <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
-                  <span class="font-medium">{{ following.username }}</span>
-                </li>
+                <a href="{% url 'profile' following.id %}">
+                  <li class="flex items-center space-x-4">
+                    <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full"/>
+                    <span class="font-semibold">{{ following.user.username }}</span>
+                  </li>
+                </a>
               {% endfor %}
             </ul>
           {% else %}
