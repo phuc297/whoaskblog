@@ -1,51 +1,41 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate
-from django.contrib import auth
-from .forms import LoginForm, RegisterForm
+from django.contrib.auth.views import LoginView as LoginBaseView, LogoutView as LogoutBaseView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, FormView
+
+from .forms import RegisterForm
 from .models import Profile
 
 
-def profile_view(request, profile_id):
-    profile = Profile.objects.get(id=profile_id)
-    context = {
-        "profile": profile,
-        "followers_list": profile.followers.all(),
-        "following_list": profile.following.all()
-    }
-    return render(request, "profiles/profile.html", context)
+class ProfileView(DetailView):
+    model = Profile
+    template_name = "users/profile.html"
+    context_object_name = "profile"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["followers_list"] = self.get_object().followers.all()
+        context["following_list"] = self.get_object().following.all()
+        context["posts_list"] = self.get_object().user.posts.all()
+        return context
 
 
-def login_view(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                auth.login(request, user)
-                return redirect('home')
-    else:
-        form = LoginForm()
-    context = {"form": form}
-    return render(request, "users/login.html", context)
+class LoginView(LoginBaseView):
+    template_name = "users/login.html"
+    redirect_authenticated_user = True
 
 
-def logout_view(request):
-    auth.logout(request)
-    return redirect("home")
+class LogoutView(LogoutBaseView):
+    next_page = reverse_lazy("home")
 
 
-def signup_view(request):
-    if request.method == "POST":
-        register_form = RegisterForm(request.POST)
-        if register_form.is_valid():
-            user = register_form.save(True)
-            profile = Profile.objects.create(user=user)
-            profile.set_default_avatar()
-            profile.save()
-            return redirect("home")
-    else:
-        register_form = RegisterForm()
-    context = {"form": register_form}
-    return render(request, "users/signup.html", context)
+class SignupView(FormView):
+    template_name = "users/signup.html"
+    form_class = RegisterForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        user = form.save(commit=True)
+        profile = Profile.objects.create(user=user)
+        profile.set_default_avatar()
+        profile.save()
+        return super().form_valid(form)

@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
-
 import random
+
+from django.contrib.auth.models import User
+from django.db import models
 
 default_avatars = [
     "001-boy.png",
