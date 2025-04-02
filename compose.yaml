@@ -1,10 +1,10 @@
 services:
-  web_dev:
+  web:
     build:
       context: app
       dockerfile: Dockerfile
     # command: ["tail", "-f", "/dev/null"]
-    command: python manage.py runserver 0.0.0.0:8000 
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     volumes:
@@ -14,6 +14,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  node:
+    build:
+      context: app
+      dockerfile: Dockerfile.node
+    command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
+    tty: true
+    volumes:
+      - ./app:/usr/src/app
+
   db:
     image: postgres
     restart: always
@@ -31,4 +41,5 @@ services:
       retries: 5
 volumes:
   db-data:
+
 
