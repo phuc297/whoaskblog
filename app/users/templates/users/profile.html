@@ -9,7 +9,7 @@
     <div class="w-full max-w-5xl">
       <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="flex items-center space-x-6 mb-8">
-          <img src="{{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300"/>
+          <img src="{{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300" />
           <div>
             <h2 class="text-3xl font-bold">{{ profile.user.username }}</h2>
             <p class="text-gray-600">{{ profile.bio|default:'No bio available.' }}</p>
@@ -31,11 +31,24 @@
         </div>
 
         <!-- Tabs Navigation -->
-        <div class="flex space-x-8 border-b pb-2">
-          <a href="#posts" class="text-blue-500 font-semibold hover:underline">Posts</a>
-          <a href="#followers" class="text-gray-600 hover:underline">Followers</a>
-          <a href="#following" class="text-gray-600 hover:underline">Following</a>
-        </div>
+
+        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+          <li class="me-2">
+            <a href="#" aria-current="page" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500">Profile</a>
+          </li>
+          <li class="me-2">
+            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Dashboard</a>
+          </li>
+          <li class="me-2">
+            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Settings</a>
+          </li>
+          <li class="me-2">
+            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Contacts</a>
+          </li>
+          <li>
+            <a class="inline-block p-4 text-gray-400 rounded-t-lg cursor-not-allowed dark:text-gray-500">Disabled</a>
+          </li>
+        </ul>
 
         <!-- Posts Section -->
         <div id="posts" class="mt-6">
@@ -67,7 +80,7 @@
               {% for followers in followers_list %}
                 <a href="{% url 'profile' followers.id %}">
                   <li class="flex items-center space-x-4">
-                    <img src="{{ followers.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full"/>
+                    <img src="{{ followers.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
                     <span class="font-semibold">{{ followers.user.username }}</span>
                   </li>
                 </a>
@@ -86,7 +99,7 @@
               {% for following in following_list %}
                 <a href="{% url 'profile' following.id %}">
                   <li class="flex items-center space-x-4">
-                    <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full"/>
+                    <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
                     <span class="font-semibold">{{ following.user.username }}</span>
                   </li>
                 </a>
