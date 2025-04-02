@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'posts',
     'layout',
     'rest_framework',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -156,7 +157,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Django REST Framework settings
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50
 }
+
+# Configure the compressor
+
+COMPRESS_ROOT = STATIC_ROOT
+
+COMPRESS_ENABLED = True
+
+STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
