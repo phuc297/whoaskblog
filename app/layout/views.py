@@ -10,3 +10,6 @@ def index(request):
         post.description = post.content[:60] + '...'
         post.category_color = post.category.color
     return render(request, 'layout/index.html', context={'posts': posts})
+
+def test(request):
+    return render(request, 'test/test.html')
