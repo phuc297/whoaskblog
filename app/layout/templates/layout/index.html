@@ -1,0 +1,81 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+{% block content %}
+  {% if user.is_authenticated %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+      <div class="w-full max-w-6xl">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl font-extrabold text-gray-800 mb-6">Welcome Back, {{ user.username }}!</h1>
+          <p class="text-xl text-gray-600">Manage your activities, explore categories, and engage with the community!</p>
+          <div class="flex justify-center space-x-4 mt-8">
+            <a href="/profile/" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600">View Profile</a>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600">Logout</button>
+            </form>
+
+          </div>
+        </div>
+
+        <!-- Latest Posts Section -->
+        <div class="bg-white p-6 mt-8 rounded-lg shadow-md mb-6">
+          <h2 class="text-2xl font-bold mb-4">Latest Posts</h2>
+
+          <!-- Post List -->
+          <div class="space-y-4">
+            <!-- Repeat this block for each post -->
+            {% for post in posts %}
+              <div class="flex items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform">
+                <div class="flex-shrink-0">
+                  <a href="/posts/{{ post.id }}"><img src="https://loremflickr.com/200/200?random={{ post.id }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer"/></a>
+                </div>
+                <div class="ml-4 flex-1">
+                  <a href="/posts/{{ post.id }}">
+                    <h3 class="text-lg font-semibold mb-1 cursor-pointer">{{ post.title }}</h3></a>
+                  <p class="text-sm text-gray-600">
+                    Posted by
+                    <a href="{% url 'profile' post.author.profile.id %}"><span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span></a> {{ post.created_at }}
+                  </p>
+                  <p class="mt-1 text-gray-700 text-sm">{{ post.description|safe }}</p>
+                </div>
+                <div class="flex items-center space-x-4 ml-6">
+                  <span class="text-green-500 text-sm">🔼 {{ post.upvotes }}</span>
+                  <span class="text-gray-500 text-sm">💬 {{ post.comments_count }}</span>
+                  <span class="text-{{ post.category_color }}-500 bg-{{ post.category_color }}-100 px-2 py-1 rounded text-sm">#{{ post.category }}</span>
+                </div>
+              </div>
+            {% endfor %}
+            <!-- Repeat Ends -->
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex justify-center mt-8">
+            <nav class="inline-flex space-x-2">
+              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Previous</a>
+              <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-green-500 border rounded hover:bg-green-600">1</a>
+              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">2</a>
+              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">3</a>
+              <span class="px-4 py-2 text-sm font-medium text-gray-500">...</span>
+              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">10</a>
+              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Next</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Welcome to Our Community</h1>
+        <p class="text-lg text-gray-600 mb-8">Your one-stop solution for all your needs. Join us to explore more!</p>
+        <div class="flex justify-center space-x-4">
+          <a href="/users/login/" class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Login</a>
+          <a href="/users/signup/" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600">Register</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
