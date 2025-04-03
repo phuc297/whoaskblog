@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load follow_tag %}
 
 {% block title %}
   User Profile
@@ -32,13 +33,22 @@
                 </div>
               </div>
             </div>
+            <!--  -->
 
-            <div class="following-status">
-              <button class="is-following bg-transparent border border-gray-500 hover:border-green-500 text-xs text-gray-500 hover:text-green-500 font-bold py-2 px-4 mt-4 rounded-full">+ Follow</button>
-              <button class="is-not-following border border-green-500 bg-white-500 hover:border-green-500 text-xs text-green-500 hover:text-green-500 hover:bg-white font-bold py-2 px-4 mt-4 rounded-full">Following</button>
+            <div id="following-status">
+              <!-- if -->
+              {% if user.profile.id != profile.id %}
+                <!--  -->
+                <button id="btn-unfollow" class="{% if user.profile|check_following:profile %}{% else %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
+                <!--  -->
+                <button id="btn-follow" class="{% if user.profile|check_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+                <!--  -->
+              {% endif %}
+              <!-- endif -->
             </div>
+            <script src="{% static 'js/profiles/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" data-token="{{ csrf_token }}"></script>
 
-            <script src="js/profiles/follow.js"></script>
+            <!--  -->
           </div>
         </div>
 
@@ -87,7 +97,7 @@
           {% comment %}Followers-tab{% endcomment %}
           <div class="followers-tab hidden profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
             <h2 class="text-2xl font-bold mb-4">Followers</h2>
-            {% if user.profile.followers %}
+            {% if profile.followers %}
               <ul class="space-y-3">
                 {% for followers in followers_list %}
                   <a href="{% url 'profile' followers.id %}">
@@ -105,7 +115,7 @@
           {% comment %}Following-tab{% endcomment %}
           <div class="following-tab hidden profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
             <h2 class="text-2xl font-bold mb-4">Following</h2>
-            {% if user.profile.following %}
+            {% if profile.following %}
               <ul class="space-y-3">
                 {% for following in following_list %}
                   <a href="{% url 'profile' following.id %}">

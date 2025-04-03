@@ -18,7 +18,6 @@ def post_comment(request, post_id):
         content = request.GET.get('comment_content')
         post = get_object_or_404(Post, id=int(request.GET.get('post_id')))
         user = get_object_or_404(User, id=int(request.GET.get('user_id')))
-        print(f"content: {content}, post: {post}, user: {user}")
         if content:
             comment = Comment.objects.create(post=post, user=user, content=content)
             comment.save()
