@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils import dateformat
 from django.views.generic import DetailView
 
@@ -11,6 +11,8 @@ class PostView(DetailView):
     model = Post
     template_name = "posts/post.html"
 
+def post_create(request):
+    return render(request, template_name="posts/create.html")
 
 def post_comment(request, post_id):
     print("post_comment")
