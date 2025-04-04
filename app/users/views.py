@@ -16,9 +16,6 @@ class ProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["followers_list"] = self.get_object().followers.all()
-        context["following_list"] = self.get_object().following.all()
-        context["posts_list"] = self.get_object().user.posts.all()
         return context
 
 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'layout',
     'rest_framework',
     'compressor',
+    'django_quill',
 ]
 
 MIDDLEWARE = [
@@ -83,20 +84,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default': {
-        'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
-        'USER': os.getenv('SQL_USER', 'user'),
-        'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
-        'HOST': os.getenv('SQL_HOST', 'localhost'),
-        'PORT': os.getenv('SQL_PORT', '5432'),
+
+if DEBUG == True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+            'USER': os.getenv('SQL_USER', 'user'),
+            'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+            'HOST': os.getenv('SQL_HOST', 'localhost'),
+            'PORT': os.getenv('SQL_PORT', '5432'),
+        }
+    }
 
 
 # Password validation
@@ -133,8 +139,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder']
 
 # Media files
 
@@ -169,4 +178,44 @@ COMPRESS_ROOT = STATIC_ROOT
 
 COMPRESS_ENABLED = True
 
-STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+STATICFILES_FINDERS += [
+    'compressor.finders.CompressorFinder'
+]
+
+#
+
+QUILL_CONFIGS = {
+    'default': {
+        'theme': 'snow',
+        'modules': {
+            'syntax': True,
+            'toolbar': [
+                [
+                    {'header': []},
+                    {'align': []},
+                    'bold', 'italic', 'underline', 'strike', 'blockquote',
+                    {'color': []},
+                    {'background': ["white"]},
+                ],
+                ['code-block', 'link'],
+                ['clean'],
+                ['link', 'image'],
+            ]
+        }
+    },
+    'title': {
+        'theme': 'snow',
+        'modules': {
+            'syntax': True,
+            'toolbar': [
+                [
+                    {'header': []},
+                    {'align': []},
+                    'bold', 'italic', 'underline', 'strike', 'blockquote',
+                    {'color': []},
+                    {'background': ["white"]},
+                ]
+            ]
+        }
+    }
+}

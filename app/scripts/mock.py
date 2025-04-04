@@ -15,19 +15,19 @@ class Mock:
     def __init__(self, delete=False):
         if delete:
             self.delete_data()
-        self.generate_users()
-        self.create_follower()
+        self.generate_users(2)
+        # self.create_follower()
         self.generate_categories()
-        self.generate_posts()
-        self.generate_comments()
+        self.generate_posts(20)
+        self.generate_comments(5)
 
     def delete_data(self):
         User.objects.all().filter(is_superuser=False).delete()
         Category.objects.all().delete()
 
-    def generate_users(self):
+    def generate_users(self, number):
 
-        for i in range(0, 30):
+        for i in range(0, number):
             mock_user = {
                 "username": fake.unique.user_name(),
                 "password": "1",
@@ -51,33 +51,32 @@ class Mock:
             for follower in random_follower:
                 profile.followers.add(follower)
 
-    def generate_posts(self):
-        n_posts = 20
+    def generate_posts(self, n_posts):
         categories = Category.objects.all()
-        users = User.objects.all().filter(is_superuser=False)
+        profiles = Profile.objects.all()
         for i in range(0, n_posts):
             mock_post = {
-                "author": choice(users),
+                "author": choice(profiles),
                 "title": fake.sentence(randrange(8, 10)),
                 "content": fake.paragraph(200),
-                "category": choice(categories)
+                "category": choice(categories),
+                "upvotes": randrange(0,50)
             }
             post = Post(author=mock_post["author"], title=mock_post["title"],
-                        content=mock_post["content"], category=mock_post["category"])
+                        content=mock_post["content"], category=mock_post["category"], upvotes=mock_post["upvotes"])
             post.save()
 
-    def generate_comments(self):
-        n_comments = 50
+    def generate_comments(self, n_comments):
         posts = Post.objects.all()
-        users = User.objects.all().filter(is_superuser=False)
+        author = Profile.objects.all().filter()
         for i in range(0, n_comments):
             mock_comment = {
                 "post": choice(posts),
-                "user": choice(users),
+                "author": choice(author),
                 "content": fake.sentence(randrange(10, 80))
             }
             comment = Comment(
-                post=mock_comment["post"], user=mock_comment["user"], content=mock_comment["content"])
+                post=mock_comment["post"], author=mock_comment["author"], content=mock_comment["content"])
             comment.save()
 
     def generate_categories(self):
