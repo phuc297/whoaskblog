@@ -1,8 +1,12 @@
+from django.conf import settings
+from django_quill.fields import QuillField
 import random
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
+
+from users.models import Profile
 
 colors = [
     "red",
@@ -37,14 +41,18 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-    title = models.TextField()
-    content = models.TextField()
+    author = models.ForeignKey(
+        Profile, related_name='posts', on_delete=models.CASCADE)
+    title = models.TextField(blank=True)
+    content = QuillField(blank=True)
+    # content = models.TextField(blank=True)
+    description = QuillField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
+    views = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -56,9 +64,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(
-        Post, related_name="comments", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     parent = models.ManyToManyField("self", symmetrical=False, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

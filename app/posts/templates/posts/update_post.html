@@ -1,0 +1,56 @@
+{% extends 'base/create_post.html' %}
+{% load static %}
+{% load add_class %}
+{% load crispy_forms_tags %}
+
+{% load tailwind_filters %}
+
+{% block head %}
+  <title>{{ post.title }}</title>
+  <!-- django-quill-editor Media -->
+  {% include 'django_quill/media.html' %}
+
+  <style>
+    .ql-editor {
+      min-height: 40rem;
+      max-height: 80rem;
+      overflow: scroll;
+    }
+    .ql-toolbar {
+      z-index: 10;
+      background: white;
+    }
+    #id_title {
+      max-height: 8vh;
+    }
+    .div_id_title label {
+      padding: 2rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container w-full md:max-w-5xl mx-auto pt-5">
+    <form id="ql-editor-form" method="POST" class="bg-white">
+      {% csrf_token %}
+      <!--  -->
+      <div>
+        <label for="id_title" class="block text-gray-700 text-sm font-bold mb-4 pd-5">Title</label>
+        {{ form.title|add_class:'textarea leading-normal border-gray-300 bg-white w-full py-2 block text-gray-700 rounded-lg border focus:outline-none px-4 appearance-none' }}
+      </div>
+      <!--  -->
+      <div>
+        <label for="id_category" class="block text-gray-700 text-sm font-bold mb-4 pd-5">Category</label>
+        {{ form.category|add_class:'textarea leading-normal border-gray-300 bg-white w-full py-2 block text-gray-700 rounded-lg border focus:outline-none px-4 appearance-none' }}
+      </div>
+      <!--  -->
+      <div>
+        <label for="id_content" class="block text-gray-700 text-sm font-bold mb-4 pt-5 pd-5">Content</label>
+        {{ form.content }}
+        {% comment %} {{ form|crispy }} {% endcomment %}
+      </div>
+    </form>
+  </div>
+
+  <script src="{% static 'js/layout/header.js' %}"></script>
+{% endblock %}

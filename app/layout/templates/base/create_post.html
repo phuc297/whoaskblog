@@ -6,11 +6,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
-    <title>
-      {% block title %}
-        Title
-      {% endblock %}
-    </title>
+    {% block head %}
+      <title>Title</title>
+    {% endblock %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -19,9 +17,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-white">
     <!-- Navbar -->
-    <nav id="header" class="fixed w-full z-40 top-0">
+    <nav id="header" class="fixed w-full z-40 top-0 bg-white">
       <div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
 
       <div class="w-full md:max-w-4xl mx-auto flex flex-wrap items-center justify-between mt-0 pt-1 pb-2">
@@ -40,19 +38,18 @@
 
         <div class="w-full flex-grow lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-100 md:bg-transparent z-20" id="nav-content">
           <ul class="list-reset lg:flex justify-end flex-1 items-center">
+            <li class="mr-3">
+              <button type="submit" form="ql-editor-form" class="bg-green-500 text-white px-4 py-2 rounded-full font-semibold hover:text-green-500 hover:bg-white cursor-pointer">Publish Post</button>
+            </li>
+            <li class="mr-3">
+              <button class="text-gray-600 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 2a6 6 0 00-6 6v4H3a1 1 0 000 2h14a1 1 0 000-2h-1V8a6 6 0 00-6-6zm-1 16a2 2 0 004 0H9z" />
+                </svg>
+              </button>
+            </li>
             <li>
-              <li class="mr-3">
-                <button class="text-gray-600 hover:text-gray-900">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 2a6 6 0 00-6 6v4H3a1 1 0 000 2h14a1 1 0 000-2h-1V8a6 6 0 00-6-6zm-1 16a2 2 0 004 0H9z" />
-                  </svg>
-                </button>
-              </li>
-              {% if user.is_authenticated %}
-                <a href="{% url 'profile' user.profile.id %}"><img class="h-12 w-12 rounded-full" src="{{ user.profile.avatar.url|default:'/static/default-avatar.png' }}" alt="User Avatar" /></a>
-              {% else %}
-                <a class="button flex items-center justify-center rounded-full bg-green-500 text-white font-semibold px-4 py-2.5 text-body-xs" href="/users/login">ĐĂNG NHẬP</a>
-              {% endif %}
+              <a href="{% url 'profile' user.profile.id %}"><img class="h-12 w-12 rounded-full" src="{{ user.profile.avatar.url|default:'/static/default-avatar.png' }}" alt="User Avatar" /></a>
             </li>
           </ul>
         </div>

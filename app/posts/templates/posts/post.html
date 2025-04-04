@@ -17,33 +17,33 @@
 
       <!-- Author -->
       <div class="flex w-full items-center font-sans px-4 py-12">
-        <a href="{% url 'profile' post.author.profile.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.profile.avatar.url }}" alt="Avatar of Author" /></a>
+        <a href="{% url 'profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
         <div class="flex-1 px-2">
-          <a href="{% url 'profile' post.author.profile.id %}"><p class="font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
+          <a href="{% url 'profile' post.author.id %}"><p class="font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
           <p class="text-sm md:text-base font-normal text-gray-600">Published {{ post.created_at }}</p>
         </div>
         <div class="justify-end">
           <!-- -->
           <div id="following-status">
             <!-- if -->
-            {% if user.profile.id != post.author.profile.id %}
+            {% if user.profile.id != post.author.id %}
               <!--  -->
-              <button id="btn-unfollow" class="{% if user.profile|check_following:post.author.profile %}{% else %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
+              <button id="btn-unfollow" class="{% if user.profile|check_following:post.author %}{% else %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
               <!--  -->
-              <button id="btn-follow" class="{% if user.profile|check_following:post.author.profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+              <button id="btn-follow" class="{% if user.profile|check_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
               <!--  -->
             {% endif %}
             <!-- endif -->
           </div>
           <!-- -->
-          <script src="{% static 'js/posts/follow.js' %}" data-url="{% url 'follow' post.author.profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.profile.id }}" data-token="{{ csrf_token }}"></script>
+          <script src="{% static 'js/posts/follow.js' %}" data-url="{% url 'follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
         </div>
         <!-- -->
       </div>
       <!-- /Author -->
 
       <!-- Post Content -->
-      <div class="py-6">{{ post.content|safe }}</div>
+      <div class="py-6">{{ post.content.html|safe }}</div>
 
       <!-- / Post Content -->
     </div>
@@ -57,12 +57,7 @@
     <div class="text-base md:text-sm text-gray-500 px-4 py-6">
       <h3 class="text-xl font-bold text-gray-900 mb-4">Related Posts</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {% for related_post in related_posts %}
-          <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg">
-            <a href="{% url 'posts:post_detail' related_post.id %}"><h4 class="text-lg font-semibold text-green-500 hover:underline">{{ related_post.title }}</h4></a>
-            <p class="text-sm text-gray-600">Published {{ related_post.created_at }}</p>
-          </div>
-        {% endfor %}
+
       </div>
     </div>
     <!-- /Related Posts -->
@@ -91,7 +86,7 @@
         <div class="comments-section" id="comments-section">
           {% for comment in post.comments.all %}
             <div class="flex mb-6">
-              <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.user.profile.avatar.url }}" alt="Avatar of User" />
+              <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.author.avatar.url }}" alt="Avatar of User" />
               <div class="flex-1">
                 <p class="text-green-600 font-normal">{{ post.author }}</p>
                 <p class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>

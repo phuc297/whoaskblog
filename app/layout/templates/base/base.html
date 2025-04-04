@@ -19,7 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-white">
     <!-- Navbar -->
     <nav id="header" class="fixed w-full z-40 top-0">
       <div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
@@ -38,7 +38,7 @@
           </button>
         </div>
 
-        <div class="w-full flex-grow lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-100 md:bg-transparent z-20" id="nav-content">
+        <div class="w-full flex-grow lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white md:bg-transparent z-20" id="nav-content">
           <ul class="list-reset lg:flex justify-end flex-1 items-center">
             {% if user.is_authenticated %}
               <li class="mr-3">
@@ -52,7 +52,7 @@
                 </div>
               </li>
               <li class="mr-3">
-                <a href="{% url 'posts:post_create' %}" class="bg-green-500 text-gray-100 px-4 py-2 rounded-full font-semibold hover:bg-gray-200 hover:text-green-500">Đăng bài</a>
+                <a href="{% url 'posts:post_create' %}" class="bg-green-500 text-gray-100 px-4 py-2 rounded-full font-semibold hover:bg-gray-200 hover:text-green-500">Create Post</a>
               </li>
               <li class="mr-3">
                 <button class="text-gray-600 hover:text-gray-900">

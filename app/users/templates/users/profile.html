@@ -1,6 +1,8 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% load follow_tag %}
+{% load to_date %}
+{% load string_tags %}
 
 {% block title %}
   User Profile
@@ -39,7 +41,14 @@
               <!-- if -->
               {% if user.profile.id != profile.id %}
                 <!--  -->
-                <button id="btn-unfollow" class="{% if user.profile|check_following:profile %}{% else %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
+                <button id="btn-unfollow"
+                  class="{% if user.profile|check_following:profile %}
+
+                  {% else %}
+                    hidden
+                  {% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">
+                  Following
+                </button>
                 <!--  -->
                 <button id="btn-follow" class="{% if user.profile|check_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
                 <!--  -->
@@ -76,20 +85,40 @@
           {% comment %}Posts-tab{% endcomment %}
           <div class="created-posts-tab profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
             <h2 class="text-2xl font-bold mb-4">User Posts</h2>
-            {% if posts_list %}
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for post in posts_list %}
-                  <div class="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg">
-                    <h3 class="text-sm font-semibold mb-1">{{ post.title }}</h3>
-                    <p class="text-gray-600 text-xs">Posted on {{ post.date }}</p>
-                    <p class="mt-1 text-gray-700 text-sm">{{ post.content|truncatewords:15 }}</p>
-                    <div class="flex justify-between items-center mt-2 border-t pt-2">
-                      <span class="text-green-500 text-xs">🔼 {{ post.upvotes }}</span>
-                      <span class="text-gray-500 text-xs">💬 {{ post.comments_count }} comments</span>
+            {% if profile.posts %}
+              <!--  -->
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {% for post in profile.posts.all %}
+                  <div>
+                    <div class="max-w-xs h-96 bg-whiterounded-lg shadow-sm flex flex-col">
+                      <a href="{% url 'posts:post_view' post.id %}"><img class="rounded-t-lg" src="https://images.spiderum.com/sp-thumbnails/240281e00f8011f09324374faab789d8.png" alt="" /></a>
+                      <div class="p-5 flex flex-col justify-between flex-1">
+                        <div>
+                          <!-- Title -->
+                          <a href="{% url 'posts:post_view' post.id %}"><h1 class="mb-2 font-semibold tracking-tight cursor-pointer">{{ post.title }}</h1></a>
+                          <!-- Description -->
+                          <p class="text-sm italic text-gray-700">{{ post.content.plain|cut }}</p>
+                          <!-- Post info -->
+                        </div>
+                        <div class="post-info flex items-center justify-between">
+                          <p class="text-xs italic text-gray-500 space-x-2">{{ post.created_at|to_date }}</p>
+                          <div class="flex items-center space-x-4">
+                            <!-- Upvote/Downvote -->
+                            <div class="flex items-center space-x-2">
+                              <span class="text-gray-500 text-xs">{{ post.upvotes }} upvotes</span>
+                            </div>
+                            <!-- Views -->
+                            <div class="flex items-center text-gray-500 text-xs">
+                              <span>{{ post.views }} views</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 {% endfor %}
               </div>
+              <!--  -->
             {% else %}
               <p class="text-gray-600">No posts available.</p>
             {% endif %}
@@ -99,11 +128,11 @@
             <h2 class="text-2xl font-bold mb-4">Followers</h2>
             {% if profile.followers %}
               <ul class="space-y-3">
-                {% for followers in followers_list %}
-                  <a href="{% url 'profile' followers.id %}">
+                {% for follower in profile.followers.all %}
+                  <a href="{% url 'profile' follower.id %}">
                     <li class="flex items-center space-x-4">
-                      <img src="{{ followers.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
-                      <span class="font-semibold">{{ followers.user.username }}</span>
+                      <img src="{{ follower.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
+                      <span class="font-semibold">{{ follower.user.username }}</span>
                     </li>
                   </a>
                 {% endfor %}
@@ -117,7 +146,7 @@
             <h2 class="text-2xl font-bold mb-4">Following</h2>
             {% if profile.following %}
               <ul class="space-y-3">
-                {% for following in following_list %}
+                {% for following in profile.following.all %}
                   <a href="{% url 'profile' following.id %}">
                     <li class="flex items-center space-x-4">
                       <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
