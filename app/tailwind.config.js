@@ -1,18 +1,47 @@
+// module.exports = {
+//     purge: {
+//         enabled: false,
+//         content: [
+//             './**/templates/*.html',
+//             './**/templates/**/*.html',
+//             './**/*.js',
+//             './**/*.jsx',
+//             './**/*.ts',
+//             './**/*.tsx',
+//         ]
+//     },
+//     theme: {
+//         extend: {
+//             height: {
+//                 '64': '16rem',
+//                 '80': '20rem',
+//             },
+//             borderRadius: {
+//                 '4xl': '2rem',
+//             }
+//         },
+//     },
+//     variants: {},
+//     plugins: [],
+// }
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  future: {
-      removeDeprecatedGapUtilities: true,
-      purgeLayersByDefault: true,
-  },
-  purge: {
-      enabled: false, //true for production build
-      content: [
-          '../**/templates/*.html',
-          '../**/templates/**/*.html'
-      ]
-  },
-  theme: {
-      extend: {},
-  },
-  variants: {},
-  plugins: [],
+    important: true,
+    content: [
+        './**/templates/*.html',
+        './**/templates/**/*.html',
+        './**/*.js',
+        './**/*.jsx',
+        './**/*.ts',
+        './**/*.tsx',],
+    plugins: [],
+    theme: {
+        extend: {
+            height: {
+                '64': '16rem',
+                '80': '20rem',
+            }
+        }
+    }
 }

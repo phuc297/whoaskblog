@@ -1,6 +1,8 @@
 $(document).ready(function () {
   const scriptTag = document.getElementById("comment-script");
   const data = scriptTag.dataset;
+
+
   $('#btn-submit-comment').on("click", function () {
     const txtComment = $('#comment-content').val();
     if (!txtComment.trim()) {
@@ -13,7 +15,7 @@ $(document).ready(function () {
       data: {
         csrfmiddlewaretoken: data.token,
         post_id: data.post_id,
-        user_id: data.user_id,
+        profile_id: data.profile_id,
         comment_content: txtComment,
       },
       success: function (data) {

@@ -1,11 +1,14 @@
 {% extends 'base/base.html' %}
-
+{% load static %}
+{% load to_date %}
+{% load follow_tag %}
+{% load list_tags %}
 {% block title %}
   Home
 {% endblock %}
 {% block content %}
   {% if user.is_authenticated %}
-    <div class="flex items-center justify-center min-h-screen bg-white">
+    <div class="flex items-center justify-center bg-white">
       <div class="w-full max-w-6xl">
         <div class="text-center mb-12">
           <h1 class="text-5xl font-extrabold text-gray-800 mb-6">Welcome Back, {{ user.username }}!</h1>
@@ -16,41 +19,80 @@
               {% csrf_token %}
               <button type="submit" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600">Logout</button>
             </form>
-
           </div>
         </div>
 
         <!-- Latest Posts Section -->
-        <div class="bg-white p-6 mt-8 rounded-lg shadow-md mb-6">
+        <div class="bg-white p-6 mt-8">
           <h2 class="text-2xl font-bold mb-4">Latest Posts</h2>
 
           <!-- Post List -->
-          <div class="space-y-4">
-            <!-- Repeat this block for each post -->
-            {% for post in posts %}
-              <div class="flex items-center p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transform transition-transform">
-                <div class="flex-shrink-0">
-                  <a href="/posts/{{ post.id }}"><img src="https://loremflickr.com/200/200?random={{ post.id }}" alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg cursor-pointer"/></a>
+          <div class="container mx-auto flex mt-6">
+            <!-- Left (Main articles) -->
+            <div class="w-4/6 p-4">
+              {% for post in posts %}
+                <div class="flex items-center border-b border-gray-400 p-8">
+                  <div class="flex-shrink-0">
+                    <a href="/posts/{{ post.id }}"><img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" /></a>
+                  </div>
+                  <div class="ml-4 flex flex-col justify-between flex-1 h-36">
+                    <div>
+                      <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer">{{ post.title }}</h3></a>
+                      <p class="mt-1 text-gray-700 text-sm">{{ post.description|safe }}</p>
+                    </div>
+                    <div class="post-info mt-auto">
+                      <p class="text-sm text-gray-600 flex items-center space-x-2">
+                        <a href="{% url 'profile' post.author.id %}" class="flex items-center space-x-2">
+                          <img src="{{ post.author.avatar.url }}" alt="" class="h-12 w-12 rounded-full" />
+                          <span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span>
+                        </a>
+                        <span>{{ post.created_at|to_date }}</span>
+                        <span class="text-green-500 text-sm">🔼 {{ post.upvotes }}</span>
+                        <span class="text-gray-500 text-sm">💬 {{ post.comments.count }}</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div class="ml-4 flex-1">
-                  <a href="/posts/{{ post.id }}">
-                    <h3 class="text-lg font-semibold mb-1 cursor-pointer">{{ post.title }}</h3></a>
-                  <p class="text-sm text-gray-600">
-                    Posted by
-                    <a href="{% url 'profile' post.author.id %}"><span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span></a> {{ post.created_at }}
-                  </p>
-                  <p class="mt-1 text-gray-700 text-sm">{{ post.description|safe }}</p>
-                </div>
-                <div class="flex items-center space-x-4 ml-6">
-                  <span class="text-green-500 text-sm">🔼 {{ post.upvotes }}</span>
-                  <span class="text-gray-500 text-sm">💬 {{ post.comments.count }}</span>
-                  <span class="text-{{ post.category.color }}-500 bg-{{ post.category.color }}-100 px-2 py-1 rounded text-sm">#{{ post.category }}</span>
-                </div>
-              </div>
-            {% endfor %}
-            <!-- Repeat Ends -->
-          </div>
+              {% endfor %}
+            </div>
 
+            <!-- Right Sidebar -->
+            <aside class="w-2/5 p-4">
+              <div class="bg-white rounded-lg shadow p-4">
+                <h3 class="text-lg font-bold">Top users</h3>
+                <ul class="mt-2">
+                  <li class="py-2">
+                    {% for profile in profiles|head %}
+                      <div class="flex w-full items-center font-sans h-28">
+                        <a href="{% url 'profile' profile.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
+                        <div class="flex-1 px-2">
+                          <a href="{% url 'profile' profile.id %}"><p class="text-base leading-none">{{ profile }}</p></a>
+                          <span class="text-gray-500 text-xs">{{ profile.bio }}</span>
+                        </div>
+                        <div id="following-status">
+                          {% if user.profile.id != profile.id %}
+                            <button id="btn-unfollow"
+                              class="{% if user.profile|check_following:profile %}{% else %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 rounded-full border-green-500 text-xs text-green-500">
+                              Following
+                            </button>
+                            <button id="btn-follow" class="{% if user.profile|check_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+                          {% endif %}
+                        </div>
+
+                        <script src="{% static 'js/posts/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
+                      </div>
+                      <!--  -->
+                    {% endfor %}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-white p-4 rounded-lg shadow mt-4">
+                <h3 class="text-lg font-bold">Writing on WhoAsk</h3>
+                <button class="bg-green-500 text-white w-full py-2 mt-2 rounded-md">Start Writing</button>
+              </div>
+            </aside>
+          </div>
           <!-- Pagination -->
           <div class="flex justify-center mt-8">
             <nav class="inline-flex space-x-2">
