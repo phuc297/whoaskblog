@@ -15,11 +15,11 @@ class Mock:
     def __init__(self, delete=False):
         if delete:
             self.delete_data()
-        self.generate_users(2)
-        # self.create_follower()
+        self.generate_users(30)
+        self.create_follower()
         self.generate_categories()
-        self.generate_posts(20)
-        self.generate_comments(5)
+        self.generate_posts(50)
+        self.generate_comments(200)
 
     def delete_data(self):
         User.objects.all().filter(is_superuser=False).delete()

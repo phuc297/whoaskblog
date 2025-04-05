@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from django.utils import dateformat
 from django.views.generic import DetailView, CreateView, FormView, UpdateView
 
+from users.models import Profile
+
 from .models import Post, Comment
 
 
@@ -48,17 +50,17 @@ def post_comment(request, post_id):
     if request.method == 'GET':
         content = request.GET.get('comment_content')
         post = get_object_or_404(Post, id=int(request.GET.get('post_id')))
-        user = get_object_or_404(User, id=int(request.GET.get('user_id')))
+        profile = get_object_or_404(Profile, id=int(request.GET.get('profile_id')))
         if content:
             comment = Comment.objects.create(
-                post=post, user=user, content=content)
+                post=post, author=profile, content=content)
             comment.save()
             return JsonResponse({
                 "success": True,
-                "username": user.username,
+                "username": profile.user.username,
                 "content": comment.content,
                 "created_at": comment.created_at,
-                "avatar": user.profile.avatar.url if hasattr(user, "profile") else "/static/default-avatar.png"
+                "avatar": profile.avatar.url
             })
     else:
         return JsonResponse({"success": False, "error": "Invalid request"})
