@@ -20,14 +20,14 @@ services:
     #   db:
     #     condition: service_healthy
 
-  node:
-    build:
-      context: app
-      dockerfile: Dockerfile.node
-    command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
-    tty: true
-    volumes:
-      - ./app:/usr/src/app
+  # node:
+  #   build:
+  #     context: app
+  #     dockerfile: Dockerfile.node
+  #   command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
+  #   tty: true
+  #   volumes:
+  #     - ./app:/usr/src/app
 
 #   db:
 #     image: postgres

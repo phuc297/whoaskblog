@@ -53,6 +53,8 @@ class Post(models.Model):
     upvotes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
+    thumbnail = models.ImageField(
+        upload_to='thumnail_post', default='thumnail_post/default.jpg')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -64,7 +66,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField()
     parent = models.ManyToManyField("self", symmetrical=False, blank=True)

@@ -33,7 +33,13 @@
               {% for post in posts %}
                 <div class="flex items-center border-b border-gray-400 p-8">
                   <div class="flex-shrink-0">
-                    <a href="/posts/{{ post.id }}"><img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" /></a>
+                    <a href="/posts/{{ post.id }}">
+                      {% if post.thumbnail %}
+                        <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" />
+                      {% else %}
+                        <img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Default Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" />
+                      {% endif %}
+                    </a>
                   </div>
                   <div class="ml-4 flex flex-col justify-between flex-1 h-36">
                     <div>

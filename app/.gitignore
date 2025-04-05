@@ -138,6 +138,8 @@ dist
 
 **/test/
 test/
+.env
+.env.dev
 
 # Django
 staticfiles/admin/

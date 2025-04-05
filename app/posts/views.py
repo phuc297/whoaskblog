@@ -14,11 +14,11 @@ class CreatePostView(CreateView):
     model = Post
     template_name = "posts/create_post.html"
     success_url = reverse_lazy("home")
-    fields = ['title', 'category', 'content']
+    fields = ['title', 'category', 'content', 'thumbnail']
 
     def form_valid(self, form):
         print('form is valid')
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.profile
         post = form.save(commit=False)
         return super().form_valid(form)
 

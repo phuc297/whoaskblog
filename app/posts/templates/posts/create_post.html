@@ -49,6 +49,12 @@
         {{ form.content }}
         {% comment %} {{ form|crispy }} {% endcomment %}
       </div>
+
+      <div>
+        <label for="id_thumbnail" class="block text-gray-700 text-sm font-bold mb-4 pt-5 pd-5">Thumbnail</label>
+        {{ form.thumbnail }}
+        {% comment %} {{ form|crispy }} {% endcomment %}
+      </div>
     </form>
   </div>
 
