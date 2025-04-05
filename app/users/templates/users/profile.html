@@ -45,7 +45,11 @@
                   class="{% if user.profile|check_following:profile %}
 
                   {% else %}
+                    
+                    
                     hidden
+
+
                   {% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">
                   Following
                 </button>
@@ -90,8 +94,16 @@
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {% for post in profile.posts.all %}
                   <div>
-                    <div class="max-w-xs h-96 bg-whiterounded-lg shadow-sm flex flex-col">
-                      <a href="{% url 'posts:post_view' post.id %}"><img class="rounded-t-lg" src="https://images.spiderum.com/sp-thumbnails/240281e00f8011f09324374faab789d8.png" alt="" /></a>
+                    <div class="max-w-xs bg-whiterounded-lg shadow-sm flex flex-col">
+                      <div>
+                        <a href="{% url 'posts:post_view' post.id %}">
+                          {% if post.thumbnail %}
+                            <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-full h-64 object-cover rounded-lg cursor-pointer" />
+                          {% else %}
+                            <img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Default Thumbnail" class="w-full h-64 object-cover rounded-lg cursor-pointer" />
+                          {% endif %}
+                        </a>
+                      </div>
                       <div class="p-5 flex flex-col justify-between flex-1">
                         <div>
                           <!-- Title -->
