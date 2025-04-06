@@ -47,7 +47,11 @@
                   {% else %}
                     
                     
+                    
+                    
                     hidden
+
+
 
 
                   {% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">
@@ -93,36 +97,34 @@
               <!--  -->
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {% for post in profile.posts.all %}
-                  <div>
-                    <div class="max-w-xs bg-whiterounded-lg shadow-sm flex flex-col">
+                  <div class="max-w-xs bg-whiterounded-lg shadow-sm flex flex-col">
+                    <div>
+                      <a href="{% url 'posts:post_view' post.id %}">
+                        {% if post.thumbnail %}
+                          <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-full h-48 object-cover rounded-lg cursor-pointer" />
+                        {% else %}
+                          <img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Default Thumbnail" class="w-full h-48 object-cover rounded-lg cursor-pointer" />
+                        {% endif %}
+                      </a>
+                    </div>
+                    <div class="p-5 flex flex-col justify-between flex-1">
                       <div>
-                        <a href="{% url 'posts:post_view' post.id %}">
-                          {% if post.thumbnail %}
-                            <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-full h-64 object-cover rounded-lg cursor-pointer" />
-                          {% else %}
-                            <img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Default Thumbnail" class="w-full h-64 object-cover rounded-lg cursor-pointer" />
-                          {% endif %}
-                        </a>
+                        <!-- Title -->
+                        <a href="{% url 'posts:post_view' post.id %}"><h1 class="mb-2 font-semibold tracking-tight cursor-pointer">{{ post.title }}</h1></a>
+                        <!-- Description -->
+                        <p class="text-sm italic text-gray-700">{{ post.content.plain|cut }}</p>
+                        <!-- Post info -->
                       </div>
-                      <div class="p-5 flex flex-col justify-between flex-1">
-                        <div>
-                          <!-- Title -->
-                          <a href="{% url 'posts:post_view' post.id %}"><h1 class="mb-2 font-semibold tracking-tight cursor-pointer">{{ post.title }}</h1></a>
-                          <!-- Description -->
-                          <p class="text-sm italic text-gray-700">{{ post.content.plain|cut }}</p>
-                          <!-- Post info -->
-                        </div>
-                        <div class="post-info flex items-center justify-between">
-                          <p class="text-xs italic text-gray-500 space-x-2">{{ post.created_at|to_date }}</p>
-                          <div class="flex items-center space-x-4">
-                            <!-- Upvote/Downvote -->
-                            <div class="flex items-center space-x-2">
-                              <span class="text-gray-500 text-xs">{{ post.upvotes }} upvotes</span>
-                            </div>
-                            <!-- Views -->
-                            <div class="flex items-center text-gray-500 text-xs">
-                              <span>{{ post.views }} views</span>
-                            </div>
+                      <div class="post-info flex items-center justify-between mt-3">
+                        <p class="text-xs italic text-gray-500 space-x-2">{{ post.created_at|to_date }}</p>
+                        <div class="flex items-center space-x-4">
+                          <!-- Upvote/Downvote -->
+                          <div class="flex items-center space-x-2">
+                            <span class="text-gray-500 text-xs">{{ post.upvotes }} upvotes</span>
+                          </div>
+                          <!-- Views -->
+                          <div class="flex items-center text-gray-500 text-xs">
+                            <span>{{ post.views }} views</span>
                           </div>
                         </div>
                       </div>

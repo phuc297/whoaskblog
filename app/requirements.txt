@@ -10,3 +10,6 @@ gunicorn
 faker
 django-compressor==4.5.1
 django-quill-editor
+channels
+channels[daphne]
+channels_redis

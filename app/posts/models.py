@@ -54,7 +54,7 @@ class Post(models.Model):
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
     thumbnail = models.ImageField(
-        upload_to='thumnail_post', default='thumnail_post/default.jpg')
+        upload_to='thumnail_post', default='thumnail_post/defaultthumbnail.jpg')
 
     def save(self, *args, **kwargs):
         if not self.slug:

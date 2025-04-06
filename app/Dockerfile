@@ -5,14 +5,16 @@ ARG PYTHON_VERSION=3.12
 # Stage 1
 #
 
-# FROM node:21 AS node-build
+# FROM node:21-slim AS node-build
 
-# RUN mkdir -p /node_build
-# WORKDIR /node_build
+# RUN mkdir -p /usr/src/app
+# WORKDIR /usr/src/app
 
-# COPY . .
+# COPY package*.json .
+# RUN npm install
 # RUN npm install tailwindcss @tailwindcss/cli
 # COPY . .
+# RUN npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css
 
 #
 # Stage 2
@@ -28,6 +30,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 RUN pip install --upgrade pip
+
+COPY requirements.txt .
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
