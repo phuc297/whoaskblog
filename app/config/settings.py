@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4-lj!uot=fs3_y&gy2*3ekl$ok*2a_195&!qh4hgk+uyvne)*d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv('DEBUG', 0))
+DEBUG = bool(int(os.getenv('DEBUG_MODE', '0')))
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 
@@ -33,6 +33,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'compressor',
     'django_quill',
+    'chat'
 ]
 
 MIDDLEWARE = [
@@ -79,30 +81,30 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+ASGI_APPLICATION = 'config.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("REDIS_CHANNEL_HOST", "redis://localhost:6379")],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-if DEBUG == True:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('SQL_USER', 'user'),
+        'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+        'HOST': os.getenv('SQL_HOST', 'localhost'),
+        'PORT': os.getenv('SQL_PORT', '5432'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
-            'USER': os.getenv('SQL_USER', 'user'),
-            'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
-            'HOST': os.getenv('SQL_HOST', 'localhost'),
-            'PORT': os.getenv('SQL_PORT', '5432'),
-        }
-    }
+}
 
 
 # Password validation

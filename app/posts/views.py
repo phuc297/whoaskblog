@@ -17,7 +17,6 @@ class CreatePostView(CreateView):
     fields = ['title', 'category', 'content', 'thumbnail']
 
     def form_valid(self, form):
-        print('form is valid')
         form.instance.author = self.request.user.profile
         post = form.save(commit=False)
         return super().form_valid(form)
@@ -30,7 +29,6 @@ class UpdatePostView(UpdateView):
     fields = ['title', 'category', 'content']
 
     def form_valid(self, form):
-        print('form is valid')
         form.instance.author = self.request.user
         post = form.save(commit=False)
         return super().form_valid(form)
