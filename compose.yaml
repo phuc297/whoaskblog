@@ -33,7 +33,7 @@ services:
     command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
     tty: true
     volumes:
-      - ./app:/usr/src/app
+      - ./app/staticfiles:/usr/src/app/staticfiles
 
 #   db:
 #     image: postgres

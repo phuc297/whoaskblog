@@ -5,16 +5,16 @@ ARG PYTHON_VERSION=3.12
 # Stage 1
 #
 
-FROM node:21-slim AS node-build
+FROM node:21-alpine AS node-build
 
 RUN mkdir -p /home/app/node
 WORKDIR /home/app/node
 
 COPY package*.json .
 RUN npm install
-RUN npm install tailwindcss @tailwindcss/cli
+RUN npm install tailwindcss @tailwindcss/postcss postcss postcss-cli postcss-font-magician autoprefixer 
 COPY . .
-RUN npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css
+RUN npx tailwindcss -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css
 
 #
 # Stage 2

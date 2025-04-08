@@ -12,4 +12,4 @@ def index(request):
 
 def test(request):
     posts = Post.objects.all()
-    return render(request, 'test/test.html',  context={'posts': posts, 'profiles': profiles})
+    return render(request, 'test/test.html')

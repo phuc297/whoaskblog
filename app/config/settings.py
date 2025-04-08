@@ -184,6 +184,11 @@ STATICFILES_FINDERS += [
     'compressor.finders.CompressorFinder'
 ]
 
+COMPRESS_POSTCSS_PLUGINS = (
+    'autoprefixer',
+    'postcss-font-magician'
+)
+
 #
 
 QUILL_CONFIGS = {
