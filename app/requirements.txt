@@ -9,6 +9,7 @@ psycopg-binary
 gunicorn
 faker
 django-compressor==4.5.1
+django-compressor-postcss
 django-quill-editor
 channels
 channels[daphne]

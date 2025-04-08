@@ -46,7 +46,7 @@ class Post(models.Model):
     title = models.TextField(blank=True)
     content = QuillField(blank=True)
     # content = models.TextField(blank=True)
-    description = QuillField(blank=True)
+    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

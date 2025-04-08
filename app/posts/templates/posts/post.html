@@ -8,7 +8,7 @@
 
 {% block content %}
   <!-- Container -->
-  <div class="container w-full md:max-w-3xl mx-auto pt-20">
+  <div class="container w-full md:max-w-4xl mx-auto pt-20">
     <div class="w-full px-4 md:px-6 text-xl text-gray-800 leading-normal">
       <!-- Title -->
       <div class="font-sans">
@@ -28,18 +28,9 @@
             <!-- if -->
             {% if user.profile.id != post.author.id %}
               <!--  -->
-              <button id="btn-unfollow"
-                class="{% if user.profile|check_following:post.author %}
-
-                {% else %}
-                  
-                  hidden
-
-                {% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">
-                Following
-              </button>
+              <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
               <!--  -->
-              <button id="btn-follow" class="{% if user.profile|check_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+              <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
               <!--  -->
             {% endif %}
             <!-- endif -->
@@ -70,18 +61,16 @@
     <!-- /Related Posts -->
 
     <!-- Divider -->
-    <hr class="border-b-2 border-gray-400 mb-8 mx-4" />
+    <hr class="border-b-2 border-gray-400 mb-8 mx-4"/>
 
     <!-- Comment Section -->
-    <div class="container w-full md:max-w-3xl mx-auto pt-8">
-      <h2 class="text-2xl font-bold text-gray-900 px-4">Comments</h2>
-
+    <div class="container w-full mx-auto pt-8 p-8 mb-16 border border-gray-300 rounded-lg shadow-md">
       <!-- Comment Form -->
       <div class="mt-6 px-4">
         <input type="hidden" name="post_id" value="{{ post.id }}" />
         <input type="hidden" name="user_id" value="{{ user.id }}" />
-        <textarea name="comment-content" id="comment-content" class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:border-green-500 bg-white" rows="4" placeholder="Write your comment here..."></textarea>
-        <button type="submit" id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 mt-4 rounded-lg">Post Comment</button>
+        <textarea name="comment-content" id="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none focus:border-green-500 bg-white" rows="4" placeholder="Write your comment here..."></textarea>
+        <button type="submit" id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 mt-4 rounded-lg">Send</button>
       </div>
 
       <script id="comment-script" src="{% static 'js/posts/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:post_comment' post.id %}" data-token="{{ csrf_token }}"></script>
