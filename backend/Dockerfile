@@ -26,8 +26,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 ENV PYTHONUNBUFFERED=1
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /usr/src/backend
+WORKDIR /usr/src/backend
 
 RUN pip install --upgrade pip
 

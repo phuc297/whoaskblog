@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from posts.models import Post
-from users.models import Profile
+from apps.posts.models import Post
+from apps.users.models import Profile
 
 
 def index(request):

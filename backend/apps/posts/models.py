@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
-from users.models import Profile
+from apps.users.models import Profile
 
 colors = [
     "red",

@@ -5,3 +5,4 @@ def index(request):
 
 def room(request, conversation):
     return render(request, "chat/conversation.html", {"conversation": conversation})
+
