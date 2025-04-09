@@ -44,7 +44,6 @@ def post_create(request):
 
 
 def post_comment(request, post_id):
-    print("post_comment")
     if request.method == 'GET':
         content = request.GET.get('comment_content')
         post = get_object_or_404(Post, id=int(request.GET.get('post_id')))
