@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.utils import dateformat
 from django.views.generic import DetailView, CreateView, FormView, UpdateView
 
-from users.models import Profile
+from apps.users.models import Profile
 
 from .models import Post, Comment
 

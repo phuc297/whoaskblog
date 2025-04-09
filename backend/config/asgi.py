@@ -13,7 +13,7 @@ from channels.routing import ProtocolTypeRouter
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-from chat.routing import websocket_urlpatterns
+from apps.chat.routing import websocket_urlpatterns
 
 from django.core.asgi import get_asgi_application
 

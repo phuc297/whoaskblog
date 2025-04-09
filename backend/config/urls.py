@@ -4,20 +4,20 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from api.views import *
+# from api.views import *
 
-router = routers.DefaultRouter()
-router.register(r'posts', PostViewSet, basename='post')
-router.register(r'users', UserViewSet, basename='user')
+# router = routers.DefaultRouter()
+# router.register(r'posts', PostViewSet, basename='post')
+# router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
     path("", include('layout.urls')),
-    path("users/", include('users.urls')),
-    path("posts/", include('posts.urls')),
-    path("chat/", include('chat.urls')),
-    path("api/", include(router.urls)),
+    path("users/", include('apps.users.urls')),
+    path("posts/", include('apps.posts.urls')),
+    path("chat/", include('apps.chat.urls')),
+    # path("api/", include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 if bool(settings.DEBUG):

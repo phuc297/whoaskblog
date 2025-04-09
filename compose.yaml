@@ -1,7 +1,7 @@
 services:
   web:
     build:
-      context: app
+      context: backend
       dockerfile: Dockerfile
       # command: ["tail", "-f", "/dev/null"]
       # command: python manage.py runserver 0.0.0.0:8000
@@ -13,7 +13,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./app:/usr/src/app
+      - ./backend:/usr/src/backend
     env_file:
       - ./.env.dev
     # depends_on:
@@ -28,12 +28,12 @@ services:
 
   node:
     build:
-      context: app
+      context: backend
       dockerfile: Dockerfile.node
     command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
     tty: true
     volumes:
-      - ./app/staticfiles:/usr/src/app/staticfiles
+      - ./backend/staticfiles:/usr/src/backend/staticfiles
 
 #   db:
 #     image: postgres
