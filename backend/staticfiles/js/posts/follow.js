@@ -29,7 +29,7 @@ function attachFollowEvent() {
 
         document.getElementById("btn-unfollow").classList.remove("hidden")
 
-        }
+      }
 
       else {
 
@@ -74,7 +74,7 @@ function attachFollowEvent() {
 
         document.getElementById("btn-follow").classList.remove("hidden")
 
-        }
+      }
 
       else {
 
