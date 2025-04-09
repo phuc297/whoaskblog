@@ -3,6 +3,7 @@
 {% load to_date %}
 {% load follow_tag %}
 {% load list_tags %}
+{% load string_tags %}
 {% block title %}
   Home
 {% endblock %}
@@ -22,16 +23,38 @@
         </div>
       </div>
       <!-- Main section -->
-      <div class="flex justify-center max-w-6xl">
+      <div class="flex justify-center w-3/4">
         <!-- Latest Posts Section -->
         <div class="bg-white p-6 mt-8">
-          <h2 class="text-2xl font-bold mb-4 text-gray-800">Recent Posts</h2>
+          <!-- Tab panel -->
+          <div class="text-sm font-semibold text-center">
+            <ul class="flex flex-wrap -mb-px">
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg text-green-500 border-green-500 border-b-2">For you</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Latest</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Popular</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Top</a>
+              </li>
+              <li class="me-2">
+                <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Following</a>
+              </li>
+            </ul>
+          </div>
+          <script src="{% static 'layout/js/tabPanel.js' %}"></script>
+          <!-- Tab panel -->
           <!-- Post List -->
           <div class="container mx-auto flex mt-6">
-            <!-- Left (Main articles) -->
-            <div class="p-4 ">
+            <!-- Posts content -->
+            <div class="p-4">
               {% for post in posts %}
-                <div class="flex items-center border-b border-gray-400 px-4 pb-8 mt-8 h-fit">
+                <div class="flex items-center border-b border-gray-200 px-4 pb-8 mt-8 h-fit">
+                  <!-- Thumbnail -->
                   <div class="flex-shrink-0">
                     <a href="/posts/{{ post.id }}">
                       {% if post.thumbnail %}
@@ -41,11 +64,15 @@
                       {% endif %}
                     </a>
                   </div>
-                  <div class="ml-4 flex flex-col justify-between flex-1">
+                  <!-- Thumbnail -->
+                  <div class="h-36 ml-4 flex flex-col justify-between place-items-center flex-1">
+                    <!-- Post title -->
                     <div>
                       <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
                       <p class="mt-1 text-gray-700 text-sm">{{ post.description }}</p>
                     </div>
+                    <!-- Post title -->
+                    <!-- Post info -->
                     <div class="post-info mt-auto">
                       <div class="text-sm text-gray-600 flex items-center justify-between space-x-2">
                         <div class="flex items-center space-x-2">
@@ -96,29 +123,48 @@
                         </div>
                       </div>
                     </div>
+                    <!-- Post info -->
                   </div>
                 </div>
               {% endfor %}
             </div>
-
+            <!-- Posts content -->
           </div>
+          <!-- Post List -->
           <!-- Pagination -->
           <div class="flex justify-center mt-8">
             <nav class="inline-flex space-x-2">
-              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Previous</a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-green-500 border rounded hover:bg-green-600">1</a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">2</a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">3</a>
-              <span class="px-4 py-2 text-sm font-medium text-gray-500">...</span>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">10</a>
-              <a href="#" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Next</a>
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Previous</a>
+              {% else %}
+                <span class="px-4 py-2 text-sm font-medium text-gray-400 bg-white border rounded cursor-not-allowed">Previous</span>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-white bg-green-500 border rounded hover:bg-green-600">{{ num }}</a>
+                {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">{{ num }}</a>
+                {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                  <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">{{ num }}</a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                  <span class="px-4 py-2 text-sm font-medium text-gray-500">...</span>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded hover:bg-gray-100">Next</a>
+              {% else %}
+                <span class="px-4 py-2 text-sm font-medium text-gray-400 bg-white border rounded cursor-not-allowed">Next</span>
+              {% endif %}
             </nav>
           </div>
+          <!-- Pagination -->
         </div>
 
         <!-- Right Sidebar -->
-        <aside class="hidden lg:block max-w-sm p-4 sticky top-10 max-h-screen">
-          <div class="flex flex-col rounded-lg shadow p-4 bg-white max-h-screen">
+        <aside class="hidden lg:block w-1/4">
+          <div class="flex flex-col rounded-lg shadow p-4 bg-white sticky top-10">
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800">Popular posts</h3>
               <div class="flow-root">
@@ -144,7 +190,6 @@
                       <a href="#" class="text-gray-900 hover:underline">Jese Leos</a>
                     </p>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -163,28 +208,28 @@
             </div>
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800">Featured users</h3>
-              <ul class="mt-2">
-                <li class="py-2">
-                  {% for profile in profiles|head3 %}
-                    <div class="flex w-full items-center font-sans h-28">
-                      <a href="{% url 'profile' profile.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
-                      <div class="flex-1 px-2">
-                        <a href="{% url 'profile' profile.id %}"><p class="text-base leading-none text-gray-800">{{ profile }}</p></a>
-                        <span class="text-gray-500 text-xs">{{ profile.bio }}</span>
-                      </div>
-                      <div id="following-status">
-                        {% if user.profile.id != profile.id %}
-                          <button id="btn-unfollow" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
-                          <button id="btn-follow" class="{% if user.profile|is_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
-                        {% endif %}
-                      </div>
-
-                      <script src="{% static 'js/posts/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
+              <div class="py-2">
+                {% for profile in profiles|head3 %}
+                  <div class="flex w-full items-center justify-center font-sans h-36">
+                    <div class="w-16 h-16">
+                      <a href="{% url 'profile' profile.id %}" class="w-16 h-16"><img class="w-16 rounded-full" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
                     </div>
-                    <!--  -->
-                  {% endfor %}
-                </li>
-              </ul>
+                    <div class="w-3/4 max-w-3/4 px-2">
+                      <a href="{% url 'profile' profile.id %}"><p class="text-base leading-none text-gray-800">{{ profile }}</p></a>
+                      <span class="text-gray-500 text-xs">{{ profile.bio|shorten }}</span>
+                    </div>
+                    <div id="following-status">
+                      {% if user.profile.id != profile.id %}
+                        <button id="btn-unfollow" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-20 bg-transparent border py-2 px-4 rounded-full border-green-500 text-xs text-green-500 flex justify-center items-center">Following</button>
+                        <button id="btn-follow" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-20 bg-transparent border py-2 px-4 rounded-full border-gray-500 text-xs text-gray-500">Follow</button>
+                      {% endif %}
+                    </div>
+
+                    <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
+                  </div>
+                  <!--  -->
+                {% endfor %}
+              </div>
             </div>
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800">Popular posts</h3>
@@ -211,7 +256,6 @@
                       <a href="#" class="text-gray-900 hover:underline">Jese Leos</a>
                     </p>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -232,3 +276,8 @@
     </div>
   {% endif %}
 {% endblock %}
+
+
+{% block footer %}
+
+{% endblock footer %}

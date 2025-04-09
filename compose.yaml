@@ -37,6 +37,9 @@ services:
     volumes:
       - ./backend/staticfiles:/usr/src/backend/staticfiles
       - ./backend/apps:/usr/src/backend/apps
+    depends_on:
+      web:
+        condition: service_started
 
 #   db:
 #     image: postgres

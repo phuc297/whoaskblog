@@ -23,7 +23,7 @@
         <!-- Profile top -->
 
         <div class="flex items-center space-x-6 mb-8">
-          <img src="{{ profile.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300" />
+          <img src="{{ profile.avatar.url }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300" />
           <div>
             <div>
               <div class="flex items-center space-x-2">
@@ -82,7 +82,7 @@
               {% endif %}
               <!-- endif -->
             </div>
-            <script src="{% static 'js/profiles/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" data-token="{{ csrf_token }}"></script>
+            <script src="{% static 'users/js/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" data-token="{{ csrf_token }}"></script>
 
             <!--  -->
           </div>
@@ -164,7 +164,7 @@
                 {% for follower in profile.followers.all %}
                   <a href="{% url 'profile' follower.id %}">
                     <li class="flex items-center space-x-4">
-                      <img src="{{ follower.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
+                      <img src="{{ follower.avatar.url }}" alt="Avatar" class="w-16 h-16 rounded-full" />
                       <span class="font-semibold">{{ follower.user.username }}</span>
                     </li>
                   </a>
@@ -182,7 +182,7 @@
                 {% for following in profile.following.all %}
                   <a href="{% url 'profile' following.id %}">
                     <li class="flex items-center space-x-4">
-                      <img src="{{ following.avatar.url|default:'/static/default-avatar.png' }}" alt="Avatar" class="w-16 h-16 rounded-full" />
+                      <img src="{{ following.avatar.url }}" alt="Avatar" class="w-16 h-16 rounded-full" />
                       <span class="font-semibold">{{ following.user.username }}</span>
                     </li>
                   </a>
@@ -193,7 +193,7 @@
             {% endif %}
           </div>
         </div>
-        <script src="{% static 'js/profiles/tabpanel.js' %}"></script>
+        <script src="{% static 'users/js/tabpanel.js' %}"></script>
       </div>
     </div>
   </div>
