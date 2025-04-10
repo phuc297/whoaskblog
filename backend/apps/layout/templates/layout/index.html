@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% load to_date %}
-{% load follow_tag %}
+{% load follow_tags %}
 {% load list_tags %}
 {% load string_tags %}
 {% block title %}
@@ -11,7 +11,7 @@
   {% if user.is_authenticated %}
     <div class="flex flex-col items-center justify-center bg-white w-full">
       <!-- Welcome section -->
-      <div class="text-center mb-12">
+      {% comment %} <div class="text-center mb-12">
         <h1 class="text-5xl font-extrabold text-gray-800 mb-6">Welcome Back, {{ user.username }}!</h1>
         <p class="text-xl text-gray-600">Manage your activities, explore categories, and engage with the community!</p>
         <div class="flex justify-center space-x-4 mt-8">
@@ -21,13 +21,13 @@
             <button type="submit" class="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600">Logout</button>
           </form>
         </div>
-      </div>
+      </div> {% endcomment %}
       <!-- Main section -->
-      <div class="flex justify-center w-3/4">
+      <div class="flex justify-center w-3/4 ">
         <!-- Posts Section -->
-        <div class="bg-white p-6 mt-8 w-3/4">
+        <div class="bg-white w-3/4 mr-4">
           <!-- Tab panel -->
-          <div class="text-sm font-semibold text-center">
+          <div class="text-sm font-semibold text-center rounded-lg border border-gray-200">
             <ul class="flex flex-wrap -mb-px">
               <li class="me-2">
                 <a href="#" class="tab-item inline-block p-4 rounded-t-lg text-green-500 border-green-500 border-b-2">For you</a>
@@ -163,36 +163,9 @@
         </div>
 
         <!-- Right Sidebar -->
-        <aside class="hidden lg:block w-1/4">
-          <div class="flex flex-col rounded-lg shadow p-4 bg-white sticky top-10">
-            <div class="p-4 side-bar-content">
-              <h3 class="text-lg font-bold text-gray-800">Popular posts</h3>
-              <div class="flow-root">
-                <div class="-my-6 divide-y divide-gray-200">
-                  <div class="space-y-2 py-6 md:py-8">
-                    <div class="grid gap-2">
-                      <a href="#" class="text-lg font-semibold text-gray-900">“The specs say this model has 2 USB ports. The one I received has none. Are they hidden somewhere?”</a>
-                    </div>
-                    <p class="text-base font-normal text-gray-500">It’s a USB-C port it’s a smaller port...</p>
-                    <p class="text-sm font-medium text-gray-500">
-                      Posted 1 day ago by
-                      <a href="#" class="text-gray-900 hover:underline">Bonnie Green</a>
-                    </p>
-                  </div>
-
-                  <div class="space-y-2 py-6 md:py-8">
-                    <div class="grid gap-2">
-                      <a href="#" class="text-lg font-semibold text-gray-900">“Is this just the monitor?”</a>
-                    </div>
-                    <p class="text-base font-normal text-gray-500">It's an all-in-one (AIO). Which means everything in ...</p>
-                    <p class="text-sm font-medium text-gray-500">
-                      Posted 1 day ago by
-                      <a href="#" class="text-gray-900 hover:underline">Jese Leos</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <aside class="hidden lg:block ml-4 w-1/4">
+          <div class="flex flex-col p-4 bg-white sticky top-10 rounded-lg  border border-gray-200">
+            
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800 py-4">Recommended topics</h3>
               <div class="flex flex-wrap gap-4 mb-4">

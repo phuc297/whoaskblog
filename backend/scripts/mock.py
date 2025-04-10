@@ -58,11 +58,10 @@ class Mock:
                 "author": choice(profiles),
                 "title": fake.sentence(randrange(8, 10)),
                 "content": fake.paragraph(200),
-                "category": choice(categories),
-                "upvotes": randrange(0,50)
+                "category": choice(categories)
             }
             post = Post(author=mock_post["author"], title=mock_post["title"],
-                        content=mock_post["content"], category=mock_post["category"], upvotes=mock_post["upvotes"])
+                        content=mock_post["content"], category=mock_post["category"])
             post.save()
 
     def generate_comments(self, n_comments):
