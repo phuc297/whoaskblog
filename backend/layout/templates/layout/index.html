@@ -24,8 +24,8 @@
       </div>
       <!-- Main section -->
       <div class="flex justify-center w-3/4">
-        <!-- Latest Posts Section -->
-        <div class="bg-white p-6 mt-8">
+        <!-- Posts Section -->
+        <div class="bg-white p-6 mt-8 w-3/4">
           <!-- Tab panel -->
           <div class="text-sm font-semibold text-center">
             <ul class="flex flex-wrap -mb-px">
@@ -51,7 +51,7 @@
           <!-- Post List -->
           <div class="container mx-auto flex mt-6">
             <!-- Posts content -->
-            <div class="p-4">
+            <div class="p-4 w-full">
               {% for post in posts %}
                 <div class="flex items-center border-b border-gray-200 px-4 pb-8 mt-8 h-fit">
                   <!-- Thumbnail -->
@@ -67,14 +67,14 @@
                   <!-- Thumbnail -->
                   <div class="h-36 ml-4 flex flex-col justify-between place-items-center flex-1">
                     <!-- Post title -->
-                    <div>
+                    <div class="flex flex-col justify-start items-start w-full">
                       <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
                       <p class="mt-1 text-gray-700 text-sm">{{ post.description }}</p>
                     </div>
                     <!-- Post title -->
                     <!-- Post info -->
-                    <div class="post-info mt-auto">
-                      <div class="text-sm text-gray-600 flex items-center justify-between space-x-2">
+                    <div class="post-info w-full">
+                      <div class="text-sm text-gray-600 flex justify-between">
                         <div class="flex items-center space-x-2">
                           <a href="{% url 'profile' post.author.id %}" class="flex items-center space-x-2">
                             <img src="{{ post.author.avatar.url }}" alt="" class="h-12 w-12 rounded-full" />

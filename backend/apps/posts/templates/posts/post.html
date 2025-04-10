@@ -81,11 +81,11 @@
         <div class="comments-section" id="comments-section">
           {% for comment in post.comments.all %}
             <div class="flex mb-6">
-              <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.author.avatar.url }}" alt="Avatar of User" />
+              <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.commenter.avatar.url }}" alt="Avatar of User" />
               <div class="flex-1">
-                <p class="text-green-600 font-normal">{{ post.author }}</p>
-                <p class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>
-                <p class="text-gray-800">{{ comment.content }}</p>
+                <p id="commenter-name" class="text-green-600 font-normal">{{ comment.commenter }}</p>
+                <p id="commenter-timestamp" class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>
+                <p id="commenter-content" class="text-gray-800">{{ comment.content }}</p>
               </div>
             </div>
           {% endfor %}
