@@ -144,9 +144,6 @@ test/
 # Django
 staticfiles/admin/
 mediafiles/*
-!mediafiles/.gitkeep
 
 # Tailwindcss
 staticfiles/*
-!staticfiles/js
-!staticfiles/css
