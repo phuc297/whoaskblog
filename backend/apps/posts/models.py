@@ -68,7 +68,7 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(
         Post, related_name='comments', on_delete=models.CASCADE)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    commenter = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     parent = models.ManyToManyField("self", symmetrical=False, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

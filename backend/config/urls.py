@@ -15,6 +15,7 @@ urlpatterns = [
     path("users/", include('apps.users.urls')),
     path("posts/", include('apps.posts.urls')),
     path("chat/", include('apps.chat.urls')),
+    path("notifications/", include('apps.notifications.urls')),
     # path("api/", include(router.urls)),
     path('admin/', admin.site.urls),
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))

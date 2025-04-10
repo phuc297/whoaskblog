@@ -5,28 +5,26 @@ from random import choice, randrange
 from django.contrib.auth.models import User
 from faker import Faker
 
-from posts.models import Category, Post, Comment
-from users.models import Profile
+from apps.posts.models import Category, Post, Comment
+from apps.users.models import Profile
 
 fake = Faker()
 
 
 class Mock:
     def __init__(self, delete=False):
-        if delete:
-            self.delete_data()
-        self.generate_users(30)
-        self.create_follower()
-        self.generate_categories()
-        self.generate_posts(50)
+        self.generate_users(10)
+        self.create_follower(2, 5)
+        # self.generate_categories()
+        self.generate_posts(20)
         self.generate_comments(200)
-
+        pass
     def delete_data(self):
         User.objects.all().filter(is_superuser=False).delete()
         Category.objects.all().delete()
 
     def generate_users(self, number):
-
+        User.objects.all().delete()
         for i in range(0, number):
             mock_user = {
                 "username": fake.unique.user_name(),
@@ -43,10 +41,10 @@ class Mock:
             profile.set_default_avatar()
             profile.save()
 
-    def create_follower(self):
+    def create_follower(self, min, max):
         all_profiles = Profile.objects.all()
         for profile in all_profiles:
-            random_number = randrange(3, 10)
+            random_number = randrange(min, max)
             random_follower = Profile.objects.order_by('?')[:random_number]
             for follower in random_follower:
                 profile.followers.add(follower)
@@ -54,6 +52,7 @@ class Mock:
     def generate_posts(self, n_posts):
         categories = Category.objects.all()
         profiles = Profile.objects.all()
+        Post.objects.all().delete()
         for i in range(0, n_posts):
             mock_post = {
                 "author": choice(profiles),
@@ -68,15 +67,16 @@ class Mock:
 
     def generate_comments(self, n_comments):
         posts = Post.objects.all()
-        author = Profile.objects.all().filter()
+        commenter = Profile.objects.all()
+        Comment.objects.all().delete()
         for i in range(0, n_comments):
             mock_comment = {
                 "post": choice(posts),
-                "author": choice(author),
+                "commenter": choice(commenter),
                 "content": fake.sentence(randrange(10, 80))
             }
             comment = Comment(
-                post=mock_comment["post"], author=mock_comment["author"], content=mock_comment["content"])
+                post=mock_comment["post"], commenter=mock_comment["commenter"], content=mock_comment["content"])
             comment.save()
 
     def generate_categories(self):

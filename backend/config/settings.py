@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.chat',
     'apps.posts',
     'apps.users',
+    'apps.notifications',
 ]
 
 MIDDLEWARE = [
