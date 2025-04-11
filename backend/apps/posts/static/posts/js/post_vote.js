@@ -1,5 +1,7 @@
 
-data = document.currentScript.dataset
+const script = document.getElementById('vote-script');
+
+data = script.dataset
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 

@@ -117,13 +117,10 @@
     <div class="container w-full mx-auto pt-8 p-8 mb-16 border border-gray-300 rounded-lg shadow-md">
       <!-- Comment Form -->
       <div class="mt-6 px-4">
-        <input type="hidden" name="post_id" value="{{ post.id }}" />
-        <input type="hidden" name="user_id" value="{{ user.id }}" />
-        <textarea name="comment-content" id="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none focus:border-green-500 bg-white" rows="4" placeholder="Write your comment here..."></textarea>
-        <button type="submit" id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 mt-4 rounded-lg">Send</button>
+        <textarea id="text-comment" name="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none bg-white" rows="4" placeholder="Write your comment here..."></textarea>
+        <button id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 mt-4 rounded-lg">Send</button>
       </div>
 
-      <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:post_comment' post.id %}" data-token="{{ csrf_token }}"></script>
       <!-- Comment List -->
       <div class="mt-10 px-4">
         <!-- Single Comment -->
@@ -148,5 +145,7 @@
 
 {% block script %}
   <script src="{% static 'posts/js/sticky_bar.js' %}"></script>
-  <script src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
+  <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
+  <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:create_comment' post.id %}"></script>
+
 {% endblock %}

@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const triggerTop = triggerElement.getBoundingClientRect().top
 
+        const triggerBottom = triggerElement.getBoundingClientRect().bottom
+
         const scrollBottom = window.innerHeight + window.scrollY
 
         const documentHeight = document.body.offsetHeight
 
-        const shouldShow = triggerTop < window.innerHeight * 0.425
+        const shouldShow = triggerTop < window.innerHeight * 0.425 && triggerBottom > 50
 
         const shouldHide = scrollBottom + footerOffset >= documentHeight
 
