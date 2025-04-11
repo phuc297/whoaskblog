@@ -23,9 +23,9 @@
         </div>
       </div> {% endcomment %}
       <!-- Main section -->
-      <div class="flex justify-center w-3/4 ">
+      <div class="flex justify-center w-3/4">
         <!-- Posts Section -->
-        <div class="bg-white w-3/4 mr-4">
+        <div class="bg-white w-2/4 mr-4">
           <!-- Tab panel -->
           <div class="text-sm font-semibold text-center rounded-lg border border-gray-200">
             <ul class="flex flex-wrap -mb-px">
@@ -46,7 +46,6 @@
               </li>
             </ul>
           </div>
-          <script src="{% static 'layout/js/tabPanel.js' %}"></script>
           <!-- Tab panel -->
           <!-- Post List -->
           <div class="container mx-auto flex mt-6">
@@ -69,7 +68,7 @@
                     <!-- Post title -->
                     <div class="flex flex-col justify-start items-start w-full">
                       <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
-                      <p class="mt-1 text-gray-700 text-sm">{{ post.description }}</p>
+                      <div class="mt-1 text-gray-700 text-sm">{{ post.content.html|shorten:18|safe }}</div>
                     </div>
                     <!-- Post title -->
                     <!-- Post info -->
@@ -91,7 +90,7 @@
                                 </svg>
                               </span>
                             </button>
-                            <span class="text-gray-500 text-sm flex justify-center items-center px-1">{{ post.upvotes }}</span>
+                            <span class="text-gray-500 text-sm flex justify-center items-center">{{ post.votes }}</span>
                             <button class="cursor-pointer hover:text-red-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
                               <span class="mb-0">
                                 <svg rpl="" fill="currentColor" height="16" icon-name="downvote-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -164,8 +163,7 @@
 
         <!-- Right Sidebar -->
         <aside class="hidden lg:block ml-4 w-1/4">
-          <div class="flex flex-col p-4 bg-white sticky top-10 rounded-lg  border border-gray-200">
-            
+          <div class="flex flex-col p-4 bg-white sticky top-10 rounded-lg border border-gray-200">
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800 py-4">Recommended topics</h3>
               <div class="flex flex-wrap gap-4 mb-4">
@@ -250,7 +248,10 @@
   {% endif %}
 {% endblock %}
 
+{% block script %}
+  <script src="{% static 'layout/js/tabPanel.js' %}"></script>
+{% endblock %}
 
 {% block footer %}
 
-{% endblock footer %}
+{% endblock %}

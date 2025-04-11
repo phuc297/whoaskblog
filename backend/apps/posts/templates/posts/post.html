@@ -7,9 +7,15 @@
   {{ post.title }}
 {% endblock %}
 
-{% block style %}
+{% block head %}
   <style>
-    
+    article p {
+      padding: 0.75rem;
+    }
+    article img {
+      display: block;
+      width: 100%;
+    }
   </style>
 {% endblock %}
 
@@ -28,7 +34,7 @@
           </a>
 
           <div class="pt-1 pb-1">
-            <span id="votes-count">{{ post.get_votes }}</span>
+            <span id="votes-count">{{ post.votes }}</span>
           </div>
 
           <a id="downvote" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1 {% if post|user_downvote:user.profile.id %}bg-red-400 text-white border-none{% endif %}">
@@ -118,7 +124,7 @@
       <!-- Comment Form -->
       <div class="mt-6 px-4">
         <textarea id="text-comment" name="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none bg-white" rows="4" placeholder="Write your comment here..."></textarea>
-        <button id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 mt-4 rounded-lg">Send</button>
+        <button id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-4 rounded-lg">Post comment</button>
       </div>
 
       <!-- Comment List -->
@@ -147,5 +153,4 @@
   <script src="{% static 'posts/js/sticky_bar.js' %}"></script>
   <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
   <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:create_comment' post.id %}"></script>
-
 {% endblock %}

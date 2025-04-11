@@ -7,6 +7,8 @@ from django.utils import dateformat
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, FormView, UpdateView
+from django.db.models import Sum
+
 
 from apps.users.models import Profile
 
@@ -32,7 +34,7 @@ class UpdatePostView(UpdateView):
     fields = ['title', 'category', 'content']
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.profile
         post = form.save(commit=False)
         return super().form_valid(form)
 
@@ -104,10 +106,11 @@ def post_vote(request, post_id):
             vote.value = vote_choice
             vote.save()
             message = "Vote updated"
+    total_value = post.post_votes.aggregate(total=Sum('value'))['total'] or 0
 
     return JsonResponse({
         "success": True,
         "message": message,
-        "votes": post.get_votes(),
+        "votes": total_value,
         "vote_choice": vote_choice
     })

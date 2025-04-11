@@ -68,11 +68,6 @@ class Post(models.Model):
         profile = Profile.objects.get(pk=profile_id)
         vote = self.post_votes.filter(voted_by=profile).first()
         return vote.value if vote else None
-    
-    def get_votes(self):
-        upvote = self.post_votes.filter(value=1).count()
-        downvote = self.post_votes.filter(value=-1).count()
-        return upvote - downvote
 
 
 class PostVote(models.Model):
