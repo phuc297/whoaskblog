@@ -14,7 +14,7 @@ def index(request):
     page_obj = paginator.get_page(page_number)
 
     profiles = Profile.objects.all()
-    return render(request, 'layout/index.html', context={'page_obj': page_obj, 'posts': page_obj.object_list, 'profiles': profiles})
+    return render(request, 'index/index.html', context={'page_obj': page_obj, 'posts': page_obj.object_list, 'profiles': profiles})
 
 
 def test(request):

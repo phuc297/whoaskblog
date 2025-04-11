@@ -144,6 +144,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder']
@@ -208,21 +211,6 @@ QUILL_CONFIGS = {
                 ['code-block', 'link'],
                 ['clean'],
                 ['link', 'image'],
-            ]
-        }
-    },
-    'title': {
-        'theme': 'snow',
-        'modules': {
-            'syntax': True,
-            'toolbar': [
-                [
-                    {'header': []},
-                    {'align': []},
-                    'bold', 'italic', 'underline', 'strike', 'blockquote',
-                    {'color': []},
-                    {'background': ["white"]},
-                ]
             ]
         }
     }

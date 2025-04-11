@@ -25,7 +25,7 @@
       <!-- Main section -->
       <div class="flex justify-center w-3/4">
         <!-- Posts Section -->
-        <div class="bg-white w-2/4 mr-4">
+        <div class="bg-white w-full xl:w-2/4 mr-4 ">
           <!-- Tab panel -->
           <div class="text-sm font-semibold text-center rounded-lg border border-gray-200">
             <ul class="flex flex-wrap -mb-px">
@@ -52,15 +52,11 @@
             <!-- Posts content -->
             <div class="p-4 w-full">
               {% for post in posts %}
-                <div class="flex items-center border-b border-gray-200 px-4 pb-8 mt-8 h-fit">
+                <div class="flex items-center border-b border-gray-200 px-4 pb-8 mt-8">
                   <!-- Thumbnail -->
                   <div class="flex-shrink-0">
                     <a href="/posts/{{ post.id }}">
-                      {% if post.thumbnail %}
-                        <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" />
-                      {% else %}
-                        <img src="{% static 'img/defaultthumbnail.jpg' %}" alt="Default Thumbnail" class="w-48 h-36 object-cover rounded-lg cursor-pointer" />
-                      {% endif %}
+                      <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="hidden lg:block w-48 h-36 object-cover rounded-lg cursor-pointer" />
                     </a>
                   </div>
                   <!-- Thumbnail -->
@@ -68,7 +64,7 @@
                     <!-- Post title -->
                     <div class="flex flex-col justify-start items-start w-full">
                       <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
-                      <div class="mt-1 text-gray-700 text-sm">{{ post.content.html|shorten:18|safe }}</div>
+                      <div id="post-description" class="mt-1 text-gray-700 text-sm hidden lg:block">{% random_sentence %}</div>
                     </div>
                     <!-- Post title -->
                     <!-- Post info -->
@@ -79,9 +75,9 @@
                             <img src="{{ post.author.avatar.url }}" alt="" class="h-12 w-12 rounded-full" />
                             <span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span>
                           </a>
-                          <span>{{ post.created_at|to_date }}</span>
+                          <span class="lg:block hidden">{{ post.created_at|to_date }}</span>
                         </div>
-                        <div class="flex justify-between items-center space-x-2">
+                        <div class="justify-between items-center space-x-2 hidden lg:flex">
                           <div class="flex justify-between rounded-lg">
                             <button class="cursor-pointer hover:text-green-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
                               <span class="mb-0">
@@ -162,7 +158,7 @@
         </div>
 
         <!-- Right Sidebar -->
-        <aside class="hidden lg:block ml-4 w-1/4">
+        <aside class="hidden xl:block ml-4 w-1/4">
           <div class="flex flex-col p-4 bg-white sticky top-10 rounded-lg border border-gray-200">
             <div class="p-4 side-bar-content">
               <h3 class="text-lg font-bold text-gray-800 py-4">Recommended topics</h3>
