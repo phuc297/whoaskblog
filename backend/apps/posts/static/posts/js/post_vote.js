@@ -3,15 +3,13 @@ const script = document.getElementById('vote-script');
 
 data = script.dataset
 
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
 document.getElementById('upvote').addEventListener('click', () => {
 
     fetch(data.url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken
+            "X-CSRFToken": window.csrfToken
         },
         body: JSON.stringify({ vote: 1 })
     })
