@@ -17,7 +17,7 @@ function attachFollowEvent() {
 
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.setRequestHeader("X-CSRFToken", data.token);
+    xhr.setRequestHeader("X-CSRFToken", window.csrfToken);
 
     xhr.onreadystatechange = function () {
 

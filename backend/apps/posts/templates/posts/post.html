@@ -92,7 +92,6 @@
               <!-- endif -->
             </div>
             <!--  -->
-            <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}" data-token="{{ csrf_token }}"></script>
           </div>
           <!--  -->
         </div>
@@ -151,6 +150,7 @@
 
 {% block script %}
   <script src="{% static 'posts/js/sticky_bar.js' %}"></script>
+  <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}"></script>
   <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
   <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:create_comment' post.id %}"></script>
 {% endblock %}

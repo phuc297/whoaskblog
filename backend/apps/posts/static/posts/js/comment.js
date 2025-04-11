@@ -1,6 +1,4 @@
 
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
 document.getElementById('btn-submit-comment').addEventListener('click', async () => {
 
     const commentContent = document.getElementById('text-comment').value
@@ -23,7 +21,7 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
+                "X-CSRFToken": window.csrfToken
             },
             body: JSON.stringify({
                 post_id: data.post_id,
@@ -35,8 +33,6 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
         const result = await response.json()
 
         if (result.success) {
-
-            console.log(result);
 
             const newComment = `
                     <div class="flex mb-6">
