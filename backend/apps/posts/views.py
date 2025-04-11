@@ -47,23 +47,30 @@ def post_create(request):
     return render(request, template_name="posts/create.html")
 
 
-def post_comment(request, post_id):
-    content = request.GET.get('comment_content')
-    post = get_object_or_404(Post, id=int(request.GET.get('post_id')))
-    profile = get_object_or_404(Profile, id=int(request.GET.get('profile_id')))
-    if content:
-        comment = Comment.objects.create(
-            post=post, author=profile, content=content)
-        comment.save()
-        return JsonResponse({
-            "success": True,
-            "username": profile.user.username,
-            "content": comment.content,
-            "created_at": comment.created_at,
-            "avatar": profile.avatar.url
-        })
-    else:
-        return JsonResponse({"success": False, "error": "Invalid request"})
+@require_POST
+def create_comment(request, post_id):
+    try:
+        data = json.loads(request.body)
+        content = data.get('content')
+        post_id = data.get('post_id')
+        profile = request.user.profile
+    except (ValueError, TypeError, json.JSONDecodeError):
+        return JsonResponse({"success": False, "error": "Invalid JSON input"}, status=400)
+
+    if not content:
+        return JsonResponse({"success": False, "error": "Empty Comment"})
+
+    post = get_object_or_404(Post, id=post_id)
+    comment = Comment.objects.create(
+        post=post, commenter=profile, content=content)
+    comment.save()
+    return JsonResponse({
+        "success": True,
+        "username": profile.user.username,
+        "content": comment.content,
+        "created_at": comment.created_at.strftime("%B %d, %Y, %-I:%M %p").lower(),
+        "avatar": profile.avatar.url
+    })
 
 
 @require_POST
@@ -75,7 +82,7 @@ def post_vote(request, post_id):
         return JsonResponse({"success": False, "error": "Invalid JSON input."}, status=400)
 
     profile = request.user.profile
-    post = Post.objects.get(pk=post_id)
+    post = get_object_or_404(Post, pk=post_id)
 
     if vote_choice not in [PostVote.UPVOTE, PostVote.DOWNVOTE]:
         return JsonResponse({"success": False, "error": "Invalid vote value."}, status=400)
@@ -86,18 +93,17 @@ def post_vote(request, post_id):
         defaults={'value': vote_choice}
     )
 
-    if not created:
-        if vote.value != vote_choice:
-            vote.value = vote_choice
-            vote.save()
-            message = "Vote updated"
-        else:
+    if created:
+        message = "Vote added"
+    else:
+        if vote.value == vote_choice:
             vote.delete()
             message = "Vote removed"
             vote_choice = 0
-    else:
-        message = "Vote added"
-        post.save()
+        else:
+            vote.value = vote_choice
+            vote.save()
+            message = "Vote updated"
 
     return JsonResponse({
         "success": True,

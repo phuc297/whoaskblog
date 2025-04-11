@@ -1,42 +1,72 @@
-$(document).ready(function () {
-  const scriptTag = document.getElementById("comment-script");
-  const data = scriptTag.dataset;
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  $('#btn-submit-comment').on("click", function () {
-    const txtComment = $('#comment-content').val();
-    if (!txtComment.trim()) {
-      alert("Comment content cannot be empty!");
-      return;
+document.getElementById('btn-submit-comment').addEventListener('click', async () => {
+
+    const commentContent = document.getElementById('text-comment').value
+
+    if (!commentContent.trim()) {
+
+        alert("Comment content cannot be empty!");
+
+        return;
+
     }
-    $.ajax({
-      type: 'GET',
-      url: data.url,
-      data: {
-        csrfmiddlewaretoken: data.token,
-        post_id: data.post_id,
-        profile_id: data.profile_id,
-        comment_content: txtComment,
-      },
-      success: function (data) {
-        const newComment = `
+
+    const script = document.getElementById('comment-script');
+
+    const data = script.dataset;
+
+    try {
+
+        const response = await fetch(data.url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({
+                post_id: data.post_id,
+                profile_id: data.profile_id,
+                content: commentContent
+            })
+        });
+
+        const result = await response.json()
+
+        if (result.success) {
+
+            console.log(result);
+
+            const newComment = `
                     <div class="flex mb-6">
-                      <img class="w-14 h-14 rounded-full mr-4" src="${data.avatar}" alt="Avatar of User"/>
+                      <img class="w-14 h-14 rounded-full mr-4" src="${result.avatar}" alt="Avatar of User"/>
                       <div class="flex-1">
-                        <p class="text-green-600 font-normal">${data.username}</p>
-                        <p class="text-gray-600 text-sm mb-2">Posted on ${data.created_at}</p>
-                        <p class="text-gray-800">${data.content}</p>
+                        <p class="text-green-600 font-normal">${result.username}</p>
+                        <p class="text-gray-600 text-sm mb-2">Posted on ${result.created_at}</p>
+                        <p class="text-gray-800">${result.content}</p>
                       </div>
                     </div>
                     `;
-        $('#comments-section').prepend(newComment);
-        $('#comment-content').val('');
 
-      },
-      error: function (xhr, status, error) {
-        console.error("Error posting comment:", error);
-        alert("Failed to post comment. Please try again.");
-      }
-    });
-  });
-});
+            document.getElementById('comments-section').insertAdjacentHTML('afterbegin', newComment)
+
+            document.getElementById('text-comment').value = ""
+
+        } else {
+
+            console.error("Error: ", result.error)
+
+        }
+
+
+    } catch (error) {
+
+        console.error("Fetch error: ", error);
+
+        alert("An error occurred when submitting the comment.")
+
+    }
+
+})
+
