@@ -1,12 +1,12 @@
-
+from django import template
 import os
 import random
+register = template.Library()
 
 
-def short_text(text, word_limit=15):
-    words = text.split()
-    shortened = " ".join(words[:word_limit])
-    return shortened
+@register.simple_tag
+def random_thumnail():
+    return get_random_thumbnail()
 
 
 def get_random_thumbnail():
@@ -16,5 +16,5 @@ def get_random_thumbnail():
     if not files:
         return None
     random_file = random.choice(files)
-    random_file_path = os.path.join(folder_path, random_file)
-    return random_file, random_file_path
+    random_file_path = f'/static/defaultthumnail/{random_file}'
+    return random_file_path

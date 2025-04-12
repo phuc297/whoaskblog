@@ -56,3 +56,11 @@
 #editor-title p {
     font-size: 2rem;
 }
+
+#editor-description {
+    border: 1px solid #ccc;
+}
+
+#editor-description p {
+    font-size: 1rem;
+}

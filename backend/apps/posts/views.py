@@ -1,17 +1,13 @@
 import json
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.utils import dateformat
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DetailView, CreateView, FormView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView
 from django.db.models import Sum
-
-
-from apps.users.models import Profile
-
+from django.db.models import F
+from django.core.files import File
+from utils.utils import get_random_thumbnail
 from .models import Post, Comment, PostVote
 
 
@@ -19,11 +15,17 @@ class CreatePostView(CreateView):
     model = Post
     template_name = "posts/create_post.html"
     success_url = reverse_lazy("home")
-    fields = ['title', 'category', 'content', 'thumbnail']
+    fields = ['title', 'content', 'description', 'category', 'thumbnail']
 
     def form_valid(self, form):
+        print("Form is valid and form_valid() is called!")
         form.instance.author = self.request.user.profile
         post = form.save(commit=False)
+        if post.thumbnail:
+            print(f"has thumbnail!{post.thumbnail.url}")
+        else:
+            print("No thumbnail! No thumbnail!")
+
         return super().form_valid(form)
 
 
@@ -36,6 +38,11 @@ class UpdatePostView(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         post = form.save(commit=False)
+        if post.thumbnail:
+            print(f"has thumbnail!{post.thumbnail.url}")
+        else:
+            print("No thumbnail! No thumbnail!")
+
         return super().form_valid(form)
 
 
@@ -43,6 +50,13 @@ class PostView(DetailView):
     model = Post
     context_object_name = "post"
     template_name = "posts/post.html"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        obj.views = obj.views + 1
+        print(obj.views)
+        obj.save(update_fields=['views'])
+        return obj
 
 
 def post_create(request):
