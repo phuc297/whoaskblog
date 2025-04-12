@@ -4,9 +4,12 @@ import random
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.files import File
+
 from django.utils.text import slugify
 
 from apps.users.models import Profile
+from utils.utils import get_random_thumbnail
 
 colors = [
     "red",
@@ -46,6 +49,7 @@ class Post(models.Model):
     title = models.TextField(blank=True)
     content = QuillField(blank=True)
     # content = models.TextField(blank=True)
+    content_text = QuillField(blank=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -54,11 +58,16 @@ class Post(models.Model):
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
     thumbnail = models.ImageField(
-        upload_to='thumnail_post', default='thumnail_post/defaultthumbnail.jpg')
+        upload_to='thumnail_post', default='/default.jpg')
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.thumbnail.url == '/media/default.jpg':
+            random_file, random_file_path = get_random_thumbnail()
+            with open(random_file_path, 'rb') as img_file:
+                file = File(img_file)
+                self.thumbnail.save(random_file, file, save=True)
         return super().save(*args, **kwargs)
 
     def __str__(self):

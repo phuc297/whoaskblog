@@ -3,7 +3,14 @@ const toolbarOptions = [
 
 ];
 
-const quill = new Quill('#editor-title', {
+const quill_title = new Quill('#editor-title', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'bubble'
+});
+
+const quill_description = new Quill('#editor-description', {
   modules: {
     toolbar: toolbarOptions
   },

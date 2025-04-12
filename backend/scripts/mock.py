@@ -13,12 +13,13 @@ fake = Faker()
 
 class Mock:
     def __init__(self, delete=False):
-        self.generate_users(10)
-        self.create_follower(2, 5)
-        # self.generate_categories()
-        self.generate_posts(20)
-        self.generate_comments(200)
+        self.generate_users(50)
+        self.create_follower(2, 10)
+        self.generate_categories()
+        self.generate_posts(40)
+        self.generate_comments(100)
         pass
+
     def delete_data(self):
         User.objects.all().filter(is_superuser=False).delete()
         Category.objects.all().delete()
@@ -58,10 +59,11 @@ class Mock:
                 "author": choice(profiles),
                 "title": fake.sentence(randrange(8, 10)),
                 "content": fake.paragraph(200),
+                "description": fake.sentence(randrange(8, 15)),
                 "category": choice(categories)
             }
             post = Post(author=mock_post["author"], title=mock_post["title"],
-                        content=mock_post["content"], category=mock_post["category"])
+                        content=mock_post["content"], category=mock_post["category"], description=mock_post["description"])
             post.save()
 
     def generate_comments(self, n_comments):

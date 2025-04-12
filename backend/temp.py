@@ -1,2 +1,14 @@
-{"ops": [{"insert": "Tổng Bí thư, Chủ tịch Trung Quốc Tập Cận Bình sẽ thăm Việt Nam vào tuần sau, theo lời mời của Tổng Bí thư Tô Lâm và Chủ tịch nước Lương Cường.\nChuyến thăm cấp nhà nước sẽ diễn ra ngày 14-15/4, theo thông cáo của Bộ Ngoại giao. Đây là chuyến thăm cấp nhà nước lần thứ tư của ông Tập Cận Bình đến Việt Nam trên cương vị Tổng Bí thư, Chủ tịch Trung Quốc, diễn ra chưa đầy một năm sau chuyến thăm cấp nhà nước đến Trung Quốc của Tổng Bí thư Tô Lâm.\nTrung Quốc là nước đầu tiên thiết lập quan hệ ngoại giao với Việt Nam vào ngày 18/1/1950. Hai nước thiết lập quan hệ Đối tác Chiến lược Toàn diện vào năm 2008.\n"}, {"attributes": {"alt": "Người tiêu dùng mua sắm tại một siêu thị ở quận Manhattan, thành phố New York, hôm 20/2. Ảnh: AFP"}, "insert": {"image": "https://i1-vnexpress.vnecdn.net/2025/04/10/AFP-20250221-36YC667-v1-HighRe-7054-8959-1744252714.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=wcNKGRAgOdeCcsj8oYyg6A"}}, {"attributes": {"align": "center"}, "insert": "\n"}, {"insert": "sdfsdfsdf"}, {"attributes": {"align": "center"}, "insert": "\n"},
-         {"insert": "Trong chuyến thăm cấp nhà nước của ông Tập Cận Bình đến Việt Nam hồi tháng 12/2023, hai nước đã đề ra 6 phương hướng hợp tác lớn nhằm tiếp tục làm sâu sắc và nâng tầm quan hệ Đối tác hợp tác Chiến lược Toàn diện, thúc đẩy xây dựng Cộng đồng chia sẻ tương lai có ý nghĩa chiến lược.\n6 phương hướng bao gồm tin cậy chính trị cao hơn, hợp tác quốc phòng - an ninh thực chất hơn, hợp tác thực chất sâu sắc hơn, nền tảng xã hội vững chắc hơn, phối hợp đa phương chặt chẽ hơn và bất đồng được kiểm soát và giải quyết tốt hơn.\nTrung Quốc liên tục là đối tác thương mại lớn nhất và là thị trường xuất khẩu lớn thứ hai của Việt Nam trên thế giới. Việt Nam là đối tác thương mại lớn nhất của Trung Quốc trong ASEAN và là đối tác thương mại lớn thứ năm của Trung Quốc trên thế giới.\nTổng kim ngạch xuất nhập khẩu hai nước năm 2024 đạt 205,2 tỷ USD, đánh dấu mức kỷ lục về thương mại hai chiều, theo Tổng cục Hải quan. Trong năm 2024, Trung Quốc là nhà đầu tư lớn thứ sáu của Việt Nam với 4.922 dự án còn hiệu lực, tổng vốn đầu tư đăng ký đạt 29,55 tỷ USD.\n"}, {"attributes": {"alt": "Container hàng hóa tại cảng Hong Kong ngày 9/4. Ảnh: AFP"}, "insert": {"image": "https://i1-vnexpress.vnecdn.net/2025/04/10/AFP-20250409-yuen-hongkong2504-2339-3172-1744252715.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=aVJqweGaaK1tTpZIW7ghrw"}}, {"attributes": {"align": "center"}, "insert": "\n"}, {"insert": "sdsfsdfsdf"}, {"attributes": {"align": "center"}, "insert": "\n"}, {"insert": "Số lượng lưu học sinh Việt Nam tại Trung Quốc trong năm 2024 ở mức kỷ lục, gần 23.000 người, tăng gấp đôi so với năm 2019.\n"}]}
+import os
+import random
+
+
+def get_random_filename():
+    folder_path='./static/defaultthumnail'
+    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    if not files:
+        return None
+    random_file = random.choice(files)
+    print(random_file)
+    return random_file
+
+get_random_filename()
