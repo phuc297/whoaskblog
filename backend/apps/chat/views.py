@@ -14,7 +14,6 @@ def to(request, profile_id):
     if int(profile_id) == request.user.profile.id:
         return redirect("home")
 
-    print(f"profile_id = {profile_id}")
     profile = Profile.objects.get(pk=int(profile_id))
     conversation = Conversation.objects.filter(
         members=request.user.profile).filter(members=profile).first()
