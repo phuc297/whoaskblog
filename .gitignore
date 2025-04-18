@@ -182,3 +182,4 @@ cython_debug/
 # Custom
 mycmd.txt
 **/test/
+.idea/
