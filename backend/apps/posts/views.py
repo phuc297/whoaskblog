@@ -5,9 +5,6 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, UpdateView
 from django.db.models import Sum
-from django.db.models import F
-from django.core.files import File
-from utils.utils import get_random_thumbnail
 from .models import Post, Comment, PostVote
 
 
@@ -18,32 +15,15 @@ class CreatePostView(CreateView):
     fields = ['title', 'content', 'description', 'category', 'thumbnail']
 
     def form_valid(self, form):
-        print("Form is valid and form_valid() is called!")
+        print('---------------------call form valid')
         form.instance.author = self.request.user.profile
         post = form.save(commit=False)
-        if post.thumbnail:
-            print(f"has thumbnail!{post.thumbnail.url}")
-        else:
-            print("No thumbnail! No thumbnail!")
-
         return super().form_valid(form)
-
-
-class UpdatePostView(UpdateView):
-    model = Post
-    template_name = "posts/update_post.html"
-    success_url = reverse_lazy("home")
-    fields = ['title', 'category', 'content']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        post = form.save(commit=False)
-        if post.thumbnail:
-            print(f"has thumbnail!{post.thumbnail.url}")
-        else:
-            print("No thumbnail! No thumbnail!")
-
-        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        print('❌ FORM INVALID')
+        print(form.errors)  # In ra lỗi form
+        return super().form_invalid(form)
 
 
 class PostView(DetailView):
@@ -54,13 +34,8 @@ class PostView(DetailView):
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
         obj.views = obj.views + 1
-        print(obj.views)
         obj.save(update_fields=['views'])
         return obj
-
-
-def post_create(request):
-    return render(request, template_name="posts/create.html")
 
 
 @require_POST
@@ -84,7 +59,7 @@ def create_comment(request, post_id):
         "success": True,
         "username": profile.user.username,
         "content": comment.content,
-        "created_at": comment.created_at.strftime("%B %d, %Y, %-I:%M %p").lower(),
+        "created_at": comment.created_at.strftime("%B %d, %Y, %I:%M %p").lstrip('0').lower(),
         "avatar": profile.avatar.url
     })
 
@@ -128,3 +103,20 @@ def post_vote(request, post_id):
         "votes": total_value,
         "vote_choice": vote_choice
     })
+
+
+class UpdatePostView(UpdateView):
+    model = Post
+    template_name = "posts/update_post.html"
+    success_url = reverse_lazy("home")
+    fields = ['title', 'category', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        post = form.save(commit=False)
+
+        return super().form_valid(form)
+
+
+def post_create(request):
+    return render(request, template_name="posts/create.html")

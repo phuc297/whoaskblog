@@ -48,22 +48,27 @@ btnBack.addEventListener('click', () => {
 
 })
 
-btnPublish.addEventListener('click', () => {
+editorForm = document.querySelector('#ql-editor-form')
+editorForm.addEventListener('submit', (event) => {
 
-    const titleContent = Array.from(document.querySelectorAll('.ql-editor p'))
+    event.preventDefault();
+
+    const titleContent = Array.from(document.querySelectorAll('#editor-title .ql-editor p'))
         .map(p => p.innerText.trim())
         .join('\n');
 
-    const descriptionContent = Array.from(document.querySelectorAll('.ql-editor p'))
+    const descriptionContent = Array.from(document.querySelectorAll('#editor-description .ql-editor p'))
         .map(p => p.innerText.trim())
         .join('\n');
 
     console.log(titleContent)
+
     console.log(descriptionContent)
 
     document.querySelector('#id_description').value = titleContent;
+
     document.querySelector('#id_title').value = descriptionContent;
 
-    console.log('Publish')
+    editorForm.submit()
 
 })

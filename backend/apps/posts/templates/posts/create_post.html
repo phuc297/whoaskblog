@@ -15,7 +15,7 @@
 
 {% block content %}
   <div class="container w-full mx-auto pt-5 text-gray-800 pt flex justify-center">
-    <form id="ql-editor-form" method="POST" class="bg-white w-full flex flex-col items-center justify-center">
+    <form id="ql-editor-form" action="{% url 'posts:create' %}" method="POST" enctype="multipart/form-data" class="bg-white w-full flex flex-col items-center justify-center">
       {% csrf_token %}
       <!--  -->
       <div id="post-main-content" class="w-full">
@@ -31,12 +31,12 @@
       </div>
 
       <!--  -->
-      <div id="post-info" class="hidden">
-        <div class="w-1/2">
+      <div id="post-info" class="hidden flex flex-col items-center justify-center">
+        <div class="w-1/2 pb-8">
           <label for="editor-description" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Description</label>
           <div id="editor-description"></div>
         </div>
-        <div class="w-1/2">
+        <div class="w-1/2 pt-8">
           <label for="id_category" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Category</label>
           {{ form.category|add_class:'border-gray-300 bg-white text-gray-700 rounded-lg border focus:outline-none px-4 h-8' }}
         </div>
@@ -51,7 +51,9 @@
         </div>
       </div>
       <!--  -->
+      <label for="id_title" class="text-gray-700 text-xl font-bold mb-4 mt-4 hidden">Title</label>
       <textarea name="title" cols="40" rows="10" id="id_title" class="hidden"></textarea>
+      <label for="id_description" class="text-gray-700 text-xl font-bold mb-4 mt-4 hidden">Title</label>
       <textarea name="description" cols="40" rows="10" id="id_description" class="hidden"></textarea>
 
       <div id="button-group">
@@ -69,6 +71,14 @@
   <script src="{% static 'js/quill.js' %}"></script>
   <script src="{% static 'posts/js/custom_quill.js' %}"></script>
   <script src="{% static 'posts/js/create_post.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const ql_editors = document.querySelectorAll('.ql-editor')
+      ql_editors.forEach((editor) => {
+        editor.setAttribute('spellcheck', 'false')
+      })
+    })
+  </script>
 {% endblock %}
 
 {% block footer %}

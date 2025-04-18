@@ -9,6 +9,7 @@ const quill_title = new Quill('#editor-title', {
   },
   theme: 'bubble'
 });
+quill_title.root.setAttribute('spellcheck', false)
 
 const quill_description = new Quill('#editor-description', {
   modules: {
@@ -16,3 +17,4 @@ const quill_description = new Quill('#editor-description', {
   },
   theme: 'bubble'
 });
+quill_description.root.setAttribute('spellcheck', false)

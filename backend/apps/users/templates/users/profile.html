@@ -118,7 +118,7 @@
                 {% for post in profile.posts.all %}
                   <div class="max-w-xs bg-whiterounded-lg shadow-sm flex flex-col">
                     <div>
-                      <a href="{% url 'posts:post_view' post.id %}">
+                      <a href="{% url 'posts:view' post.id %}">
                         {% if post.thumbnail %}
                           <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="w-full h-48 object-cover rounded-lg cursor-pointer" />
                         {% else %}
@@ -129,7 +129,7 @@
                     <div class="p-5 flex flex-col justify-between flex-1">
                       <div>
                         <!-- Title -->
-                        <a href="{% url 'posts:post_view' post.id %}"><h1 class="mb-2 font-semibold tracking-tight cursor-pointer">{{ post.title }}</h1></a>
+                        <a href="{% url 'posts:view' post.id %}"><h1 class="mb-2 font-semibold tracking-tight cursor-pointer">{{ post.title }}</h1></a>
                         <!-- Description -->
                         <p class="text-sm italic text-gray-700">{{ post.content.plain|cut }}</p>
                         <!-- Post info -->
