@@ -19,11 +19,6 @@ class CreatePostView(CreateView):
         form.instance.author = self.request.user.profile
         post = form.save(commit=False)
         return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        print('❌ FORM INVALID')
-        print(form.errors)  # In ra lỗi form
-        return super().form_invalid(form)
 
 
 class PostView(DetailView):
@@ -39,7 +34,7 @@ class PostView(DetailView):
 
 
 @require_POST
-def create_comment(request, post_id):
+def comment(request, post_id):
     try:
         data = json.loads(request.body)
         content = data.get('content')
