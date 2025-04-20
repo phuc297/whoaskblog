@@ -1,5 +1,14 @@
 #ql-editor-form {
     margin-bottom: 5rem;
+    --font-size-base: 1.25rem;
+    --font-size-h3: calc(var(--font-size-base) * 1.25);
+    --font-size-h2: calc(var(--font-size-base) * 1.5);
+    --font-size-h1: calc(var(--font-size-base) * 1.75);
+    font-size: var(--font-size-base);
+}
+
+.ql-editor {
+    font-size: var(--font-size-base);
 }
 
 #quill-id_content .ql-editor {
@@ -27,19 +36,19 @@
 }
 
 #quill-id_content p {
-    font-size: 1.25rem;
+    font-size: var(--font-size-base);
 }
 
 #quill-id_content h3 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-h3);
 }
 
 #quill-id_content h2 {
-    font-size: 1.75rem;
+    font-size: var(--font-size-h2)
 }
 
 #quill-id_content h1 {
-    font-size: 2;
+    font-size: var(--font-size-h1)
 }
 
 #id_title {
@@ -55,7 +64,7 @@
 }
 
 #editor-title p {
-    font-size: 2rem;
+    font-size: var(--font-size-h1);
 }
 
 #editor-description {
@@ -63,5 +72,5 @@
 }
 
 #editor-description p {
-    font-size: 1rem;
+    font-size: var(--font-size-base);
 }

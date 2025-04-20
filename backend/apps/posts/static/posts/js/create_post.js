@@ -65,9 +65,9 @@ editorForm.addEventListener('submit', (event) => {
 
     console.log(descriptionContent)
 
-    document.querySelector('#id_description').value = titleContent;
+    document.querySelector('#id_description').value = descriptionContent;
 
-    document.querySelector('#id_title').value = descriptionContent;
+    document.querySelector('#id_title').value = titleContent;
 
     editorForm.submit()
 

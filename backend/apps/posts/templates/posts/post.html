@@ -8,22 +8,15 @@
 {% endblock %}
 
 {% block head %}
-  <style>
-    article p {
-      padding: 0.75rem;
-    }
-    article img {
-      display: block;
-      width: 100%;
-    }
-  </style>
+<link rel="stylesheet" href="{% static 'posts/css/view_post.css' %}" />
+  <link rel="stylesheet" href="{% static 'posts/css/quill.snow.css' %}" />
 {% endblock %}
 
 {% block content %}
   <meta name="csrf-token" content="{{ csrf_token }}" />
 
   <!-- Container -->
-  <div class="container w-full md:max-w-4xl mx-auto pt-20">
+  <div class="container w-full md:max-w-4xl mx-auto pt-15">
     <div class="w-full px-4 md:px-6 text-xl text-gray-800 leading-normal flex">
       <div id="sticky-bar" class="hidden 2xl:block w-20 fixed top-1/2 left-1/6 -translate-y-1/2 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="flex flex-col justify-center items-center w-20 h-80 -z-10 text-gray-500">
@@ -98,7 +91,9 @@
         <!-- /Author -->
 
         <!-- Post Content -->
-        <article class="py-6">{{ post.content.html|safe }}</article>
+        <article class="ql-snow">
+          <div class="ql-editor">{{ post.content.html|safe }}</div>
+        </article>
         <!-- / Post Content -->
       </div>
     </div>
@@ -153,5 +148,5 @@
   <script src="{% static 'js/get_csrftoken.js' %}"></script>
   <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}"></script>
   <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
-  <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:create_comment' post.id %}"></script>
+  <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:comment' post.id %}"></script>
 {% endblock %}
