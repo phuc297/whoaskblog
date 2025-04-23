@@ -4,6 +4,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, FormView
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+
 
 from .forms import RegisterForm
 from .models import Profile
@@ -36,7 +39,6 @@ class SignupView(FormView):
     def form_valid(self, form):
         user = form.save(commit=True)
         profile = Profile.objects.create(user=user)
-        profile.set_default_avatar()
         profile.save()
         return super().form_valid(form)
 

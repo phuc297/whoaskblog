@@ -2,19 +2,8 @@ import random
 
 from django.contrib.auth.models import User
 from django.db import models
+from utils.utils import get_random_avatar
 
-default_avatars = [
-    "001-boy.png",
-    "002-girl.png",
-    "003-boy-1.png",
-    "004-boy-2.png",
-    "005-boy-3.png",
-    "006-girl-1.png",
-    "007-boy-4.png",
-    "008-girl-2.png",
-    "009-girl-3.png",
-    "010-boy-5.png",
-]
 
 
 class Profile(models.Model):
@@ -22,7 +11,8 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     followers = models.ManyToManyField(
         "self", symmetrical=False, related_name='following', blank=True)
-    avatar = models.ImageField(upload_to='avatars', default='004-boy-2.png',  blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to='avatars', default=get_random_avatar,  blank=True, null=True)
 
     def __str__(self):
         return self.user.username
