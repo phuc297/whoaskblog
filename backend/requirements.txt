@@ -14,3 +14,4 @@ django-quill-editor
 channels
 channels[daphne]
 channels_redis
+selenium

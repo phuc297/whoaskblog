@@ -142,6 +142,7 @@ dist
 test/
 .env
 .env.dev
+.env.dev.local
 
 # Django
 staticfiles/admin/

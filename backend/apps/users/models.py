@@ -22,10 +22,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     followers = models.ManyToManyField(
         "self", symmetrical=False, related_name='following', blank=True)
-    avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
-
-    def set_default_avatar(self):
-        self.avatar = f"{random.choice(default_avatars)}"
+    avatar = models.ImageField(upload_to='avatars', default='004-boy-2.png',  blank=True, null=True)
 
     def __str__(self):
         return self.user.username
