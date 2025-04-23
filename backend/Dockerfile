@@ -37,4 +37,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r ./requirements.txt
 
+RUN apt-get update && apt-get install -y chromium-driver chromium
+
 COPY . .

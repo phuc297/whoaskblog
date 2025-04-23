@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, CreateView, UpdateView
 from django.db.models import Sum
 from .models import Post, Comment, PostVote
@@ -34,7 +35,12 @@ class PostView(DetailView):
 
 
 @require_POST
+@login_required
 def comment(request, post_id):
+    print('post')
+    if not request.user.is_authenticated:
+        print('not')
+        return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
     try:
         data = json.loads(request.body)
         content = data.get('content')
@@ -44,7 +50,7 @@ def comment(request, post_id):
         return JsonResponse({"success": False, "error": "Invalid JSON input"}, status=400)
 
     if not content:
-        return JsonResponse({"success": False, "error": "Empty Comment"})
+        return JsonResponse({"success": False, "error": "Empty Comment"}, status=400)
 
     post = get_object_or_404(Post, id=post_id)
     comment = Comment.objects.create(
@@ -59,6 +65,7 @@ def comment(request, post_id):
     })
 
 
+@login_required
 @require_POST
 def post_vote(request, post_id):
     try:

@@ -142,10 +142,14 @@ dist
 test/
 .env
 .env.dev
+.env.dev.local
 
 # Django
 staticfiles/admin/
 mediafiles/*
+!mediafiles/default_thumnails/
+!mediafiles/default_avatars/
+
 
 # Tailwindcss
 staticfiles/*

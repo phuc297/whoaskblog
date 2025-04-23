@@ -13,7 +13,14 @@ document.getElementById('upvote').addEventListener('click', () => {
         },
         body: JSON.stringify({ vote: 1 })
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.redirected) {
+                alert("You need to be logged in to voting. Redirecting to login...");
+                window.location.href = response.url;  // Redirect to the login page
+                return;
+            }
+            return response.json()
+        })
         .then(data => {
             console.log(data)
             upvote_element = document.getElementById('upvote')
@@ -43,7 +50,14 @@ document.getElementById('downvote').addEventListener('click', () => {
         },
         body: JSON.stringify({ vote: -1 })
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.redirected) {
+                alert("You need to be logged in to voting. Redirecting to login...");
+                window.location.href = response.url;  // Redirect to the login page
+                return;
+            }
+            return response.json()
+        })
         .then(data => {
             console.log(data)
             downvote_element = document.getElementById('downvote')

@@ -9,12 +9,12 @@
 {% endblock %}
 
 {% block head %}
-<style>
-  * {
-    scrollbar-width: none;
-  }
-</style>
-{% endblock head %}
+  <style>
+    * {
+      scrollbar-width: none;
+    }
+  </style>
+{% endblock %}
 
 {% block content %}
   <div class="flex justify-center mb-8">
@@ -56,16 +56,22 @@
               <p class="text-gray-600 mt-2">{{ profile.bio|default:'No bio available.' }}</p>
               <div class="mt-3 flex space-x-4">
                 <div class="text-center">
-                  <h3 class="text-xl font-semibold">{{ profile.followers_count }}</h3>
-                  <p class="text-gray-500 text-sm">Followers</p>
+                  <p class="text-gray-500 text-sm">
+                    <span>{{ profile.followers.count }}</span>
+                    <span>followers</span>
+                  </p>
                 </div>
                 <div class="text-center">
-                  <h3 class="text-xl font-semibold">{{ profile.following_count }}</h3>
-                  <p class="text-gray-500 text-sm">Following</p>
+                  <p class="text-gray-500 text-sm">
+                    <span>{{ profile.following.count }}</span>
+                    <span>following</span>
+                  </p>
                 </div>
                 <div class="text-center">
-                  <h3 class="text-xl font-semibold">{{ profile.posts_count }}</h3>
-                  <p class="text-gray-500 text-sm">Posts</p>
+                  <p class="text-gray-500 text-sm">
+                    <span>{{ profile.posts.count }}</span>
+                    <span>posts</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -75,9 +81,9 @@
               <!-- if -->
               {% if user.profile.id != profile.id %}
                 <!--  -->
-                <button id="btn-unfollow" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
+                <button id="btn-unfollow" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Đang theo dõi</button>
                 <!--  -->
-                <button id="btn-follow" class="{% if user.profile|is_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+                <button id="btn-follow" class="{% if user.profile|is_following:profile %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Theo dõi</button>
                 <!--  -->
               {% endif %}
               <!-- endif -->
@@ -93,15 +99,15 @@
         <div class="text-sm font-medium text-center text-gray-500 border-b dark:text-gray-400">
           <ul class="flex flex-wrap -mb-px">
             <li class="me-2">
-              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg text-green-500 border-green-500 active" ar>Posts</a>
+              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg text-green-500 border-green-500 active" ar>Bài viết</a>
             </li>
             <li class="me-2">
-              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg hover:text-green-500 hover:border-green-300 dark:hover:text-green-300">Followers</a>
+              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg hover:text-green-500 hover:border-green-300 dark:hover:text-green-300">Người theo dõi</a>
             </li>
             <li class="me-2">
-              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg hover:text-green-500 hover:border-green-300 dark:hover:text-green-300">Following</a>
+              <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg hover:text-green-500 hover:border-green-300 dark:hover:text-green-300">Đang theo dõi</a>
             </li>
-            <li class="me-2">
+            <li class="me-2 hidden">
               <a href="#" class="profile-tab-item inline-block p-4 border-b-2 rounded-t-lg hover:text-green-500 hover:border-green-300 dark:hover:text-green-300">About</a>
             </li>
           </ul>
@@ -111,7 +117,7 @@
         <div id="default-styled-tab-content">
           {% comment %}Posts-tab{% endcomment %}
           <div class="created-posts-tab profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
-            <h2 class="text-2xl font-bold mb-4">User Posts</h2>
+            <h2 class="text-2xl font-bold mb-4">Bài viết</h2>
             {% if profile.posts %}
               <!--  -->
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -138,12 +144,12 @@
                         <p class="text-xs italic text-gray-500 space-x-2">{{ post.created_at|to_date }}</p>
                         <div class="flex items-center space-x-4">
                           <!-- Upvote/Downvote -->
-                          <div class="flex items-center space-x-2">
+                          <div class="hidden flex items-center space-x-2">
                             <span class="text-gray-500 text-xs">{{ post.upvotes }} upvotes</span>
                           </div>
                           <!-- Views -->
                           <div class="flex items-center text-gray-500 text-xs">
-                            <span>{{ post.views }} views</span>
+                            <span>{{ post.views }} lượt xem</span>
                           </div>
                         </div>
                       </div>
@@ -197,4 +203,7 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

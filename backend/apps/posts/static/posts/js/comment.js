@@ -1,40 +1,59 @@
 
 document.getElementById('btn-submit-comment').addEventListener('click', async () => {
 
+    console.log('window.csrfToken = ', window.csrfToken)
+
     const commentContent = document.getElementById('text-comment').value
-
     if (!commentContent.trim()) {
-
         alert("Comment content cannot be empty!");
-
         return;
-
     }
 
     const script = document.getElementById('comment-script');
-
     const data = script.dataset;
 
-    try {
+    const response = await fetch(data.url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": window.csrfToken
+        },
+        body: JSON.stringify({
+            post_id: data.post_id,
+            profile_id: data.profile_id,
+            content: commentContent
+        })
+    });
 
-        const response = await fetch(data.url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": window.csrfToken
-            },
-            body: JSON.stringify({
-                post_id: data.post_id,
-                profile_id: data.profile_id,
-                content: commentContent
-            })
-        });
+    if (response.redirected) {
+        const redirectUrl = response.url;
+        if (redirectUrl.includes('/login/')) {
+            alert("You need to be logged in to comment. Redirecting to login...");
+            window.location.href = redirectUrl;  // Redirect to the login page
+            return;
+        }
+    }
 
-        const result = await response.json()
+    const contentType = response.headers.get("Content-Type");
 
-        if (result.success) {
+    if (!response.ok) {
+        const errorText = await response.text();  // Get raw HTML or error message if not JSON
+        console.error("Error response: ", errorText);  // Log the raw error content
+        alert("An error occurred: " + errorText);
+        return;
+    }
 
-            const newComment = `
+    if (!contentType || !contentType.includes("application/json")) {
+        console.error("Expected JSON, but received: ", response);
+        alert("Unexpected response format. Please try again.");
+        return;
+    }
+
+    const result = await response.json();
+
+    if (result.success) {
+        const newComment = `
                     <div class="flex mb-6">
                       <img class="w-14 h-14 rounded-full mr-4" src="${result.avatar}" alt="Avatar of User"/>
                       <div class="flex-1">
@@ -45,24 +64,13 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
                     </div>
                     `;
 
-            document.getElementById('comments-section').insertAdjacentHTML('afterbegin', newComment)
+        document.getElementById('comments-section').insertAdjacentHTML('afterbegin', newComment)
 
-            document.getElementById('text-comment').value = ""
-
-        } else {
-
-            console.error("Error: ", result.error)
-
-        }
-
-
-    } catch (error) {
-
-        console.error("Fetch error: ", error);
-
-        alert("An error occurred when submitting the comment.")
-
+        document.getElementById('text-comment').value = ""
+    } else {
+        console.error("Error: ", result.error);
     }
+
 
 })
 

@@ -29,7 +29,7 @@
   <div class="z-0">
     <div class="flex justify-center bg-white min-h-[90vh] max-h-[90vh]">
       <div class="w-9/10 min-h-[90vh] max-h-[90vh] flex">
-        <div class="flex w-full">
+        <div class="flex w-full pb-5">
           <!-- Sidebar -->
           <div class="w-2/6 p-4 space-x-2 h-full rounded-lg border border-gray-400 mr-3 overflow-auto">
             <h2 class="text-lg font-semibold mb-4">Chats</h2>
@@ -91,8 +91,8 @@
                   <div class="pt-4 flex items-center justify-center">
                     <div class="w-full">
                       <form class="flex items-center space-x-4">
-                        <input type="text" id="input-msg-content" placeholder="Type a message..." class="flex-1 rounded-full border border-gray-400 bg-gray-100 px-4 py-3 focus:outline-none" />
-                        <button id="btn-send-msg" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">Send</button>
+                        <input type="text" id="input-msg-content" placeholder="Nhập tin nhắn..." class="flex-1 rounded-full border border-gray-400 bg-gray-100 px-4 py-3 focus:outline-none" />
+                        <button id="btn-send-msg" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">Gửi</button>
                       </form>
                       {{ user.profile.id|json_script:"sender-id" }}
                       {{ other.id|json_script:"receiver-id" }}

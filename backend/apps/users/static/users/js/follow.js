@@ -5,8 +5,6 @@ function attachFollowEvent() {
 
   document.getElementById("btn-follow").addEventListener("click", () => {
 
-    console.log("btn-follow")
-
     var xhr = new XMLHttpRequest();
 
     xhr.open("POST", data.url, true);
@@ -18,8 +16,6 @@ function attachFollowEvent() {
     xhr.onreadystatechange = function () {
 
       if (xhr.readyState === 4 && xhr.status === 200) {
-
-        console.log("Success:", JSON.parse(xhr.responseText));
 
         document.getElementById("btn-follow").classList.add("hidden");
 
@@ -48,8 +44,6 @@ function attachFollowEvent() {
 
   document.getElementById("btn-unfollow").addEventListener("click", () => {
 
-    console.log("btn-unfollow")
-
     var xhr = new XMLHttpRequest();
 
     xhr.open("POST", data.url, true);
@@ -61,8 +55,6 @@ function attachFollowEvent() {
     xhr.onreadystatechange = function () {
 
       if (xhr.readyState === 4 && xhr.status === 200) {
-
-        console.log("Success:", JSON.parse(xhr.responseText));
 
         document.getElementById("btn-unfollow").classList.add("hidden");
 
