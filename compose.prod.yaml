@@ -1,23 +1,21 @@
 services:
   web:
     build:
-      context: app
+      context: backend
       dockerfile: Dockerfile.prod
-    command: bash -c 
-      " python manage.py makemigrations --noinput
-        && python manage.py migrate
-        && python manage.py collectstatic --no-input
-        && gunicorn 'config.wsgi:application' --bind=0.0.0.0:8000"
+    command: bash -c " python manage.py makemigrations --noinput && python manage.py migrate && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8000 config.asgi:application"
     expose:
       - 8000
     volumes:
-      - static_volume:/home/app/staticfiles/
-      - media_volume:/home/app/mediafiles/
+      - static_volume:/home/app/backend/staticfiles/
+      - media_volume:/home/app/backend/mediafiles/
     env_file:
       - ./.env.prod
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - mynetwork
   db:
     image: postgres
     restart: always
@@ -33,23 +31,40 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - mynetwork
   nginx:
     build: ./nginx
     ports:
       - 1337:80
     volumes:
-      - static_volume:/home/app/staticfiles/
-      - media_volume:/home/app/mediafiles/
+      - static_volume:/home/app/backend/staticfiles/
+      - media_volume:/home/app/backend/mediafiles/
     depends_on:
       - web
+    networks:
+      - mynetwork
+  # node:
+  #   build:
+  #     context: backend
+  #     dockerfile: Dockerfile.node
+  #   command: npx @tailwindcss/cli -i ./static/css/input.css -o ./staticfiles/css/output.css --watch
+  #   volumes:
+  #     - static_volume:/home/app/backend/staticfiles/
+  #   depends_on:
+  #     web:
+  #       condition: service_started
   redis:
     restart: unless-stopped
     image: redis
     expose:
       - 6379
+    networks:
+      - mynetwork
 volumes:
   db-data:
   static_volume:
   media_volume:
-
-
+networks:
+  mynetwork:
+    driver: bridge

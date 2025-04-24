@@ -46,7 +46,7 @@ class Category(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(
         Profile, related_name='posts', on_delete=models.CASCADE)
-    title = models.TextField(blank=True, max_length=130)
+    title = models.TextField(blank=True, max_length=150)
     # content = QuillField(blank=True)
     content = models.TextField(blank=True)
     content_text = QuillField(blank=True)
@@ -57,11 +57,11 @@ class Post(models.Model):
     votes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
-    thumbnail = models.ImageField(upload_to='thumnail_post', default=get_random_thumbnail, null=True)
+    thumbnail = models.ImageField(upload_to='thumnail_post', default=get_random_thumbnail, null=True, max_length=500)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title)[:200]
         return super().save(*args, **kwargs)
 
     def __str__(self):
