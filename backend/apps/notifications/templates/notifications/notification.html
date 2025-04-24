@@ -1,4 +1,6 @@
 {% extends 'base/base.html' %}
+{% load string_tags %}
+
 
 {% block content %}
   <div class="flex flex-col items-center justify-center bg-white w-full">
@@ -8,8 +10,8 @@
       <!-- Notification -->
       {% for notification in notifications %}
         <li class="list-row w-full cursor-pointer rounded-box hover:shadow-sm">
-          <div>
-            {% comment %} <img class="size-10 rounded-box" src="" /> {% endcomment %}
+          <div class="w-10 h-10 overflow-hidden rounded-full">
+            <img class="w-full h-full object-cover object-center rounded-full" src="{{ notification.get_image_object }}" />
           </div>
           <div>
             <div class="font-semibold text-gray-700">
@@ -18,7 +20,7 @@
             </div>
             <div class="text-xs text-gray-700 py-1">
               {% if notification.related_object %}
-                <span>{{ notification.related_object }}</span>
+                <span>{{ notification.related_object|shorten }}</span>
               {% endif %}
             </div>
           </div>

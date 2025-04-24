@@ -1,8 +1,6 @@
 
 document.getElementById('btn-submit-comment').addEventListener('click', async () => {
 
-    console.log('window.csrfToken = ', window.csrfToken)
-
     const commentContent = document.getElementById('text-comment').value
     if (!commentContent.trim()) {
         alert("Comment content cannot be empty!");
@@ -30,7 +28,7 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
         const redirectUrl = response.url;
         if (redirectUrl.includes('/login/')) {
             alert("You need to be logged in to comment. Redirecting to login...");
-            window.location.href = redirectUrl;  // Redirect to the login page
+            window.location.href = redirectUrl;
             return;
         }
     }
@@ -38,8 +36,8 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
     const contentType = response.headers.get("Content-Type");
 
     if (!response.ok) {
-        const errorText = await response.text();  // Get raw HTML or error message if not JSON
-        console.error("Error response: ", errorText);  // Log the raw error content
+        const errorText = await response.text();
+        console.error("Error response: ", errorText);
         alert("An error occurred: " + errorText);
         return;
     }

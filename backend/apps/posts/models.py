@@ -47,8 +47,8 @@ class Post(models.Model):
     author = models.ForeignKey(
         Profile, related_name='posts', on_delete=models.CASCADE)
     title = models.TextField(blank=True, max_length=130)
-    content = QuillField(blank=True)
-    # content = models.TextField(blank=True)
+    # content = QuillField(blank=True)
+    content = models.TextField(blank=True)
     content_text = QuillField(blank=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -57,7 +57,7 @@ class Post(models.Model):
     votes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
-    thumbnail = models.ImageField(upload_to='thumnail_post', default='default.png', null=True)
+    thumbnail = models.ImageField(upload_to='thumnail_post', default=get_random_thumbnail, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
