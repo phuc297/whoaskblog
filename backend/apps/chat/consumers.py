@@ -4,8 +4,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.shortcuts import get_object_or_404
-from .models import Message, Conversation
-from apps.users.models import Profile
+# from .models import Message, Conversation
+# from apps.users.models import Profile
 from asgiref.sync import sync_to_async
 
 
@@ -24,6 +24,7 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
+        from .models import Message
         text_data_json = json.loads(text_data)
         conversation_id = text_data_json["conversation_id"]
         sender_id = text_data_json["sender_id"]
@@ -56,9 +57,11 @@ class AsyncChatConsumer(AsyncWebsocketConsumer):
 
 @sync_to_async
 def get_conversation(conversation_id):
+    from .models import Conversation
     return Conversation.objects.get(pk=int(conversation_id))
 
 
 @sync_to_async
 def get_profile(profile_id):
+    from apps.users.models import Profile
     return Profile.objects.get(pk=int(profile_id))
