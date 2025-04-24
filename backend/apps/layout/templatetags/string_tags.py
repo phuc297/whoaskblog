@@ -11,6 +11,7 @@ def cut(string):
 
 @register.filter
 def shorten(text, word_limit=10):
+    text = str(text)
     words = text.split()
     shortened = " ".join(words[:word_limit])
     return shortened + ("..." if len(words) > word_limit else "")
