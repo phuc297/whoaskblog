@@ -1,6 +1,4 @@
 
-// Follow button in post page
-
 function attachFollowEvent() {
 
   const data = document.currentScript.dataset;
@@ -52,13 +50,11 @@ function attachFollowEvent() {
 
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    xhr.setRequestHeader("X-CSRFToken", data.token);
+    xhr.setRequestHeader("X-CSRFToken", window.csrfToken);
 
     xhr.onreadystatechange = function () {
 
       if (xhr.readyState === 4 && xhr.status === 200) {
-
-        console.log("Success:", JSON.parse(xhr.responseText));
 
         document.getElementById("btn-unfollow").classList.add("hidden");
 
