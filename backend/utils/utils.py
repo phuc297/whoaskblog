@@ -4,10 +4,10 @@ import random
 from dotenv import load_dotenv
 
 load_dotenv('.env.dev')
-IS_CLOUD_STORE = bool(int(os.getenv('DEBUG_MODE', '0')))
+IS_CLOUD_STORE = bool(int(os.getenv('IS_CLOUD_STORE', '0')))
 
 
-STORAGES_PATH = ''
+STORAGES_PATH = './'
 DEFAULT_THUMBNAIL_POST_PATH = f'{STORAGES_PATH}/mediafiles/default_thumnails'
 DEFAULT_AVATAR_PATH = f'{STORAGES_PATH}/mediafiles/default_avatars'
 
