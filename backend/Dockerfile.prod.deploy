@@ -1,0 +1,38 @@
+# syntax=docker/dockerfile:1
+ARG PYTHON_VERSION=3.12
+
+FROM python:${PYTHON_VERSION}-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1
+
+ENV PYTHONUNBUFFERED=1
+
+ENV APP_HOME=/home/app/backend
+RUN mkdir -p $APP_HOME
+RUN mkdir -p $APP_HOME/staticfiles
+RUN mkdir -p $APP_HOME/mediafiles
+WORKDIR $APP_HOME
+
+RUN apt-get update && apt-get install -y build-essential libpq-dev curl
+
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    appuser
+
+RUN pip install --upgrade pip
+
+COPY ./backend/requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt && pip install daphne
+
+COPY . $APP_HOME
+RUN chown -R appuser:appuser $APP_HOME
+
+USER appuser
+
+CMD ["bash", "-c", "python manage.py makemigrations --noinput && python manage.py migrate && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8000 config.asgi:application"]
