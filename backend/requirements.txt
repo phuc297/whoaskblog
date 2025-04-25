@@ -16,4 +16,5 @@ channels[daphne]
 channels_redis
 selenium
 dotenv
+whitenoise
 dj_database_url
