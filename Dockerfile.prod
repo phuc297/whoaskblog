@@ -54,3 +54,5 @@ COPY --from=node-build /home/node $APP_HOME
 RUN chown -R appuser:appuser $APP_HOME
 
 USER appuser
+
+CMD bash -c "python manage.py makemigrations --noinput && python manage.py migrate && python manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8000 config.asgi:application"
