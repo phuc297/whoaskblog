@@ -18,3 +18,5 @@ selenium
 dotenv
 whitenoise
 dj_database_url
+django-cloudinary-storage
+Pillow

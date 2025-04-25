@@ -154,4 +154,6 @@ mediafiles/*
 # Tailwindcss
 staticfiles/*
 
+
 scripts/
+cloudinary_api.py
