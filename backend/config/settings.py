@@ -33,7 +33,10 @@ DEBUG = bool(int(os.getenv('DEBUG_MODE', '0')))
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(' ')
+]
+
 
 # Application definition
 
@@ -160,7 +163,11 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Media files
 
