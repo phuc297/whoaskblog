@@ -16,3 +16,4 @@ channels[daphne]
 channels_redis
 selenium
 dotenv
+dj_database_url

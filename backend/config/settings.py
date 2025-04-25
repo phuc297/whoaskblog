@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from django.urls import reverse_lazy
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv('.env.dev')
@@ -100,15 +101,19 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
+#         'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
+#         'USER': os.getenv('SQL_USER', 'user'),
+#         'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+#         'HOST': os.getenv('SQL_HOST', 'localhost'),
+#         'PORT': os.getenv('SQL_PORT', '5432'),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.sqlite3'),
-        'USER': os.getenv('SQL_USER', 'user'),
-        'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
-        'HOST': os.getenv('SQL_HOST', 'localhost'),
-        'PORT': os.getenv('SQL_PORT', '5432'),
-    }
+    'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
 }
 
 
