@@ -26,7 +26,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile.node
-    command: npx @tailwindcss/cli -i ./static/css/input.css -o ./staticfiles/css/output.css --watch
+    command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
     tty: true
     volumes:
       - ./backend/staticfiles:/usr/src/backend/staticfiles

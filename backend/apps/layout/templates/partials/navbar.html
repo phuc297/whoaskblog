@@ -84,7 +84,7 @@
 
           {% if user.is_authenticated %}
             <li class="mr-2 h-12 flex flex-col justify-center relative">
-              <button id="dropdown-profile-button"><img class="h-12 w-12 rounded-full cursor-pointer" src="{{ user.profile.avatar.url|default:'/static/default-avatar.png' }}" alt="User Avatar" /></button>
+              <button id="dropdown-profile-button"><img class="h-12 w-12 rounded-full cursor-pointer" src="{{ user.profile.avatar.url }}" alt="User Avatar" /></button>
               <div id="dropdown-profile-menu" class="hidden left-0 top-full absolute w-56 rounded-md shadow-lg bg-white border border-gray-200 group-hover:block z-10">
                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   <a href="{% url 'profile' user.profile.id %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Trang cá nhân</a>

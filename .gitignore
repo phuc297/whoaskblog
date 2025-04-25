@@ -183,3 +183,5 @@ cython_debug/
 mycmd.txt
 **/test/
 .idea/
+temp
+temp.py

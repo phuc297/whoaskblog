@@ -1,6 +1,10 @@
 # syntax=docker/dockerfile:1
 ARG PYTHON_VERSION=3.12
 
+#
+# Stage 1
+#
+
 FROM node:18-alpine AS node-build
 
 ENV NODE_HOME=/home/node

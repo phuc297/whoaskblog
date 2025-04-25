@@ -57,7 +57,7 @@ class Post(models.Model):
     votes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
-    thumbnail = models.ImageField(upload_to='thumnail_post', default=get_random_thumbnail, null=True, max_length=500)
+    thumbnail = models.ImageField(upload_to='images/thumnail_posts/', default=get_random_thumbnail, null=True, max_length=500)
 
     def save(self, *args, **kwargs):
         if not self.slug:
