@@ -87,10 +87,10 @@
               <button id="dropdown-profile-button"><img class="h-12 w-12 rounded-full cursor-pointer" src="{{ user.profile.avatar.url }}" alt="User Avatar" /></button>
               <div id="dropdown-profile-menu" class="hidden left-0 top-full absolute w-56 rounded-md shadow-lg bg-white border border-gray-200 group-hover:block z-10">
                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                  <a href="{% url 'profile' user.profile.id %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Trang cá nhân</a>
+                  <a href="{% url 'users:profile' user.profile.id %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Trang cá nhân</a>
                   <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết đã lưu</a>
                   <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết nháp</a>
-                  <form action="{% url 'logout' %}" method="POST">
+                  <form action="{% url 'users:logout' %}" method="POST">
                     {% csrf_token %}
                     <a class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem"><button type="submit">Đăng xuất</button></a>
                   </form>
@@ -99,10 +99,10 @@
             </li>
           {% else %}
             <li class="mr-2 flex flex-col justify-center">
-              <a class="w-full border border-green-500 font-semibold text-green-500 py-2 px-4 rounded-3xl hover:bg-green-100 transition duration-300 ease-in-out" href="{% url 'signup' %}">Đăng kí</a>
+              <a class="w-full border border-green-500 font-semibold text-green-500 py-2 px-4 rounded-3xl hover:bg-green-100 transition duration-300 ease-in-out" href="{% url 'users:signup' %}">Đăng kí</a>
             </li>
             <li class="mr-2 flex flex-col justify-center">
-              <a class="w-full bg-green-500 font-semibold text-white py-2 px-4 rounded-3xl hover:bg-green-600 transition duration-300 ease-in-out" href="{% url 'login' %}">Đăng nhập</a>
+              <a class="w-full bg-green-500 font-semibold text-white py-2 px-4 rounded-3xl hover:bg-green-600 transition duration-300 ease-in-out" href="{% url 'users:login' %}">Đăng nhập</a>
             </li>
           {% endif %}
         </ul>

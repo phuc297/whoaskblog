@@ -48,7 +48,7 @@ class Fake:
             sys.stdout.write("create a user successful !\n")
             sys.stdout.flush() 
             profile = Profile(
-                user=user, bio=mock_user["bio"])
+                user=user, bio=mock_user["bio"], display_name=mock_user["username"])
             profiles.append(profile)
         Profile.objects.bulk_create(profiles)
         sys.stdout.write(f"create {len(profiles)} profiles successful !\n")

@@ -13,7 +13,7 @@ class Profile(models.Model):
     followers = models.ManyToManyField(
         "self", symmetrical=False, related_name='following', blank=True)
     avatar = models.ImageField(
-        upload_to='images/avatars/', default=get_random_avatar, blank=True, null=True)
+        upload_to='images/avatars/', default=get_random_avatar, null=True, max_length=500)
 
     def __str__(self):
         return self.display_name or self.user.username

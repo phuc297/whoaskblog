@@ -21,10 +21,10 @@
           <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 mt-6 rounded-lg hover:bg-green-600">Đăng kí</button>
         </form>
         <p class="text-sm text-gray-600 text-center mt-4">
-          Đã có tài khoản? <a href="{% url 'login' %}" class="text-green-500 hover:underline">Đăng nhập</a>.
+          Đã có tài khoản? <a href="{% url 'users:login' %}" class="text-green-500 hover:underline">Đăng nhập</a>.
         </p>
       </div>
     </div>
   </div>
-  <div class="border border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"></div>
+  <div class="hidden border border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"></div>
 {% endblock %}

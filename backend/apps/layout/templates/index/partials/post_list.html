@@ -28,7 +28,7 @@
           <div class="post-info w-full">
             <div class="text-sm text-gray-600 flex justify-between">
               <div class="flex items-center space-x-2">
-                <a href="{% url 'profile' post.author.id %}" class="flex items-center space-x-2">
+                <a href="{% url 'users:profile' post.author.id %}" class="flex items-center space-x-2">
                   <img src="{{ post.author.avatar.url }}" alt="" class="h-12 w-12 rounded-full" />
                   <span class="font-medium hover:underline cursor-pointer">{{ post.author }}</span>
                 </a>
