@@ -47,9 +47,8 @@ class Post(models.Model):
     author = models.ForeignKey(
         Profile, related_name='posts', on_delete=models.CASCADE)
     title = models.TextField(blank=True, max_length=150)
-    # content = QuillField(blank=True)
-    content = models.TextField(blank=True)
-    content_text = QuillField(blank=True)
+    content = QuillField(blank=True)
+    # content = models.TextField(blank=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

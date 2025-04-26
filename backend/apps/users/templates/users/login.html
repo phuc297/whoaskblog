@@ -1,9 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% load static %}
-
 {% load crispy_forms_tags %}
-
 {% load tailwind_filters %}
 
 {% block title %}
@@ -13,20 +11,21 @@
   <div class="min-h-[85vh] flex flex-col justify-center">
     <div class="flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100 w-full max-w-sm">
-        <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">Đăng nhập</h2>
         <form method="POST" action="{% url 'login' %}">
           {% csrf_token %}
           {{ form|crispy }}
           <div class="flex items-center justify-between mb-4">
-            <label class="flex items-center"><input type="checkbox" name="remember" class="mr-2" />Remember me</label>
-            <a href="#" class="text-green-500 hover:underline text-sm">Forgot password?</a>
+            <label class="flex items-center"><input type="checkbox" name="remember" class="mr-2" />Nhớ mật khẩu</label>
+            <a href="#" class="text-green-500 hover:underline text-sm">Quên mật khẩu?</a>
           </div>
-          <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Login</button>
+          <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Đăng nhập</button>
         </form>
         <p class="text-sm text-gray-600 text-center mt-4">
-          Don't have an account? <a href="{% url 'signup' %}" class="text-green-500 hover:underline">Register here</a>.
+          Chưa có tài khoản? <a href="{% url 'signup' %}" class="text-green-500 hover:underline">Đăng kí</a>.
         </p>
       </div>
     </div>
   </div>
+  <div class="hidden border border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"></div>
 {% endblock %}

@@ -10,7 +10,7 @@ def cut(string):
 
 
 @register.filter
-def shorten(text, word_limit=10):
+def truncate_text(text, word_limit=10):
     text = str(text)
     words = text.split()
     shortened = " ".join(words[:word_limit])

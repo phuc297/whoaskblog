@@ -2,10 +2,9 @@
 {% load static %}
 {% load follow_tags %}
 {% load to_date %}
-{% load string_tags %}
 
 {% block title %}
-  User Profile
+  Trang cá nhân của {{ profile }}
 {% endblock %}
 
 {% block content %}
@@ -15,7 +14,7 @@
         <!-- Profile top -->
 
         <div class="flex items-center space-x-6 mb-8">
-          <img src="{{ profile.avatar.url }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-300" />
+          <img src="{{ profile.avatar.url }}" alt="Avatar" class="w-36 h-36 rounded-full border-1 border-gray-100" />
           <div>
             <div>
               <div class="flex items-center space-x-2">
