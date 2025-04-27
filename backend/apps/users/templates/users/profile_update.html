@@ -40,31 +40,12 @@
             </div>
             <!--  -->
             <div class="flex justify-center">
+              <button class="mt-8 w-36 cursor-pointer bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Lưu thay đổi</button>
+            </div>
+            <div class="flex justify-center">
               <button type="submit" class="mt-8 w-36 cursor-pointer bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Lưu thay đổi</button>
             </div>
           </form>
-          <script>
-            const inputAvatar = document.getElementById('id_avatar')
-            const avatarPreview = document.getElementById('avatar_preview')
-            
-            inputAvatar.addEventListener('change', function (event) {
-              const file = event.target.files[0]
-              if (file) {
-                avatarPreview.src = URL.createObjectURL(file)
-              }
-            })
-          </script>
-          <script>
-            const input = document.getElementById('file-input')
-            const image = document.getElementById('img-preview')
-            
-            input.addEventListener('change', (e) => {
-              if (e.target.files.length) {
-                const src = URL.createObjectURL(e.target.files[0])
-                image.src = src
-              }
-            })
-          </script>
 
           <!--  -->
         </div>
@@ -74,6 +55,27 @@
   </div>
 {% endblock %}
 
-{% block footer %}
-
+{% block script %}
+  <script>
+    const inputAvatar = document.getElementById('id_avatar')
+    const avatarPreview = document.getElementById('avatar_preview')
+    
+    inputAvatar.addEventListener('change', function (event) {
+      const file = event.target.files[0]
+      if (file) {
+        avatarPreview.src = URL.createObjectURL(file)
+      }
+    })
+  </script>
+  <script>
+    const input = document.getElementById('file-input')
+    const image = document.getElementById('img-preview')
+    
+    input.addEventListener('change', (e) => {
+      if (e.target.files.length) {
+        const src = URL.createObjectURL(e.target.files[0])
+        image.src = src
+      }
+    })
+  </script>
 {% endblock %}
