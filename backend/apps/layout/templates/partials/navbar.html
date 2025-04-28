@@ -88,9 +88,9 @@
               <div id="dropdown-profile-menu" class="hidden left-0 top-full absolute w-56 rounded-md shadow-lg bg-white border border-gray-200 group-hover:block z-10">
                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   <a href="{% url 'users:profile' user.profile.id %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Trang cá nhân</a>
-                  <a href="{% url 'users:update' %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Chỉnh sửa trang cá nhân</a>
                   <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết đã lưu</a>
                   <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết nháp</a>
+                  <a href="{% url 'users:update' %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Tùy chỉnh</a>
                   <form action="{% url 'users:logout' %}" method="POST">
                     {% csrf_token %}
                     <a class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem"><button type="submit">Đăng xuất</button></a>
