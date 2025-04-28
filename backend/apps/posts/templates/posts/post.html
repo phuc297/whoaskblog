@@ -66,9 +66,9 @@
 
         <!-- Author -->
         <div class="flex w-full items-center font-sans px-4 py-12">
-          <a href="{% url 'profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
+          <a href="{% url 'users:profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
           <div class="flex-1 px-2">
-            <a href="{% url 'profile' post.author.id %}"><p class="font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
+            <a href="{% url 'users:profile' post.author.id %}"><p class="font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
             <p class="text-sm md:text-base font-normal text-gray-600">Published {{ post.created_at }}</p>
           </div>
           <div class="justify-end">
@@ -77,12 +77,12 @@
               <!-- if -->
               {% if user.is_authenticated and user.profile.id != post.author.id %}
                 <!--  -->
-                <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Following</button>
+                <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Đang theo dõi</button>
                 <!--  -->
-                <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</button>
+                <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Theo dõi</button>
                 <!--  -->
               {% else %}
-                <a href="{% url 'login' %}" id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
+                <a href="{% url 'users:login' %}" id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
               {% endif %}
               <!-- endif -->
             </div>
@@ -135,7 +135,7 @@
 {% block script %}
   <script src="{% static 'posts/js/sticky_bar.js' %}"></script>
   <script src="{% static 'js/get_csrftoken.js' %}"></script>
-  <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}"></script>
+  <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'users:follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}"></script>
   <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
   <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:comment' post.id %}"></script>
   <script>

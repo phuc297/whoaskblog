@@ -7,23 +7,24 @@
 {% load tailwind_filters %}
 
 {% block title %}
-  User
+  Đăng kí
 {% endblock %}
 
 {% block content %}
   <div class="min-h-[85vh] flex flex-col justify-center">
     <div class="flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">Đăng kí</h2>
         <form method="POST">
           {% csrf_token %}
           {{ form|crispy }}
-          <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 mt-6 rounded-lg hover:bg-green-600">Register</button>
+          <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 mt-6 rounded-lg hover:bg-green-600">Đăng kí</button>
         </form>
         <p class="text-sm text-gray-600 text-center mt-4">
-          Already have an account? <a href="{% url 'login' %}" class="text-green-500 hover:underline">Login here</a>.
+          Đã có tài khoản? <a href="{% url 'users:login' %}" class="text-green-500 hover:underline">Đăng nhập</a>.
         </p>
       </div>
     </div>
   </div>
+  <div class="hidden border border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"></div>
 {% endblock %}

@@ -12,16 +12,13 @@
       {% endblock %}
     </title>
 
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/output.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     {% block head %}
 
     {% endblock %}
   </head>
-  <body class="bg-white text-gray-800 min-h-screen">
+  <body class="bg-white min-h-screen">
     <!-- Navbar -->
     {% block navbar %}
       {% include 'partials/navbar.html' with user=user %}
