@@ -1,12 +1,22 @@
-/* Works on Firefox */
-* {
+html {
+    overflow: scroll;
+    /* hoặc overflow: scroll */
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: gray;
-    scrollbar-gutter: stable overlay;
+    scrollbar-width: thin;
 }
 
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 10px;
-    color: #4dc0b5;
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
 }

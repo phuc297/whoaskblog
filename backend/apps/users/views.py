@@ -3,13 +3,25 @@ from django.contrib.auth.views import LoginView as LoginBaseView, LogoutView as 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
-
 from .forms import RegisterForm
 from .models import Profile
+
+
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    fields = ['avatar', 'display_name', 'bio']
+    template_name = "users/profile_update.html"
+    context_object_name = "profile"
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={'pk': self.object.pk})
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
 
 
 class ProfileView(DetailView):
@@ -37,9 +49,7 @@ class SignupView(FormView):
     success_url = reverse_lazy("home")
 
     def form_valid(self, form):
-        user = form.save(commit=True)
-        profile = Profile.objects.create(user=user)
-        profile.save()
+        form.save(commit=True)
         return super().form_valid(form)
 
 

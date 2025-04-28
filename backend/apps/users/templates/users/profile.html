@@ -18,7 +18,7 @@
           <div>
             <div>
               <div class="flex items-center space-x-2">
-                <h2 class="text-3xl font-bold">{{ profile.user.username }}</h2>
+                <h2 class="text-3xl font-bold">{{ profile }}</h2>
                 {% if user.profile.id != profile.id %}
                   <div class="flex flex-col justify-center">
                     <a href="{% url 'chat:to' profile.id %}">
@@ -79,11 +79,11 @@
                   <!--  -->
                 {% endif %}
               {% else %}
-                <a href="{% url 'login' %}"><button id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 cursor-pointer">+ Theo dõi</button></a>
+                <a href="{% url 'users:login' %}"><button id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 cursor-pointer">+ Theo dõi</button></a>
               {% endif %}
               <!-- endif -->
             </div>
-            <script src="{% static 'users/js/follow.js' %}" data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" data-token="{{ csrf_token }}"></script>
+            <script src="{% static 'users/js/follow.js' %}" data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" data-token="{{ csrf_token }}"></script>
 
             <!--  -->
           </div>

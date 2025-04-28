@@ -54,11 +54,11 @@
   <!-- Post Tab -->
   <!-- Followers Tab -->
   <div class="followers-tab hidden profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
-    <h2 class="text-2xl font-bold mb-4">Followers</h2>
+    <h2 class="text-2xl font-bold mb-4">Người theo dõi</h2>
     {% if profile.followers %}
       <ul class="space-y-3">
         {% for follower in profile.followers.all %}
-          <a href="{% url 'profile' follower.id %}">
+          <a href="{% url 'users:profile' follower.id %}">
             <li class="flex items-center space-x-4">
               <img src="{{ follower.avatar.url }}" alt="Avatar" class="w-16 h-16 rounded-full" />
               <span class="font-semibold">{{ follower.user.username }}</span>
@@ -73,11 +73,11 @@
   <!-- Followers Tab -->
   <!-- Following Tab -->
   <div class="following-tab hidden profile-tab-content p-4 rounded-lg" id="styled-profile" role="tabpanel">
-    <h2 class="text-2xl font-bold mb-4">Following</h2>
+    <h2 class="text-2xl font-bold mb-4">Đang theo dõi</h2>
     {% if profile.following %}
       <ul class="space-y-3">
         {% for following in profile.following.all %}
-          <a href="{% url 'profile' following.id %}">
+          <a href="{% url 'users:profile' following.id %}">
             <li class="flex items-center space-x-4">
               <img src="{{ following.avatar.url }}" alt="Avatar" class="w-16 h-16 rounded-full" />
               <span class="font-semibold">{{ following.user.username }}</span>

@@ -36,22 +36,22 @@
         {% for profile in profiles|head3 %}
           <div class="flex w-full items-center justify-center font-sans py-3 min-h-20">
             <div class="w-12 min-h-20 flex-shrink-0 flex flex-col justify-start items-start">
-              <a href="{% url 'profile' profile.id %}" class="w-12 h-12"><img class="w-16 rounded-full" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
+              <a href="{% url 'users:profile' profile.id %}" class="w-12 h-12"><img class="w-16 rounded-full" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>
             </div>
             <div class="w-1/2 min-h-20 px-2 flex-shrink-0">
-              <a href="{% url 'profile' profile.id %}"><p class="text-base leading-none text-gray-800">{{ profile }}</p></a>
+              <a href="{% url 'users:profile' profile.id %}"><p class="text-base leading-none text-gray-800">{{ profile }}</p></a>
               <span class="text-gray-500 text-xs">{{ profile.bio|truncate_text }}</span>
             </div>
             <div id="following-status" class="min-h-20 flex-shrink-0">
               <!-- if -->
               {% if user.is_authenticated and user.profile.id != post.author.id %}
                 <!--  -->
-                <button data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500 btn-unfollow">Đang theo dõi</button>
+                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500 btn-unfollow">Đang theo dõi</button>
                 <!--  -->
-                <button data-url="{% url 'follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 btn-follow">+ Theo dõi</button>
+                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 btn-follow">+ Theo dõi</button>
                 <!--  -->
               {% else %}
-                <a href="{% url 'login' %}" id="btn-follow-login" class="w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
+                <a href="{% url 'users:login' %}" id="btn-follow-login" class="w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
               {% endif %}
               <!-- endif -->
             </div>

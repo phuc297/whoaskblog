@@ -12,7 +12,7 @@
     <div class="flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg shadow-md border border-gray-100 w-full max-w-sm">
         <h2 class="text-2xl font-bold text-center mb-6">Đăng nhập</h2>
-        <form method="POST" action="{% url 'login' %}">
+        <form method="POST" action="{% url 'users:login' %}">
           {% csrf_token %}
           {{ form|crispy }}
           <div class="flex items-center justify-between mb-4">
@@ -22,7 +22,7 @@
           <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600">Đăng nhập</button>
         </form>
         <p class="text-sm text-gray-600 text-center mt-4">
-          Chưa có tài khoản? <a href="{% url 'signup' %}" class="text-green-500 hover:underline">Đăng kí</a>.
+          Chưa có tài khoản? <a href="{% url 'users:signup' %}" class="text-green-500 hover:underline">Đăng kí</a>.
         </p>
       </div>
     </div>
