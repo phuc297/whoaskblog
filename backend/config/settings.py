@@ -200,7 +200,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
 CRISPY_TEMPLATE_PACK = 'tailwind'
 
 # Login and Logout URL
-LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

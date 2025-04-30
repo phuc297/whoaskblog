@@ -11,8 +11,10 @@ from apps.posts.models import Category, Post, Comment
 from apps.users.models import Profile
 from apps.notifications.models import Notification
 from apps.chat.models import Conversation
+from apps.core.signals import disable_signal
 from utils.utils import get_random_avatar, get_random_thumbnail
-
+from django.db.models.signals import post_save, m2m_changed
+from apps.users.signals import create_profile_on_new_user
 fake = Faker()
 
 
@@ -36,23 +38,24 @@ class Fake:
     def generate_users(self, number):
         users = []
         profiles = []
-        for i in range(0, number):
-            mock_user = {
-                "username": fake.unique.user_name(),
-                "password": "1",
-                "email": fake.unique.email(),
-                "bio": fake.text(max_nb_chars=80)
-            }
-            user = User.objects.create_user(username=mock_user["username"], password=mock_user["password"],
-                                            email=mock_user["email"])
-            sys.stdout.write("create a user successful !\n")
+        with disable_signal(post_save, create_profile_on_new_user, User):
+            for _ in range(number):
+                mock_user = {
+                    "username": fake.unique.user_name(),
+                    "password": "1",
+                    "email": fake.unique.email(),
+                    "bio": fake.text(max_nb_chars=80)
+                }
+                user = User.objects.create_user(username=mock_user["username"], password=mock_user["password"],
+                                                email=mock_user["email"])
+                sys.stdout.write("create a user successful !\n")
+                sys.stdout.flush() 
+                profile = Profile(
+                    user=user, bio=mock_user["bio"], display_name=mock_user["username"])
+                profiles.append(profile)
+            Profile.objects.bulk_create(profiles)
+            sys.stdout.write(f"create {len(profiles)} profiles successful !\n")
             sys.stdout.flush() 
-            profile = Profile(
-                user=user, bio=mock_user["bio"], display_name=mock_user["username"])
-            profiles.append(profile)
-        Profile.objects.bulk_create(profiles)
-        sys.stdout.write(f"create {len(profiles)} profiles successful !\n")
-        sys.stdout.flush() 
 
     def create_follower(self, min, max):
         all_profiles = Profile.objects.all()

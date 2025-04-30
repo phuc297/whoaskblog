@@ -39,8 +39,8 @@ class PostView(DetailView):
 def comment(request, post_id):
     print('post')
     if not request.user.is_authenticated:
-        print('not')
         return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
+    
     try:
         data = json.loads(request.body)
         content = data.get('content')
@@ -65,8 +65,8 @@ def comment(request, post_id):
     })
 
 
-@login_required
 @require_POST
+@login_required
 def post_vote(request, post_id):
     try:
         data = json.loads(request.body)
