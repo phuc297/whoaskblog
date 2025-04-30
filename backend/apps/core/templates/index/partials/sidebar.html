@@ -33,7 +33,7 @@
     <div class="px-2 side-bar-content">
       <h3 class="text-lg font-bold text-gray-800 py-4">Người dùng nổi bật</h3>
       <div class="py-1">
-        {% for profile in profiles|head3 %}
+        {% for profile in top_profiles %}
           <div class="flex w-full items-center justify-center font-sans py-3 min-h-20">
             <div class="w-12 min-h-20 flex-shrink-0 flex flex-col justify-start items-start">
               <a href="{% url 'users:profile' profile.id %}" class="w-12 h-12"><img class="w-16 rounded-full" src="{{ profile.avatar.url }}" alt="Avatar of Author" /></a>

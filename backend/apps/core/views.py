@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-
+from django.db.models import Count
 from apps.posts.models import Post
 from apps.users.models import Profile
 from django.views.generic import DetailView
@@ -13,8 +13,8 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    profiles = Profile.objects.all()
-    return render(request, 'index/index.html', context={'page_obj': page_obj, 'posts': page_obj.object_list, 'profiles': profiles})
+    top_profiles = Profile.objects.annotate(num_posts=Count('posts')).order_by('-num_posts')[:3]
+    return render(request, 'index/index.html', context={'page_obj': page_obj, 'posts': page_obj.object_list, 'top_profiles': top_profiles})
 
 
 def test(request):

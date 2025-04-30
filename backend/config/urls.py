@@ -11,7 +11,7 @@ from rest_framework import routers
 # router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
-    path("", include('apps.layout.urls')),
+    path("", include('apps.core.urls')),
     path("users/", include('apps.users.urls')),
     path("posts/", include('apps.posts.urls')),
     path("chat/", include('apps.chat.urls')),

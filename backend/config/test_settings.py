@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'compressor',
     'django_quill',
-    'apps.core',
+    'apps.layout',
     'apps.chat',
     'apps.posts',
     'apps.users',
@@ -107,21 +107,16 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
-            'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'dev.sqlite3'),
-            'USER': os.getenv('SQL_USER', 'user'),
-            'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
-            'HOST': os.getenv('SQL_HOST', 'localhost'),
-            'PORT': os.getenv('SQL_PORT', '5432'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('SQL_DATABASE', BASE_DIR / 'db.test.sqlite3'),
+        'USER': os.getenv('SQL_USER', 'user'),
+        'PASSWORD': os.getenv('SQL_PASSWORD', 'password'),
+        'HOST': os.getenv('SQL_HOST', 'localhost'),
+        'PORT': os.getenv('SQL_PORT', '5432'),
     }
-else:
-    DATABASES = {
-        'default': dj_database_url.parse(os.getenv("DATABASE_URL", "sqlite:///db.sqlite3"))
-    }
+}
 
 
 # Password validation
