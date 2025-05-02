@@ -11,6 +11,9 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_HOST: db
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DEBUG_MODE: 1
+      SECRET_KEY: ${SECRET_KEY}
     depends_on:
       db:
         condition: service_healthy
@@ -34,5 +37,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-
