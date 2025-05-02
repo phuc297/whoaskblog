@@ -14,8 +14,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - mynetwork
   db:
     image: postgres
     restart: always
@@ -31,8 +29,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - mynetwork
   nginx:
     build: ./nginx
     ports:
@@ -42,8 +38,6 @@ services:
       - media_volume:/home/app/backend/mediafiles/
     depends_on:
       - web
-    networks:
-      - mynetwork
   # node:
   #   build:
   #     context: backend
@@ -59,12 +53,7 @@ services:
     image: redis
     expose:
       - 6379
-    networks:
-      - mynetwork
 volumes:
   db-data:
   static_volume:
   media_volume:
-networks:
-  mynetwork:
-    driver: bridge

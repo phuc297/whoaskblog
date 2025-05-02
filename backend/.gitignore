@@ -157,5 +157,4 @@ staticfiles/*
 
 scripts/
 cloudinary_api.py
-db.sqlite3
-dev.sqlite3
+*.sqlite3

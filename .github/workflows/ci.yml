@@ -1,0 +1,44 @@
+name: CI with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: mydb
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: docker compose -f compose.ci.yaml version
+
+      - name: Build and run tests
+        run: |
+          docker compose -f compose.ci.yaml up --build --abort-on-container-exit
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f compose.ci.yaml down -v
