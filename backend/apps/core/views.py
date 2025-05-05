@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import Count
 from apps.posts.models import Post
+from apps.posts.services import get_published_posts
 from apps.users.models import Profile
 from django.views.generic import DetailView
 
@@ -15,7 +16,7 @@ def index(request):
         "most_discussed": "Thảo luận nhiều",
     }
     tab = request.GET.get("tab", "new")
-    posts = Post.objects.all().order_by('-created_at')
+    posts = get_published_posts()
 
     if tab == "popular":
         posts = posts.order_by("-views")

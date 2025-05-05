@@ -61,13 +61,15 @@ editorForm.addEventListener('submit', (event) => {
         .map(p => p.innerText.trim())
         .join('\n');
 
-    console.log(titleContent)
-
-    console.log(descriptionContent)
-
     document.querySelector('#id_description').value = descriptionContent;
 
     document.querySelector('#id_title').value = titleContent;
+
+    let actionInput = document.createElement("input");
+    actionInput.type = "hidden";
+    actionInput.name = "action";
+    actionInput.value = event.submitter.value; // Lấy giá trị từ nút submit được nhấn
+    editorForm.appendChild(actionInput);
 
     editorForm.submit()
 

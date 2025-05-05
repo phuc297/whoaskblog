@@ -105,6 +105,7 @@ class Fake:
                 "html": f"<p>{content_text}</p>"
             }
             post.content.json_string = json.dumps(content_quill)
+            post.status = Post.PUBLISHED
             posts.append(post)
         Post.objects.bulk_create(posts)
         sys.stdout.write(f"create {len(posts)} posts successful !\n")
