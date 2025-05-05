@@ -19,7 +19,6 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
         },
         body: JSON.stringify({
             post_id: data.post_id,
-            profile_id: data.profile_id,
             content: commentContent
         })
     });
@@ -62,7 +61,7 @@ document.getElementById('btn-submit-comment').addEventListener('click', async ()
                     </div>
                     `;
 
-        document.getElementById('comments-section').insertAdjacentHTML('afterbegin', newComment)
+        document.getElementById('comments').insertAdjacentHTML('afterbegin', newComment)
 
         document.getElementById('text-comment').value = ""
     } else {

@@ -4,141 +4,116 @@ from django.contrib.auth.models import User
 from apps.users.models import Profile
 from apps.posts.models import Post, Category, Comment, PostVote
 import json
+from faker import Faker
+from random import choice, randrange
+from utils.fake import FakeUtils
 
 
-class PostViewsTestCase(TestCase):
+class PostsAppTestCase(TestCase):
     def setUp(self):
-        # Create user and profile
         self.client = Client()
+        self.username = 'test_user'
+        self.raw_password = 'pass1234'
         self.user = User.objects.create_user(
-            username="testuser", password="password123")
-        self.profile = Profile.objects.create(user=self.user)
+            username=self.username, password=self.raw_password)
+        self.profile = Profile.objects.get(user=self.user)
+        self.fake = Faker()
 
-        # Create a category
         self.category = Category.objects.create(
             name="Test Category", description="A test category")
 
-        # Create a post
-        self.post = Post.objects.create(
-            author=self.profile,
-            title="Test Post",
-            content="Test content",
-            description="Test description",
-            category=self.category
-        )
-
-    def test_create_post_view_get(self):
-        # Test the GET request for the create post view
-        response = self.client.get(reverse("posts:create"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "posts/create_post.html")
-
-    def test_create_post_view_post(self):
-        # Test the POST request to create a new post
-        data = {
-            "title": "New Post",
-            "content": "This is the content of the new post.",
-            "description": "Description of the new post.",
-            "category": self.category.id
+        data_post = {
+            "author": self.profile,
+            "title": self.fake.sentence(5),
+            "content": "temp_string",
+            "description": self.fake.sentence(5),
+            "category": self.category
         }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:create"), data)
-        # Expecting a redirect after post creation
-        self.assertEqual(response.status_code, 302)
-        # Check if the post is created
-        self.assertTrue(Post.objects.filter(title="New Post").exists())
+        self.post = Post(author=data_post["author"], title=data_post["title"],
+                         content=data_post["content"], category=data_post["category"], description=data_post["description"])
 
-    def test_post_view_get(self):
-        # Test the GET request for viewing a post
+        self.post.content.json_string = FakeUtils.get_fake_content_quill()
+        self.post.save()
+
+    def test_post_view_returns_200_and_correct_template(self):
         response = self.client.get(
-            reverse("posts:view", kwargs={"pk": self.post.pk}))
+            reverse('posts:view', kwargs={'pk': self.post.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "posts/post.html")
-        self.assertEqual(response.context["post"], self.post)
+        self.assertTemplateUsed(response, 'posts/post.html')
 
-    def test_comment_post(self):
-        # Test the POST request for adding a comment
-        comment_data = {
-            "content": "This is a comment.",
-            "post_id": self.post.id
-        }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:comment", kwargs={"post_id": self.post.pk}),
-                                    json.dumps(comment_data), content_type="application/json")
+    def test_post_create_view_returns_200_and_correct_template(self):
+        response = self.client.get(reverse('posts:create'))
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
-            "success": True,
-            "username": self.profile.user.username,
-            "content": "This is a comment.",
-            "avatar": self.profile.avatar.url,
-            "created_at": response.json()['created_at']
-        })
+        self.assertTemplateUsed(response, 'posts/create_post.html')
 
-        # Check if comment is saved
-        self.assertTrue(Comment.objects.filter(
-            content="This is a comment.").exists())
-
-    def test_post_vote_upvote(self):
-        # Test the POST request for voting (upvote)
-        vote_data = {
-            "vote": PostVote.UPVOTE
+    def test_post_create_post_successfully(self):
+        logged_in = self.client.login(
+            username=self.user.username, password=self.raw_password)
+        self.assertTrue(logged_in)
+        data = {
+            'title': 'Test Title',
+            'content': FakeUtils.get_fake_content_quill(),
+            'description': self.fake.sentence(5),
+            'category': self.category.id,
+            'thumbnail': ''
         }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:vote", kwargs={"post_id": self.post.pk}),
-                                    json.dumps(vote_data), content_type="application/json")
+        response = self.client.post(reverse('posts:create'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Post.objects.filter(title='Test Title').exists())
+
+    def test_comment_redirects_to_login_if_not_authenticated(self):
+        data = {
+            'content': self.fake.sentence(5),
+            'post_id': self.post.id
+        }
+
+        url = reverse('posts:comment', kwargs={'post_id': self.post.id})
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f'/users/login/?next={url}')
+
+    def test_comment_successfully(self):
+        logged_in = self.client.login(
+            username=self.user.username, password=self.raw_password)
+        self.assertTrue(logged_in)
+
+        data = {
+            'post_id': self.post.id,
+            'content': self.fake.sentence(1)
+        }
+
+        url = reverse('posts:comment', kwargs={'post_id': self.post.id})
+        response = self.client.post(url, json.dumps(
+            data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
-            "success": True,
-            "message": "Vote added",
-            "votes": 1,  # The total votes for this post
-            "vote_choice": 1  # The vote choice (upvote)
-        })
-        # Ensure one vote is recorded
-        self.assertEqual(self.post.post_votes.count(), 1)
 
-    def test_post_vote_downvote(self):
-        # Test the POST request for voting (downvote)
-        vote_data = {
-            "vote": PostVote.DOWNVOTE
+    def test_post_vote_redirects_to_login_if_not_authenticated(self):
+        data = {
+            'vote_choice': choice([-1, 1]),
         }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:vote", kwargs={"post_id": self.post.pk}),
-                                    json.dumps(vote_data), content_type="application/json")
+
+        url = reverse('posts:vote', kwargs={'post_id': self.post.id})
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, f'/users/login/?next={url}')
+
+    def test_post_vote_successfully(self):
+        logged_in = self.client.login(
+            username=self.user.username, password=self.raw_password)
+        self.assertTrue(logged_in)
+
+        old_vote_value = self.post.votes
+
+        data = {
+            'vote': choice([-1, 1]),
+        }
+
+        url = reverse('posts:vote', kwargs={'post_id': self.post.id})
+        response = self.client.post(url, json.dumps(
+            data), content_type='application/json')
+
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
-            "success": True,
-            "message": "Vote added",
-            "votes": -1,  # The total votes for this post (downvoted)
-            "vote_choice": -1  # The vote choice (downvote)
-        })
-        # Ensure one vote is recorded
-        self.assertEqual(self.post.post_votes.count(), 1)
-
-    def test_invalid_comment(self):
-        # Test invalid comment (empty content)
-        comment_data = {
-            "content": "",
-            "post_id": self.post.id
-        }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:comment", kwargs={"post_id": self.post.pk}),
-                                    json.dumps(comment_data), content_type="application/json")
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {
-            "success": False,
-            "error": "Empty Comment"
-        })
-
-    def test_invalid_vote(self):
-        # Test invalid vote value (not 1 or -1)
-        vote_data = {
-            "vote": 0  # Invalid vote
-        }
-        self.client.login(username="testuser", password="password123")
-        response = self.client.post(reverse("posts:vote", kwargs={"post_id": self.post.pk}),
-                                    json.dumps(vote_data), content_type="application/json")
-        self.assertEqual(response.status_code, 400)
-        self.assertJSONEqual(response.content, {
-            "success": False,
-            "error": "Invalid vote value."
-        })

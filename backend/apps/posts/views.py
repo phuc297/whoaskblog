@@ -16,10 +16,12 @@ class CreatePostView(CreateView):
     fields = ['title', 'content', 'description', 'category', 'thumbnail']
 
     def form_valid(self, form):
-        print('---------------------call form valid')
-        form.instance.author = self.request.user.profile
+        form.instance.author = self.request.user.profile        
         post = form.save(commit=False)
         return super().form_valid(form)
+    
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 
 class PostView(DetailView):
@@ -37,10 +39,9 @@ class PostView(DetailView):
 @require_POST
 @login_required
 def comment(request, post_id):
-    print('post')
     if not request.user.is_authenticated:
         return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
-    
+
     try:
         data = json.loads(request.body)
         content = data.get('content')
@@ -118,7 +119,3 @@ class UpdatePostView(UpdateView):
         post = form.save(commit=False)
 
         return super().form_valid(form)
-
-
-def post_create(request):
-    return render(request, template_name="posts/create.html")
