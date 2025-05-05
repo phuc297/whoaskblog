@@ -11,21 +11,39 @@ from apps.posts.models import Category, Post, Comment
 from apps.users.models import Profile
 from apps.notifications.models import Notification
 from apps.chat.models import Conversation
+from apps.core.signals import disable_signal
 from utils.utils import get_random_avatar, get_random_thumbnail
-
+from django.db.models.signals import post_save, m2m_changed
+from apps.users.signals import create_profile_on_new_user
 fake = Faker()
 
 
+class FakeUtils:
+
+    @staticmethod
+    def get_fake_content_quill():
+        content_text = fake.paragraph(5)
+        content_quill = {
+            "delta": {
+                "ops": [
+                     {"insert": content_text + "\n"}
+                ]
+            },
+            "html": f"<p>{content_text}</p>"
+        }
+        return json.dumps(content_quill)
+
+
 class Fake:
-    def __init__(self, delete=False):
+    def __init__(self, generate=False, delete=False):
         if delete:
             self.delete_data()
-        self.generate_users(50)
-        self.create_follower(2, 10)
-        self.generate_categories()
-        self.generate_posts(40)
-        self.generate_comments(100)
-        pass
+        if generate:
+            self.generate_users(50)
+            self.create_follower(2, 10)
+            self.generate_categories()
+            self.generate_posts(40)
+            self.generate_comments(100)
 
     def delete_data(self):
         User.objects.all().filter(is_superuser=False).delete()
@@ -36,23 +54,24 @@ class Fake:
     def generate_users(self, number):
         users = []
         profiles = []
-        for i in range(0, number):
-            mock_user = {
-                "username": fake.unique.user_name(),
-                "password": "1",
-                "email": fake.unique.email(),
-                "bio": fake.text(max_nb_chars=80)
-            }
-            user = User.objects.create_user(username=mock_user["username"], password=mock_user["password"],
-                                            email=mock_user["email"])
-            sys.stdout.write("create a user successful !\n")
-            sys.stdout.flush() 
-            profile = Profile(
-                user=user, bio=mock_user["bio"], display_name=mock_user["username"])
-            profiles.append(profile)
-        Profile.objects.bulk_create(profiles)
-        sys.stdout.write(f"create {len(profiles)} profiles successful !\n")
-        sys.stdout.flush() 
+        with disable_signal(post_save, create_profile_on_new_user, User):
+            for _ in range(number):
+                mock_user = {
+                    "username": fake.unique.user_name(),
+                    "password": "1",
+                    "email": fake.unique.email(),
+                    "bio": fake.text(max_nb_chars=80)
+                }
+                user = User.objects.create_user(username=mock_user["username"], password=mock_user["password"],
+                                                email=mock_user["email"])
+                sys.stdout.write("create a user successful !\n")
+                sys.stdout.flush()
+                profile = Profile(
+                    user=user, bio=mock_user["bio"], display_name=mock_user["username"])
+                profiles.append(profile)
+            Profile.objects.bulk_create(profiles)
+            sys.stdout.write(f"create {len(profiles)} profiles successful !\n")
+            sys.stdout.flush()
 
     def create_follower(self, min, max):
         all_profiles = Profile.objects.all()
@@ -89,7 +108,7 @@ class Fake:
             posts.append(post)
         Post.objects.bulk_create(posts)
         sys.stdout.write(f"create {len(posts)} posts successful !\n")
-        sys.stdout.flush() 
+        sys.stdout.flush()
 
     def generate_comments(self, n_comments):
         comments = []
@@ -106,7 +125,7 @@ class Fake:
             comments.append(comment)
         Comment.objects.bulk_create(comments)
         sys.stdout.write(f"create {len(comments)} comments successful !\n")
-        sys.stdout.flush() 
+        sys.stdout.flush()
 
     def generate_categories(self):
         # categories = [

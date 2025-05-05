@@ -131,15 +131,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    # },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 
@@ -170,83 +170,19 @@ STATICFILES_FINDERS = [
 
 # Media files
 MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'mediafiles'
-
-if not DEBUG:
-    STORAGES = {
-        'default': {
-            'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
-            'OPTIONS': {
-            },
-        },
-        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
-    }
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': os.getenv('CLOUD_NAME'),
-        'API_KEY': os.getenv('API_KEY'),
-        'API_SECRET': os.getenv('API_SECRET')
-    }
-else:
-    MEDIA_ROOT = BASE_DIR / 'mediafiles'
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Django Crispy Forms
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
-CRISPY_TEMPLATE_PACK = 'tailwind'
-
 # Login and Logout URL
 LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Django REST Framework settings
+# Django Crispy Forms
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 50
-}
-
-# Configure the compressor
-
-COMPRESS_ROOT = STATIC_ROOT
-
-COMPRESS_ENABLED = True
-
-STATICFILES_FINDERS += [
-    'compressor.finders.CompressorFinder'
-]
-
-COMPRESS_POSTCSS_PLUGINS = (
-    'autoprefixer',
-    'postcss-font-magician'
-)
-
-#
-
-QUILL_CONFIGS = {
-    'default': {
-        'theme': 'snow',
-        'modules': {
-            'syntax': True,
-            'toolbar': [
-                [
-                    {'header': []},
-                    {'align': []},
-                    'bold', 'italic', 'underline', 'strike', 'blockquote',
-                    {'color': []},
-                    {'background': ["white"]},
-                ],
-                ['code-block', 'link'],
-                ['clean'],
-                ['link', 'image'],
-            ]
-        }
-    }
-}
-
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
+CRISPY_TEMPLATE_PACK = 'tailwind'

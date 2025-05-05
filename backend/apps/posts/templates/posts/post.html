@@ -114,7 +114,7 @@
       <div class="mt-10 px-4">
         <!-- Single Comment -->
 
-        <div>
+        <div id="comments">
           {% for comment in post.comments.all %}
             <div class="flex mb-6">
               <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.commenter.avatar.url }}" alt="Avatar of User" />

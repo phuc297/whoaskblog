@@ -14,26 +14,16 @@
         <!-- Tab panel -->
         <div class="text-sm font-semibold text-center rounded-lg border border-gray-200">
           <ul class="flex flex-wrap -mb-px">
-            <li class="me-2">
-              <a href="#" class="tab-item inline-block p-4 rounded-t-lg text-green-500 border-green-500 border-b-2">Bài viết mới</a>
-            </li>
-            <li class="me-2">
-              <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Phổ biến</a>
-            </li>
-            <li class="me-2">
-              <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Xu hướng</a>
-            </li>
-            <li class="me-2">
-              <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Được yêu thích</a>
-            </li>
-            <li class="me-2">
-              <a href="#" class="tab-item inline-block p-4 rounded-t-lg">Thảo luận nhiều</a>
-            </li>
+            {% for key, label in tabs.items %}
+              <li class="me-2">
+                <a href="{% url 'home' %}?tab={{ key }}" class="tab-item inline-block p-4 rounded-t-lg {% if key == active_tab %}text-green-500 border-green-500 border-b-2{% endif %}">{{ label }}</a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         <!-- Tab panel -->
         <!-- Post List -->
-        {% include 'index/partials/post_list.html' with posts=posts %}
+        {% include 'index/partials/post_list.html' %}
         <!-- Post List -->
         <!-- Pagination -->
         <div class="flex justify-center mt-8">
@@ -67,7 +57,7 @@
       </div>
 
       <!-- Right Sidebar -->
-      {% include 'index/partials/sidebar.html' with user=user %}
+      {% include 'index/partials/sidebar.html'%}
     </div>
   </div>
 {% endblock %}
@@ -75,5 +65,4 @@
 {% block script %}
   <script src="{% static 'layout/js/tabPanel.js' %}"></script>
   <script src="{% static 'js/get_csrftoken.js' %}"></script>
-
 {% endblock %}

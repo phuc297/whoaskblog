@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 @receiver(post_save, sender=User)
 def create_profile_on_new_user(sender, instance, created, **kwargs):
+    if getattr(instance, '_disable_signals', False):
+        return
     if created:
         profile = Profile.objects.create(user=instance)
         profile.display_name = instance.username
