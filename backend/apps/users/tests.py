@@ -5,7 +5,7 @@ from apps.users.models import Profile
 import json
 
 
-class UserAppsTestCase(TestCase):
+class UsersAppTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.raw_password = 'pass1234'
@@ -64,10 +64,11 @@ class UserAppsTestCase(TestCase):
         data = {
             'profile_id': self.user2.id
         }
-        response = self.client.post(
-            reverse('users:follow', kwargs={'profile_id': self.profile2.id}), data)
+        url = reverse('users:follow', kwargs={'profile_id': self.profile2.id})
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
         self.assertRedirects(
-            response, f'/users/login/?next=/users/{data['profile_id']}/follow')
+            response, f'/users/login/?next={url}')
 
     def test_follow_profile_successfully(self):
         logged_in = self.client.login(
@@ -77,9 +78,8 @@ class UserAppsTestCase(TestCase):
         data = {
             'profile_id': self.user2.id
         }
-        response = self.client.post(
-            reverse('users:follow', kwargs={'profile_id': self.profile2.id}), data)
-
+        url = reverse('users:follow', kwargs={'profile_id': self.profile2.id})
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content.decode(), {
             'success': True,
