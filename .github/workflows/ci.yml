@@ -32,6 +32,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Write env vars to .env
+        run: |
+          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
+
       - name: Set up Docker Compose
         run: docker compose -f compose.ci.yaml version
 
