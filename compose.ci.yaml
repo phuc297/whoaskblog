@@ -3,10 +3,11 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    command: bash -c "python manage.py migrate && python manage.py test apps/"
+    command: bash -c "python manage.py migrate && pytest -v"
     ports:
       - 8000:8000
     environment:
+      IS_CLOUD_STORE: 1
       POSTGRES_DB: mydb
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
