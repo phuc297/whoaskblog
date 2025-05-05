@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.forms import ValidationError
 from django_quill.fields import QuillField
 import random
 
@@ -44,19 +45,31 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    DRAFT = 'draft'
+    PUBLISHED = 'published'
+
+    STATUS_CHOICES = [
+        (DRAFT, 'Draft'),
+        (PUBLISHED, 'Published'),
+    ]
+
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=DRAFT)
     author = models.ForeignKey(
         Profile, related_name='posts', on_delete=models.CASCADE)
-    title = models.TextField(blank=True, max_length=150)
-    content = QuillField(blank=True)
+    title = models.CharField(blank=True, max_length=150)
+    content = QuillField()
     # content = models.TextField(blank=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=True, blank=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True, max_length=200)
     views = models.IntegerField(default=0)
-    thumbnail = models.ImageField(upload_to='images/thumnail_posts/', default=get_random_thumbnail, null=True, max_length=500)
+    thumbnail = models.ImageField(
+        upload_to='images/thumnail_posts/', default=get_random_thumbnail, null=True, max_length=500)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -70,6 +83,13 @@ class Post(models.Model):
         profile = Profile.objects.get(pk=profile_id)
         vote = self.post_votes.filter(voted_by=profile).first()
         return vote.value if vote else None
+
+    def clean(self):
+        if self.status == Post.PUBLISHED and not self.category:
+            raise ValidationError('Category cannot be null.')
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class PostVote(models.Model):
