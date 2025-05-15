@@ -29,7 +29,7 @@
 }
 
 .django-quill-widget-container .ql-toolbar {
-    z-index: 20;
+    z-index: 1;
     background: white;
     position: sticky;
     top: 4rem;
@@ -51,10 +51,6 @@
     font-size: var(--font-size-h1)
 }
 
-#id_title {
-    max-height: 8vh;
-}
-
 .div_id_title label {
     padding: 2rem;
 }
@@ -73,4 +69,15 @@
 
 #editor-description p {
     font-size: var(--font-size-base);
+}
+
+.no-scrollbar {
+    overflow-y: hidden;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari */
 }

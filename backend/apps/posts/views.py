@@ -4,30 +4,46 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView
 from django.db.models import Sum
 from .models import Post, Comment, PostVote
+from django.core.exceptions import PermissionDenied
+from .forms import PostForm
+
+
+class DeletePostView(DeleteView):
+    model = Post
+    template_name = 'posts/delete.html'
+
+    def get_success_url(self):
+        if self.object.status == Post.DRAFT:
+            return reverse_lazy('posts:draft')
+        return reverse_lazy('posts:list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if obj.author != self.request.user.profile:
+            raise PermissionDenied
+
+        return obj
 
 
 class CreatePostView(CreateView):
     model = Post
-    template_name = 'posts/create_post.html'
+    template_name = 'posts/create.html'
     success_url = reverse_lazy('home')
-    fields = ['title', 'content', 'description', 'category', 'thumbnail']
+    form_class = PostForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
-        post = form.save(commit=False)
-        # action = self.request.POST.get("action")
-        # print(f'action = {action}')
-        print(f'{self.request.POST}')
-        
-        return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        action = self.request.POST.get("action")
-        print(f'action = {action}')
-        return super().post(request, *args, **kwargs)
+        action = self.request.POST.get('action', '').lower()
+
+        if action == 'published':
+            form.instance.status = Post.PUBLISHED
+
+        return super().form_valid(form)
 
 
 class PostView(DetailView):
@@ -44,13 +60,26 @@ class PostView(DetailView):
 
 class UpdatePostView(UpdateView):
     model = Post
-    template_name = 'posts/update_post.html'
+    context_object_name = 'post'
+    template_name = 'posts/update.html'
     success_url = reverse_lazy('home')
-    fields = ['title', 'category', 'content']
+    form_class = PostForm
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if obj.author != self.request.user.profile:
+            raise PermissionDenied
+
+        return obj
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
-        post = form.save(commit=False)
+
+        action = self.request.POST.get('action', '').lower()
+
+        if action == 'published':
+            form.instance.status = Post.PUBLISHED
 
         return super().form_valid(form)
 
@@ -63,7 +92,8 @@ class PublishedPostListView(ListView):
     def get_queryset(self):
         query_set = super().get_queryset()
         return query_set.filter(author=self.request.user.profile, status=Post.PUBLISHED).order_by('-created_at')
-    
+
+
 class DraftPostListView(ListView):
     model = Post
     template_name = 'posts/draft_list.html'
