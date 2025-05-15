@@ -109,7 +109,9 @@
         </div>
 
         <!-- Tab Content -->
-        {% include 'users/partials/tab_profile.html' with profile=profile %}
+        <div id="default-styled-tab-content">
+          {% include 'users/partials/tab_profile.html' with profile=profile %}
+        </div>
         <!-- Tab Content -->
         <script src="{% static 'users/js/tabpanel.js' %}"></script>
       </div>

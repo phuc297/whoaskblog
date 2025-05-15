@@ -1,0 +1,24 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/output.css' %}" />
+
+<div id="modalOverlay" class="fixed inset-0 w-screen h-screen flex items-center justify-center z-50">
+  <div class="absolute inset-0 bg-gray-200 opacity-50"></div>
+  <div class="bg-white rounded shadow-lg w-full max-w-md p-6 relative">
+    <h2 class="text-xl font-semibold mb-4 text-green-500">Xác nhận</h2>
+    <p class="mb-4">
+      Bản có chắc muốn xóa{% if object.status == 'draft' %}
+        bản nháp
+      {% else %}
+        bài viết
+      {% endif %}"{{ object }}" ?
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <div>
+        <button type="submit" class="h-8 border bg-red-400 hover:bg-red-500 text-white px-2 cursor-pointer btn">Xóa</button>
+        <a href="javascript:history.back()" class="h-8 border border-gray-200 px-2 btn">Hủy</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -38,16 +38,6 @@ services:
       - media_volume:/home/app/backend/mediafiles/
     depends_on:
       - web
-  # node:
-  #   build:
-  #     context: backend
-  #     dockerfile: Dockerfile.node
-  #   command: npx @tailwindcss/cli -i ./static/css/input.css -o ./staticfiles/css/output.css --watch
-  #   volumes:
-  #     - static_volume:/home/app/backend/staticfiles/
-  #   depends_on:
-  #     web:
-  #       condition: service_started
   redis:
     restart: unless-stopped
     image: redis

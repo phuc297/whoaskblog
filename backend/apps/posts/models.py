@@ -1,24 +1,14 @@
 from django.conf import settings
+from django.forms import ValidationError
 from django_quill.fields import QuillField
-import random
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.files import File
-
 from django.utils.text import slugify
-
 from apps.users.models import Profile
+from django.utils.timezone import now
+import random
 from utils.utils import get_random_thumbnail
-
-colors = [
-    "red",
-    "yellow",
-    "green",
-    "blue",
-    "pink",
-    "purple"
-]
 
 
 class Category(models.Model):
@@ -30,13 +20,6 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-
-        available_colors = set(
-            colors) - set(Category.objects.values_list("color", flat=True))
-        if available_colors:
-            self.color = random.choice(list(available_colors))
-        else:
-            raise ValueError("No available colors left to assign.")
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -44,23 +27,58 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    DRAFT = 'draft'
+    PUBLISHED = 'published'
+
+    STATUS_CHOICES = [
+        (DRAFT, 'Draft'),
+        (PUBLISHED, 'Published'),
+    ]
+
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=DRAFT)
     author = models.ForeignKey(
         Profile, related_name='posts', on_delete=models.CASCADE)
-    title = models.TextField(blank=True, max_length=150)
-    content = QuillField(blank=True)
+    title = models.TextField(max_length=150)
+    content = QuillField()
     # content = models.TextField(blank=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    published_at = models.DateTimeField(null=True, blank=True)
+    last_published_update_at = models.DateTimeField(null=True, blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=True, blank=True)
     votes = models.IntegerField(default=0)
-    slug = models.SlugField(blank=True, max_length=200)
+    slug = models.SlugField(blank=True)
     views = models.IntegerField(default=0)
-    thumbnail = models.ImageField(upload_to='images/thumnail_posts/', default=get_random_thumbnail, null=True, max_length=500)
+    thumbnail = models.ImageField(
+        upload_to='images/thumnail_posts/', default=get_random_thumbnail, null=True, max_length=500)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)[:200]
+            self.slug = slugify(self.title)
+            
+        if not self.category:
+            self.category, _ = Category.objects.get_or_create(name='Uncategorized')
+
+        if not self._state.adding:
+            previous = Post.objects.get(pk=self.pk)
+
+            if previous.status == Post.DRAFT and self.status == Post.PUBLISHED:
+                if not self.published_at:
+                    self.published_at = now()
+
+            elif previous.status == Post.PUBLISHED:
+                if not self.published_at:
+                    self.published_at = now()
+                else:
+                    self.last_published_update_at = now()
+
+        else:
+            if self.status == Post.PUBLISHED:
+                self.published_at = now()
+
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -70,6 +88,13 @@ class Post(models.Model):
         profile = Profile.objects.get(pk=profile_id)
         vote = self.post_votes.filter(voted_by=profile).first()
         return vote.value if vote else None
+
+    def clean(self):
+        if self.status == Post.PUBLISHED and not self.category:
+            raise ValidationError('Category cannot be null.')
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class PostVote(models.Model):

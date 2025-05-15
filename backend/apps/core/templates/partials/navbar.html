@@ -1,3 +1,5 @@
+{% load static %}
+
 <header class="bg-white w-full h-20">
   <nav id="header" class="fixed w-full z-20 top-0">
     <div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
@@ -40,7 +42,7 @@
               </div>
             </li>
             <li class="mr-2 h-12 flex flex-col justify-center" id="create_post_id">
-              <button class="w-full bg-green-500 font-semibold text-white py-2 px-4 rounded-3xl hover:bg-green-600 transition duration-300 ease-in-out"><a href="{% url 'posts:create' %}" class="font-semibold cursor-pointer">+ Create</a></button>
+              <button class="w-full bg-green-500 font-semibold text-white py-2 px-4 rounded-3xl hover:bg-green-600 transition duration-300 ease-in-out"><a href="{% url 'posts:create' %}" class="font-semibold cursor-pointer">+ Viết bài</a></button>
             </li>
             <li class="mr-2 h-12 flex flex-col justify-center relative" id="notification_id">
               <button id="dropdown-notification-button" class="rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer flex items-center justify-center relative">
@@ -88,8 +90,9 @@
               <div id="dropdown-profile-menu" class="hidden left-0 top-full absolute w-56 rounded-md shadow-lg bg-white border border-gray-200 group-hover:block z-10">
                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   <a href="{% url 'users:profile' user.profile.id %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Trang cá nhân</a>
+                  <a href="{% url 'posts:list' %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Danh sách bài viết</a>
+                  <a href="{% url 'posts:draft' %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết nháp</a>
                   <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết đã lưu</a>
-                  <a href="#" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Bài viết nháp</a>
                   <a href="{% url 'users:update' %}" class="block px-4 py-4 text-gray-700 hover:bg-gray-100" role="menuitem">Tùy chỉnh</a>
                   <form action="{% url 'users:logout' %}" method="POST">
                     {% csrf_token %}
@@ -113,41 +116,5 @@
 </header>
 
 {% if user.is_authenticated %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function (event) {
-      const btn = document.getElementById('dropdown-profile-button')
-      const menu = document.getElementById('dropdown-profile-menu')
-    
-      btn.addEventListener('click', function (event) {
-        menu.classList.toggle('hidden')
-      })
-    })
-    
-    document.addEventListener('click', function (event) {
-      const btn = document.getElementById('dropdown-profile-button')
-      const menu = document.getElementById('dropdown-profile-menu')
-      const isClickInside = menu.contains(event.target) || btn.contains(event.target)
-      if (!isClickInside) {
-        menu.classList.add('hidden')
-      }
-    })
-    
-    document.addEventListener('DOMContentLoaded', function (event) {
-      const btn = document.getElementById('dropdown-notification-button')
-      const menu = document.getElementById('dropdown-notification-menu')
-    
-      btn.addEventListener('click', function (event) {
-        menu.classList.toggle('hidden')
-      })
-    })
-    
-    document.addEventListener('click', function (event) {
-      const btn = document.getElementById('dropdown-notification-button')
-      const menu = document.getElementById('dropdown-notification-menu')
-      const isClickInside = menu.contains(event.target) || btn.contains(event.target)
-      if (!isClickInside) {
-        menu.classList.add('hidden')
-      }
-    })
-  </script>
+  <script src="{% static 'js/dropdown_profile.js' %}"></script>
 {% endif %}
