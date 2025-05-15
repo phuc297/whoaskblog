@@ -8,7 +8,7 @@ IS_CLOUD_STORE = bool(int(os.getenv('IS_CLOUD_STORE', '0')))
 
 
 STORAGES_PATH = './'
-DEFAULT_THUMBNAIL_POST_PATH = f'{STORAGES_PATH}/mediafiles/default_thumnails'
+DEFAULT_THUMBNAIL_POST_PATH = f'{STORAGES_PATH}/mediafiles/default_thumbnails'
 DEFAULT_AVATAR_PATH = f'{STORAGES_PATH}/mediafiles/default_avatars'
 
 CLOUD_AVATAR_LIST = ["/images/default_avatars/001-cat.png",
