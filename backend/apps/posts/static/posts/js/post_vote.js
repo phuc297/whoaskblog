@@ -22,7 +22,6 @@ document.getElementById('upvote').addEventListener('click', () => {
             return response.json()
         })
         .then(data => {
-            console.log(data)
             upvote_element = document.getElementById('upvote')
             downvote_element = document.getElementById('downvote')
 
@@ -59,7 +58,6 @@ document.getElementById('downvote').addEventListener('click', () => {
             return response.json()
         })
         .then(data => {
-            console.log(data)
             downvote_element = document.getElementById('downvote')
             upvote_element = document.getElementById('upvote')
 

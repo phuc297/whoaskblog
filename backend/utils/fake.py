@@ -21,8 +21,8 @@ fake = Faker()
 class FakeUtils:
 
     @staticmethod
-    def get_fake_content_quill():
-        content_text = fake.paragraph(5)
+    def get_fake_content_quill(paragraph=5):
+        content_text = fake.paragraph(paragraph)
         content_quill = {
             "delta": {
                 "ops": [
@@ -105,6 +105,7 @@ class Fake:
                 "html": f"<p>{content_text}</p>"
             }
             post.content.json_string = json.dumps(content_quill)
+            post.status = Post.PUBLISHED
             posts.append(post)
         Post.objects.bulk_create(posts)
         sys.stdout.write(f"create {len(posts)} posts successful !\n")

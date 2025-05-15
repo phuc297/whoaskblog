@@ -3,8 +3,6 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-      # command: ["tail", "-f", "/dev/null"]
-      # command: python manage.py runserver 0.0.0.0:8000
     command: bash -c " python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"
     ports:
       - 8000:8000
@@ -19,18 +17,6 @@ services:
       - 6379:6379
     volumes:
       - cache:/data
-  node:
-    build:
-      context: backend
-      dockerfile: Dockerfile.node
-    command: npx @tailwindcss/cli -i ./staticfiles/css/input.css -o ./staticfiles/css/output.css --watch
-    tty: true
-    volumes:
-      - ./backend/staticfiles:/usr/src/backend/staticfiles
-      - ./backend/apps:/usr/src/backend/apps
-    depends_on:
-      web:
-        condition: service_started
 volumes:
   cache:
 
