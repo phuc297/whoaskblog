@@ -1,9 +1,6 @@
+const data = document.currentScript.dataset;
 
-function attachFollowEvent() {
-
-  const data = document.currentScript.dataset;
-
-  document.getElementById("btn-follow").addEventListener("click", () => {
+document.querySelectorAll("#btn-follow").forEach(e => e.addEventListener("click", () => {
 
     var xhr = new XMLHttpRequest();
 
@@ -15,34 +12,26 @@ function attachFollowEvent() {
 
     xhr.onreadystatechange = function () {
 
-      if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
 
-        document.getElementById("btn-follow").classList.add("hidden");
+            document.querySelectorAll("#btn-follow").forEach(e => e.classList.toggle("hidden"));
 
-        document.getElementById("btn-unfollow").classList.remove("hidden")
+            document.querySelectorAll("#btn-unfollow").forEach(e => e.classList.toggle("hidden"));
 
-      }
-
-      else {
-
-        console.log("Error:", "Error when follow profile");
-
-      }
+        }
 
     };
 
     xhr.send(JSON.stringify({
 
-      "user_profile_id": data.user,
+        "user_profile_id": data.user,
 
-      "profile_id": data.profile
+        "profile_id": data.profile
 
     }));
+}))
 
-  })
-
-
-  document.getElementById("btn-unfollow").addEventListener("click", () => {
+document.querySelectorAll("#btn-unfollow").forEach(e => e.addEventListener("click", () => {
 
     var xhr = new XMLHttpRequest();
 
@@ -54,33 +43,22 @@ function attachFollowEvent() {
 
     xhr.onreadystatechange = function () {
 
-      if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
 
-        document.getElementById("btn-unfollow").classList.add("hidden");
+            document.querySelectorAll("#btn-follow").forEach(e => e.classList.toggle("hidden"));
 
-        document.getElementById("btn-follow").classList.remove("hidden")
+            document.querySelectorAll("#btn-unfollow").forEach(e => e.classList.toggle("hidden"));
 
-      }
-
-      else {
-
-        console.log("Error:", "Error when unfollow profile");
-
-      }
+        }
 
     };
 
     xhr.send(JSON.stringify({
 
-      "user_profile_id": data.user,
+        "user_profile_id": data.user,
 
-      "profile_id": data.profile
+        "profile_id": data.profile
 
     }));
 
-  })
-
-}
-
-attachFollowEvent()
-
+}))

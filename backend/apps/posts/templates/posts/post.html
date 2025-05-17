@@ -16,121 +16,222 @@
   <meta name="csrf-token" content="{{ csrf_token }}" />
 
   <!-- Container -->
-  <div class="container w-full md:max-w-4xl mx-auto pt-15">
-    <div class="w-full px-4 md:px-6 text-xl text-gray-800 leading-normal flex">
-      <div id="sticky-bar" class="hidden 2xl:block w-20 fixed top-1/2 left-1/6 -translate-y-1/2 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="flex flex-col justify-center items-center w-20 h-80 -z-10 text-gray-500">
-          <a id="upvote" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1 {% if post|user_upvote:user.profile.id %}bg-green-400 text-white border-none{% endif %}">
-            <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
-            </svg>
-          </a>
+  <div class="w-full">
+    <div class="w-full md:max-w-4xl mx-auto pt-15">
+      <!-- Post Content -->
+      <div class="w-full px-4 md:px-6 text-xl text-gray-700 leading-normal flex">
+        <div id="sticky-bar" class="hidden 2xl:block w-20 fixed top-1/2 left-1/6 -translate-y-1/2 opacity-0 pointer-events-none transition-opacity duration-300">
+          <div class="flex flex-col justify-center items-center w-20 h-80 -z-10 text-gray-500">
+            <a id="upvote" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1 {% if post|user_upvote:user.profile.id %}bg-green-400 text-white border-none{% endif %}">
+              <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z" />
+              </svg>
+            </a>
 
-          <div class="pt-1 pb-1">
-            <span id="votes-count">{{ post.votes }}</span>
-          </div>
-
-          <a id="downvote" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1 {% if post|user_downvote:user.profile.id %}bg-red-400 text-white border-none{% endif %}">
-            <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
-              <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"></path>
-            </svg>
-          </a>
-
-          <div class="py-4"></div>
-
-          <a id="sharepost" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
-            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-              <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m20 12-6.4-7v3.5C10.4 8.5 4 10.6 4 19c0-1.167 1.92-3.5 9.6-3.5V19l6.4-7z" />
-            </svg>
-          </a>
-
-          <a id="bookmark" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
-            <svg fill="currentColor" width="18" height="18" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
-              <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z"></path>
-            </svg>
-          </a>
-
-          <a id="comment" onclick="scrollToComment()" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
-            <svg fill="currentColor" height="20" width="20" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-              <path class="cls-1" d="M14,3.5v6A1.5,1.5,0,0,1,12.5,11H8.75L3.5,14l.75-3H3.5A1.5,1.5,0,0,1,2,9.5v-6A1.5,1.5,0,0,1,3.5,2h9A1.5,1.5,0,0,1,14,3.5Z" />
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <div id="post-content relative mr-auto ml-auto">
-        <!-- Title -->
-        <div class="font-sans">
-          <h1 class="font-bold font-sans break-normal text-gray-900 pt-4 pb-2 text-3xl md:text-4xl">{{ post.title }}</h1>
-        </div>
-
-        <!-- Author -->
-        <div class="flex w-full items-center font-sans px-4 py-12">
-          <a href="{% url 'users:profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
-          <div class="flex-1 px-2">
-            <a href="{% url 'users:profile' post.author.id %}"><p class="font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
-            {% if post.last_published_update_at %}
-            <p class="text-sm md:text-base font-normal text-gray-600">Last updated {{ post.last_published_update_at }}</p>
-            {% else %}
-            <p class="text-sm md:text-base font-normal text-gray-600">Published {{ post.created_at }}</p>
-            {% endif %}
-          </div>
-          <div class="justify-end">
-            <!--  -->
-            <div id="following-status">
-              <!-- if -->
-              {% if user.is_authenticated %}
-                {% if user.profile.id != post.author.id %}
-                  <!--  -->
-                  <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Đang theo dõi</button>
-                  <!--  -->
-                  <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Theo dõi</button>
-                  <!--  -->
-                {% endif %}
-              {% else %}
-                <a href="{% url 'users:login' %}" id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
-              {% endif %}
-              <!-- endif -->
+            <div class="pt-1 pb-1">
+              <span id="votes-count">{{ post.votes }}</span>
             </div>
-            <!--  -->
+
+            <a id="downvote" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1 {% if post|user_downvote:user.profile.id %}bg-red-400 text-white border-none{% endif %}">
+              <svg fill="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
+                <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"></path>
+              </svg>
+            </a>
+
+            <div class="py-4"></div>
+
+            <a id="sharepost" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m20 12-6.4-7v3.5C10.4 8.5 4 10.6 4 19c0-1.167 1.92-3.5 9.6-3.5V19l6.4-7z" />
+              </svg>
+            </a>
+
+            <a id="bookmark" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
+              <svg fill="currentColor" width="18" height="18" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z"></path>
+              </svg>
+            </a>
+
+            <a id="comment" onclick="scrollToComment()" class="cursor-pointer rounded-full h-8 w-8 border border-gray-500 flex justify-center items-center mt-1 mb-1">
+              <svg fill="currentColor" height="20" width="20" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path class="cls-1" d="M14,3.5v6A1.5,1.5,0,0,1,12.5,11H8.75L3.5,14l.75-3H3.5A1.5,1.5,0,0,1,2,9.5v-6A1.5,1.5,0,0,1,3.5,2h9A1.5,1.5,0,0,1,14,3.5Z" />
+              </svg>
+            </a>
           </div>
         </div>
-        <!-- /Author -->
 
-        <!-- Post Content -->
-        <article class="ql-snow">
-          <div class="ql-editor">{{ post.content.html|safe|default:post.content }}</div>
-        </article>
-        <!-- / Post Content -->
-      </div>
-    </div>
+        <div id="post-content relative mr-auto ml-auto">
+          <!-- Title -->
+          <div class="font-sans">
+            <h1 class="font-bold font-sans break-normal text-gray-700 pt-4 pb-2 text-3xl md:text-4xl">{{ post.title }}</h1>
+          </div>
 
-    <!-- Divider -->
-    <hr class="border-b-2 border-gray-400 mb-8 mx-4" />
-
-    <!-- Comment Section -->
-    <div id="comment-section" class="container w-full mx-auto pt-8 p-8 mb-16 border border-gray-300 rounded-lg shadow-md">
-      <!-- Comment Form -->
-      <div class="mt-6 px-4">
-        <textarea id="text-comment" name="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none bg-white" rows="4" placeholder="Write your comment here..."></textarea>
-        <button id="btn-submit-comment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-4 rounded-lg">Post comment</button>
-      </div>
-
-      <!-- Comment List -->
-      <div class="mt-10 px-4">
-        <!-- Single Comment -->
-
-        <div id="comments">
-          {% for comment in post.comments.all %}
-            <div class="flex mb-6">
-              <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.commenter.avatar.url }}" alt="Avatar of User" />
-              <div class="flex-1">
-                <p id="commenter-name" class="text-green-600 font-normal">{{ comment.commenter }}</p>
-                <p id="commenter-timestamp" class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>
-                <p id="commenter-content" class="text-gray-800">{{ comment.content }}</p>
+          <!-- Author -->
+          <div class="flex w-full items-center font-sans px-4 py-12">
+            <a href="{% url 'users:profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
+            <div class="flex-1 px-2">
+              <a href="{% url 'users:profile' post.author.id %}"><p class="text-gray-700 font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
+              {% if post.last_published_update_at %}
+                <p class="text-sm md:text-base font-normal text-gray-600">Last updated {{ post.last_published_update_at }}</p>
+              {% else %}
+                <p class="text-sm md:text-base font-normal text-gray-600">Published {{ post.created_at }}</p>
+              {% endif %}
+            </div>
+            <div class="justify-end">
+              <div id="following-status">
+                {% if user.is_authenticated %}
+                  {% if user.profile.id != post.author.id %}
+                    <!--  -->
+                    <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Đang theo dõi</button>
+                    <!--  -->
+                    <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Theo dõi</button>
+                    <!--  -->
+                  {% endif %}
+                {% else %}
+                  <a href="{% url 'users:login' %}" id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
+                {% endif %}
               </div>
             </div>
-          {% endfor %}
+          </div>
+          <!-- /Author -->
+
+          <!-- Post Content -->
+          <article class="ql-snow">
+            <div class="ql-editor">{{ post.content.html|safe|default:post.content }}</div>
+          </article>
+          <!-- / Post Content -->
+        </div>
+      </div>
+      <!-- Post Content -->
+
+      <!-- AI Summarize Section -->
+      <div class="w-full">
+        <div class="header mx-auto px-6 pb-3 flex space-x-2 text-black">
+          <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <path d="M8.665 15.735c.245.173.537.265.836.264v-.004a1.441 1.441 0 0 0 1.327-.872l.613-1.864a2.87 2.87 0 0 1 1.817-1.812l1.778-.578a1.442 1.442 0 0 0-.052-2.74l-1.755-.57a2.877 2.877 0 0 1-1.822-1.823l-.578-1.777a1.446 1.446 0 0 0-2.732.022l-.583 1.792a2.877 2.877 0 0 1-1.77 1.786l-1.777.57a1.444 1.444 0 0 0 .017 2.735l1.754.569a2.887 2.887 0 0 1 1.822 1.826l.578 1.775c.099.283.283.527.527.7Zm7.667 5.047a1.123 1.123 0 0 1-.41-.55l-.328-1.006a1.292 1.292 0 0 0-.821-.823l-.991-.323a1.148 1.148 0 0 1-.781-1.083 1.142 1.142 0 0 1 .771-1.08l1.006-.326a1.3 1.3 0 0 0 .8-.82l.324-.991a1.143 1.143 0 0 1 2.157-.021l.329 1.014a1.299 1.299 0 0 0 .82.816l.992.323a1.141 1.141 0 0 1 .039 2.165l-1.014.329a1.3 1.3 0 0 0-.818.822l-.322.989c-.078.23-.226.43-.425.57a1.14 1.14 0 0 1-1.328-.005Z"></path>
+          </svg>
+
+          <span class="font-semibold">Tóm tắt bài viết AI</span>
+        </div>
+
+        <div class="mx-auto p-6 mb-16 border border-gray-300 rounded-2xl">
+          <p>Anime Saga has released new codes that provide players with free gems, gold, and other in-game rewards, enhancing the gaming experiencefreetoplayer.com+2. Players can redeem these codes easily by interacting with the NPC in the game, making it accessible for everyonebeebom.com. The codes are time-limited, so players are encouraged to redeem them quickly to maximize their rewards and improve their gameplayfreetoplayer.com.</p>
+        </div>
+      </div>
+      <!-- AI Summarize Section -->
+
+      <!-- Tags -->
+      <div class="px-8 flex flex-wrap gap-2 mb-10">
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Công nghệ</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Chính trị</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Lập trình</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Quan điểm</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Viết lách</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Góc nhìn</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Sách</span>
+      </div>
+
+      <!-- Status -->
+      <div class="mx-4 px-8 py-4 flex justify-between items-center">
+        <div class="flex space-x-4 text-gray-500">
+          <div class="flex justify-between rounded-lg">
+            <button class="cursor-pointer hover:text-green-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
+              <span class="mb-0">
+                <svg fill="currentColor" height="16" icon-name="upvote-outline" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"></path>
+                </svg>
+              </span>
+            </button>
+            <span class="text-gray-500 text-sm flex justify-center items-center">0</span>
+            <button class="cursor-pointer hover:text-red-500 rounded-full hover:bg-gray-100 w-8 h-8 flex justify-center items-center">
+              <span class="mb-0">
+                <svg fill="currentColor" height="16" icon-name="downvote-outline" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
+                  <path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"></path>
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div class="flex justify-between items-center">
+            <svg fill="currentColor" height="20" width="20" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path class="cls-1" d="M14,3.5v6A1.5,1.5,0,0,1,12.5,11H8.75L3.5,14l.75-3H3.5A1.5,1.5,0,0,1,2,9.5v-6A1.5,1.5,0,0,1,3.5,2h9A1.5,1.5,0,0,1,14,3.5Z"></path>
+            </svg>
+            <span class="text-gray-500 text-sm px-1">{{ post.comments.count }}</span>
+          </div>
+        </div>
+
+        <div>
+          <button class="rounded-full hover:bg-gray-200 w-8 h-8 flex items-center justify-center cursor-pointer">
+            <svg rpl="" fill="currentColor" height="16" icon-name="overflow-horizontal-fill" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
+              <!-- ?lit$739076916$ -->
+              <!-- ?lit$739076916$ -->
+              <path d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+              <!-- ? -->
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Author's Profile -->
+      <div class="flex w-full items-center font-sans px-8 py-4">
+        <a href="{% url 'users:profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
+        <div class="flex-1 px-2">
+          <a href="{% url 'users:profile' post.author.id %}"><p class="text-gray-800 font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
+          <p class="text-sm md:text-base font-normal text-gray-600">
+            <span>{{ post.author.followers.count }} followers</span><span class="px-2">.</span><span>{{ post.author.following.count }} following</span>
+          </p>
+          <p class="text-sm md:text-base font-normal text-gray-600">{{ post.author.bio }}</p>
+        </div>
+        <div class="justify-end">
+          <!--  -->
+          <div id="following-status">
+            <!-- if -->
+            {% if user.is_authenticated %}
+              {% if user.profile.id != post.author.id %}
+                <!--  -->
+                <button id="btn-unfollow" class="{% if user.profile|is_not_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500">Đang theo dõi</button>
+                <!--  -->
+                <button id="btn-follow" class="{% if user.profile|is_following:post.author %}hidden{% endif %} bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Theo dõi</button>
+                <!--  -->
+              {% endif %}
+            {% else %}
+              <a href="{% url 'users:login' %}" id="btn-follow-login" class="bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
+            {% endif %}
+            <!-- endif -->
+          </div>
+          <!--  -->
+        </div>
+      </div>
+      <!-- /Author's Profile -->
+    </div>
+
+    <div class="w-full border-t-1 border-gray-200 mt-8">
+      <div class="w-full md:max-w-4xl mx-auto">
+        <!-- Comment Section -->
+        <div id="comment-section" class="container w-full mx-auto pt-8 p-8 mb-16">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">Bình luận ({{ post.comments.count }})</h2>
+          <!-- Comment Form -->
+          <div class="mt-6 px-4">
+            <textarea id="text-comment" name="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none bg-white" rows="4" placeholder="Write your comment here..."></textarea>
+            <button id="btn-submit-comment" type="button" class="btn bg-green-500 text-white font-bold py-2 px-4 mt-4 rounded-xl">Gửi</button>
+          </div>
+
+          <!-- Comment List -->
+          <div class="mt-10 px-4">
+            <!-- Single Comment -->
+
+            <div id="comments">
+              {% for comment in post.comments.all %}
+                <div class="flex mb-6">
+                  <img class="w-14 h-14 rounded-full mr-4" src="{{ comment.commenter.avatar.url }}" alt="Avatar of User" />
+                  <div class="flex-1">
+                    <p id="commenter-name" class="text-green-600 font-normal">{{ comment.commenter }}</p>
+                    <p id="commenter-timestamp" class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>
+                    <p id="commenter-content" class="text-gray-800">{{ comment.content }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
