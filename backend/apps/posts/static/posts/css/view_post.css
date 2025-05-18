@@ -22,23 +22,22 @@
 .ql-editor h1,
 h2,
 h3 {
-    font-family: Noto Sans;
     padding-top: 0.85rem;
     padding-bottom: 0.85rem;
 }
 
 .ql-editor h3 {
-    font-weight: bold;
+    font-weight: 600;
     font-size: var(--font-size-h3) !important;
 }
 
 .ql-editor h2 {
-    font-weight: bold;
+    font-weight: 600;
     font-size: var(--font-size-h2) !important;
 }
 
 .ql-editor h1 {
-    font-weight: bold;
+    font-weight: 600;
     font-size: var(--font-size-h1) !important;
 }
 

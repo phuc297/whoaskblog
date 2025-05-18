@@ -1,14 +1,127 @@
 import json
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView, TemplateView, View
 from django.db.models import Sum
-from .models import Post, Comment, PostVote
+from .models import Post, Comment, PostVote, Tag
 from django.core.exceptions import PermissionDenied
-from .forms import PostForm
+from .forms import PostForm, TagForm
+from utils.utils import get_text_post_content
+from utils import genai
+
+
+class CreateTagView(View):
+    template_name = 'posts/tag_create.html'
+
+    def get(self, request, pk):
+        allowed_post_id = request.session.get('can_tag_post_id')
+        if allowed_post_id != pk:
+            return HttpResponseForbidden()
+        del request.session['can_tag_post_id']
+
+        post = Post.objects.get(pk=pk)
+        content_json_string = post.content.json_string
+        text_content = get_text_post_content(content_json_string)
+        tags = genai.auto_tag_post(post.title, text_content)
+        return render(request, self.template_name, {'pk': pk, 'tags': tags})
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+
+        tags = self.request.POST.get('tags', '').lower()
+        tag_list = [tag.strip()
+                    for tag in tags.split(',') if tag.strip()]
+        # if len(tag_list) == 0:
+        #     content_json_string = post.content.json_string
+        #     text_content = get_text_post_content(content_json_string)
+        #     tag_list = genai.auto_tag_post(post.title, text_content)
+
+        for tag in tag_list:
+            tag_obj, _ = Tag.objects.get_or_create(name=tag)
+            post.tags.add(tag_obj)
+
+        return redirect(reverse_lazy('home'))
+
+
+class CreatePostView(CreateView):
+    model = Post
+    template_name = 'posts/create.html'
+    form_class = PostForm
+    published = False
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user.profile
+        action = self.request.POST.get('action', '').lower()
+
+        if action == 'published':
+            self.published = True
+            form.instance.status = Post.PUBLISHED
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        if self.published:
+            self.request.session['can_tag_post_id'] = self.object.id
+            return reverse_lazy('posts:create_tags', kwargs={'pk': self.object.id})
+        return reverse_lazy('home')
+
+
+class UpdatePostView(UpdateView):
+    model = Post
+    context_object_name = 'post'
+    template_name = 'posts/create.html'
+    form_class = PostForm
+    published = False
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if obj.author != self.request.user.profile:
+            raise PermissionDenied
+
+        return obj
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user.profile
+        action = self.request.POST.get('action', '').lower()
+
+        if action == 'published':
+            self.published = True
+            form.instance.status = Post.PUBLISHED
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        if self.published:
+            self.request.session['can_tag_post_id'] = self.object.id
+            return reverse_lazy('posts:create_tags', kwargs={'pk': self.object.id})
+        return reverse_lazy('home')
+
+# class CreatePostView(View):
+#     template_name = 'posts/create.html'
+
+#     def get(self, request):
+#         return render(request, self.template_name, {
+#             'form': PostForm()
+#         })
+
+#     def post(self, request):
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.author = self.request.user.profile
+#             action = self.request.POST.get('action', '').lower()
+#             if action == 'published':
+#                 post.status = Post.PUBLISHED
+#             post = form.save()
+#             return JsonResponse({'success': True, 'pk': post.id}, status=200)
+
+#         return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
 
 class DeletePostView(DeleteView):
@@ -29,23 +142,6 @@ class DeletePostView(DeleteView):
         return obj
 
 
-class CreatePostView(CreateView):
-    model = Post
-    template_name = 'posts/create.html'
-    success_url = reverse_lazy('home')
-    form_class = PostForm
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-
-        action = self.request.POST.get('action', '').lower()
-
-        if action == 'published':
-            form.instance.status = Post.PUBLISHED
-
-        return super().form_valid(form)
-
-
 class PostView(DetailView):
     model = Post
     context_object_name = 'post'
@@ -56,32 +152,6 @@ class PostView(DetailView):
         obj.views = obj.views + 1
         obj.save(update_fields=['views'])
         return obj
-
-
-class UpdatePostView(UpdateView):
-    model = Post
-    context_object_name = 'post'
-    template_name = 'posts/update.html'
-    success_url = reverse_lazy('home')
-    form_class = PostForm
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-
-        if obj.author != self.request.user.profile:
-            raise PermissionDenied
-
-        return obj
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-
-        action = self.request.POST.get('action', '').lower()
-
-        if action == 'published':
-            form.instance.status = Post.PUBLISHED
-
-        return super().form_valid(form)
 
 
 class PublishedPostListView(ListView):
@@ -105,15 +175,51 @@ class DraftPostListView(ListView):
 
 
 @require_POST
+def summarize_post(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        content_json_string = post.content.json_string
+        text_content = get_text_post_content(content_json_string)
+        summary = genai.summarize_post(post.title, text_content)
+        # tags = genai.add_tags_post(post.title, text_content)
+        return JsonResponse({
+            'success': True,
+            'content': summary
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Unexpected error: {str(e)}'
+        }, status=500)
+
+
+def generate_tag(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+        content_json_string = post.content.json_string
+        text_content = get_text_post_content(content_json_string)
+        tags = genai.auto_tag_post(post.title, text_content)
+        return JsonResponse({
+            'success': True,
+            'content': tags
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Unexpected error: {str(e)}'
+        }, status=500)
+
+
+@require_POST
 @login_required
-def comment(request, post_id):
+def comment(request, pk):
     if not request.user.is_authenticated:
         return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
 
     try:
         data = json.loads(request.body)
         content = data.get('content')
-        post_id = data.get('post_id')
+        post_id = pk
         profile = request.user.profile
     except (ValueError, TypeError, json.JSONDecodeError):
         return JsonResponse({'success': False, 'error': 'Invalid JSON input'}, status=400)
@@ -136,7 +242,7 @@ def comment(request, post_id):
 
 @require_POST
 @login_required
-def post_vote(request, post_id):
+def post_vote(request, pk):
     try:
         data = json.loads(request.body)
         vote_choice = int(data.get('vote', 0))
@@ -144,7 +250,7 @@ def post_vote(request, post_id):
         return JsonResponse({'success': False, 'error': 'Invalid JSON input.'}, status=400)
 
     profile = request.user.profile
-    post = get_object_or_404(Post, pk=post_id)
+    post = get_object_or_404(Post, pk=pk)
 
     if vote_choice not in [PostVote.UPVOTE, PostVote.DOWNVOTE]:
         return JsonResponse({'success': False, 'error': 'Invalid vote value.'}, status=400)

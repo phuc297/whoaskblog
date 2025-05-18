@@ -97,7 +97,7 @@
 
           <!-- Post Content -->
           <article class="ql-snow">
-            <div class="ql-editor">{{ post.content.html|safe|default:post.content }}</div>
+            <div class="ql-editor font-sans">{{ post.content.html|safe|default:post.content }}</div>
           </article>
           <!-- / Post Content -->
         </div>
@@ -105,7 +105,8 @@
       <!-- Post Content -->
 
       <!-- AI Summarize Section -->
-      <div class="w-full">
+
+      <div id="id_summarize" class="w-full" data-url="{% url 'posts:summarize' post.id %}" data-post_id="{{ post.id }}">
         <div class="header mx-auto px-6 pb-3 flex space-x-2 text-black">
           <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
             <path d="M8.665 15.735c.245.173.537.265.836.264v-.004a1.441 1.441 0 0 0 1.327-.872l.613-1.864a2.87 2.87 0 0 1 1.817-1.812l1.778-.578a1.442 1.442 0 0 0-.052-2.74l-1.755-.57a2.877 2.877 0 0 1-1.822-1.823l-.578-1.777a1.446 1.446 0 0 0-2.732.022l-.583 1.792a2.877 2.877 0 0 1-1.77 1.786l-1.777.57a1.444 1.444 0 0 0 .017 2.735l1.754.569a2.887 2.887 0 0 1 1.822 1.826l.578 1.775c.099.283.283.527.527.7Zm7.667 5.047a1.123 1.123 0 0 1-.41-.55l-.328-1.006a1.292 1.292 0 0 0-.821-.823l-.991-.323a1.148 1.148 0 0 1-.781-1.083 1.142 1.142 0 0 1 .771-1.08l1.006-.326a1.3 1.3 0 0 0 .8-.82l.324-.991a1.143 1.143 0 0 1 2.157-.021l.329 1.014a1.299 1.299 0 0 0 .82.816l.992.323a1.141 1.141 0 0 1 .039 2.165l-1.014.329a1.3 1.3 0 0 0-.818.822l-.322.989c-.078.23-.226.43-.425.57a1.14 1.14 0 0 1-1.328-.005Z"></path>
@@ -114,21 +115,18 @@
           <span class="font-semibold">Tóm tắt bài viết AI</span>
         </div>
 
-        <div class="mx-auto p-6 mb-16 border border-gray-300 rounded-2xl">
-          <p>Anime Saga has released new codes that provide players with free gems, gold, and other in-game rewards, enhancing the gaming experiencefreetoplayer.com+2. Players can redeem these codes easily by interacting with the NPC in the game, making it accessible for everyonebeebom.com. The codes are time-limited, so players are encouraged to redeem them quickly to maximize their rewards and improve their gameplayfreetoplayer.com.</p>
+        <div class="mx-auto p-6 mb-16 border border-gray-300 rounded-2xl bg-gray-100">
+          <span id="id_summarize_loading" class="hidden loading loading-dots loading-md"></span>
+          <p id="id_summarize_content" class="font-semibold"></p>
         </div>
       </div>
       <!-- AI Summarize Section -->
 
       <!-- Tags -->
       <div class="px-8 flex flex-wrap gap-2 mb-10">
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Công nghệ</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Chính trị</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Lập trình</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Quan điểm</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Viết lách</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Góc nhìn</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Sách</span>
+        {% for tag in post.tags.all %}
+          <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">{{ tag.name }}</span>
+        {% endfor %}
       </div>
 
       <!-- Status -->
@@ -175,7 +173,7 @@
       <div class="flex w-full items-center font-sans px-8 py-4">
         <a href="{% url 'users:profile' post.author.id %}"><img class="w-16 h-16 rounded-full mr-4" src="{{ post.author.avatar.url }}" alt="Avatar of Author" /></a>
         <div class="flex-1 px-2">
-          <a href="{% url 'users:profile' post.author.id %}"><p class="text-gray-800 font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
+          <a href="{% url 'users:profile' post.author.id %}"><p class="text-gray-700 font-bold text-base md:text-xl leading-none mb-2">{{ post.author }}</p></a>
           <p class="text-sm md:text-base font-normal text-gray-600">
             <span>{{ post.author.followers.count }} followers</span><span class="px-2">.</span><span>{{ post.author.following.count }} following</span>
           </p>
@@ -208,11 +206,11 @@
       <div class="w-full md:max-w-4xl mx-auto">
         <!-- Comment Section -->
         <div id="comment-section" class="container w-full mx-auto pt-8 p-8 mb-16">
-          <h2 class="text-2xl font-bold mb-4 text-gray-800">Bình luận ({{ post.comments.count }})</h2>
+          <h2 class="text-2xl font-bold mb-4 text-gray-700">Bình luận ({{ post.comments.count }})</h2>
           <!-- Comment Form -->
           <div class="mt-6 px-4">
             <textarea id="text-comment" name="comment-content" class="w-full border-b border-gray-300 p-4 focus:outline-none bg-white" rows="4" placeholder="Write your comment here..."></textarea>
-            <button id="btn-submit-comment" type="button" class="btn bg-green-500 text-white font-bold py-2 px-4 mt-4 rounded-xl">Gửi</button>
+            <button id="btn-submit-comment" type="button" class="btn bg-green-500 text-white font-bold py-2 px-4 mt-4 rounded-xl border-none">Gửi</button>
           </div>
 
           <!-- Comment List -->
@@ -226,7 +224,7 @@
                   <div class="flex-1">
                     <p id="commenter-name" class="text-green-600 font-normal">{{ comment.commenter }}</p>
                     <p id="commenter-timestamp" class="text-gray-600 text-sm mb-2">Posted on {{ comment.created_at }}</p>
-                    <p id="commenter-content" class="text-gray-800">{{ comment.content }}</p>
+                    <p id="commenter-content" class="text-gray-700">{{ comment.content }}</p>
                   </div>
                 </div>
               {% endfor %}
@@ -245,6 +243,7 @@
   <script src="{% static 'posts/js/follow.js' %}" data-url="{% url 'users:follow' post.author.id %}" data-user="{{ user.profile.id }}" data-profile="{{ post.author.id }}"></script>
   <script id="vote-script" src="{% static 'posts/js/post_vote.js' %}" data-url="{% url 'posts:vote' post.id %}"></script>
   <script id="comment-script" src="{% static 'posts/js/comment.js' %}" data-post_id="{{ post.id }}" data-profile_id="{{ user.profile.id }}" data-url="{% url 'posts:comment' post.id %}"></script>
+  <script src="{% static 'posts/js/summarize.js' %}"></script>
   <script>
     function scrollToComment() {
       const el = document.getElementById('comment-section')

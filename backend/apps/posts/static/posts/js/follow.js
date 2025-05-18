@@ -1,4 +1,4 @@
-const data = document.currentScript.dataset;
+data = document.currentScript.dataset;
 
 document.querySelectorAll("#btn-follow").forEach(e => e.addEventListener("click", () => {
 

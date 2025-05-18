@@ -1,20 +1,16 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% load add_attrs %}
-{% load crispy_forms_tags %}
-{% load tailwind_filters %}
+
 
 {% block title %}
-Bài viết mới
+  Bài viết mới
 {% endblock %}
 
 {% block head %}
   <title>{{ post.title }}</title>
   <link rel="stylesheet" href="{% static 'posts/css/create_post.css' %}" />
-  <link rel="stylesheet" href="{% static 'posts/css/quill.bubble.css' %}" />
-  <!--  -->
 
-  {{ form.media }}
+  {% include 'posts/include_quill.html' %}
 {% endblock %}
 
 {% block content %}
@@ -35,18 +31,18 @@ Bài viết mới
       </div>
 
       <!--  -->
-      <div id="post-info" class="hidden flex flex-col items-center justify-center mb-8">
-        <div class="w-2/3">
-          <label for="editor-description" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Description</label>
+      <div id="post-info" class="post-info hidden flex flex-col items-center justify-center mb-8 max-w-xl mx-auto">
+        <div class="w-full">
+          <label for="editor-description" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Mô tả</label>
           {{ form.description }}
         </div>
-        <div class="w-2/3">
-          <label for="id_category" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Category</label>
+        <div class="w-full">
+          <label for="id_category" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Chuyên mục</label>
           {{ form.category }}
         </div>
-        <div class="w-2/3">
+        <div class="w-full">
           <div>
-            <label for="id_thumbnail" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Thumbnail</label>
+            <label for="id_thumbnail" class="block text-gray-700 text-xl font-bold mb-4 pt-5">Ảnh bìa</label>
             {{ form.thumbnail }}
           </div>
         </div>
@@ -54,19 +50,19 @@ Bài viết mới
       <!--  -->
 
       <div id="button-group" class="mt-4">
-        <button id="btn-save" type="submit" name="action" value="draft" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Save</button>
-        <button id="btn-next" type="button" class="text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Next step</button>
+        <button id="btn-save" type="submit" name="action" value="draft" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Lưu nháp</button>
+        <button id="btn-next" type="button" class="text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Tiếp theo</button>
 
-        <button id="btn-back" type="button" class="hidden py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Back</button>
-        <button id="btn-publish" type="submit" name="action" value="published" class="hidden text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Publish</button>
+        <button id="btn-back" type="button" class="hidden py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100">Trở về</button>
+        <button id="btn-publish" type="submit" name="action" value="published" class="hidden text-white bg-green-500 hover:bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Đăng bài</button>
       </div>
     </form>
   </div>
 {% endblock %}
 
 {% block script %}
-  <script src="{% static 'posts/js/quill.js' %}"></script>
   <script src="{% static 'posts/js/create.js' %}"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const ql_editors = document.querySelectorAll('.ql-editor')

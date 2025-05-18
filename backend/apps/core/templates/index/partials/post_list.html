@@ -1,5 +1,6 @@
 {% load static %}
 {% load to_date %}
+{% load text_tags %}
 
 <div class="container mx-auto flex">
   <!-- Posts content -->
@@ -21,7 +22,7 @@
           <!-- Post title -->
           <div class="flex flex-col justify-start items-start w-full">
             <a href="/posts/{{ post.id }}"><h3 class="text-lg font-semibold mb-1 cursor-pointer text-gray-800">{{ post.title }}</h3></a>
-            <div id="post-description" class="mt-1 text-gray-700 text-sm hidden lg:block">{{ post.description }}</div>
+            <div id="post-description" class="mt-1 text-gray-700 text-sm hidden lg:block">{{ post.description|truncate_text:20 }}</div>
           </div>
           <!-- Post title -->
           <!-- Post info -->

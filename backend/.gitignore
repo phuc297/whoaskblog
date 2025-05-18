@@ -152,9 +152,12 @@ mediafiles/*
 
 
 # Tailwindcss
+static/css/tailwindcss.exe
+static/css/tailwindcss
 staticfiles/*
 
 
 scripts/
 cloudinary_api.py
 *.sqlite3
+temp.*

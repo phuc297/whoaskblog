@@ -46,17 +46,38 @@ btnBack.addEventListener('click', () => {
 
 })
 
-editorForm = document.querySelector('#ql-editor-form')
-editorForm.addEventListener('submit', (event) => {
+editorForm = document.getElementById('ql-editor-form')
+editorForm.addEventListener('submit', () => {
 
-    event.preventDefault();
+    editorForm.preventDefault();
 
     let actionInput = document.createElement("input");
     actionInput.type = "hidden";
     actionInput.name = "action";
-    actionInput.value = event.submitter.value;
+    actionInput.value = editorForm.submitter.value;
     editorForm.appendChild(actionInput);
-    editorForm.submit()
+    // editorForm.submit()
+    console.log(editorForm.action)
+    const formData = new FormData(editorForm);
+    fetch(editorForm.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': editorForm.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        body: formData,
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Lỗi mạng hoặc máy chủ');
+            return response.text(); 
+        })
+        .then(data => {
+            if (data.success) {
+                
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
 })
 

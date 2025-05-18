@@ -15,6 +15,7 @@ from pathlib import Path
 from django.urls import reverse_lazy
 import dj_database_url
 from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
 
 load_dotenv('.env.dev')
 
@@ -26,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv('DEBUG_MODE', '0')))
@@ -250,3 +251,7 @@ QUILL_CONFIGS = {
 }
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+
+
+# GENAI API
+GOOGLE_GENAI_API_KEY = os.environ.get('GOOGLE_GENAI_API_KEY', '')
