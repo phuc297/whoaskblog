@@ -2,13 +2,14 @@
 import os
 import random
 from dotenv import load_dotenv
+import json
 
 load_dotenv('.env.dev')
 IS_CLOUD_STORE = bool(int(os.getenv('IS_CLOUD_STORE', '0')))
 
 
 STORAGES_PATH = './'
-DEFAULT_THUMBNAIL_POST_PATH = f'{STORAGES_PATH}/mediafiles/default_thumnails'
+DEFAULT_THUMBNAIL_POST_PATH = f'{STORAGES_PATH}/mediafiles/default_thumbnails'
 DEFAULT_AVATAR_PATH = f'{STORAGES_PATH}/mediafiles/default_avatars'
 
 CLOUD_AVATAR_LIST = ["/images/default_avatars/001-cat.png",
@@ -86,3 +87,19 @@ def get_random_avatar():
         random_file = random.choice(files)
         random_file_path = f'/default_avatars/{random_file}'
     return random_file_path
+
+
+def get_text_post_content(content_json_string):
+    try:
+        data = json.loads(content_json_string)
+        delta = json.loads(data['delta'])
+    except (KeyError, json.JSONDecodeError):
+        return ''
+
+    text_content = ''
+    for op in delta.get('ops', []):
+        insert = op.get('insert')
+        if isinstance(insert, str):
+            text_content += insert
+
+    return text_content.strip()
