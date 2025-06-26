@@ -73,7 +73,7 @@ class CreatePostView(CreateView):
 class UpdatePostView(UpdateView):
     model = Post
     context_object_name = 'post'
-    template_name = 'posts/create.html'
+    template_name = 'posts/update.html'
     form_class = PostForm
     published = False
 
@@ -97,9 +97,6 @@ class UpdatePostView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        if self.published:
-            self.request.session['can_tag_post_id'] = self.object.id
-            return reverse_lazy('posts:create_tags', kwargs={'pk': self.object.id})
         return reverse_lazy('home')
 
 # class CreatePostView(View):
