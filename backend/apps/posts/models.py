@@ -12,15 +12,21 @@ from utils.utils import get_random_thumbnail
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True)
     slug = models.SlugField(blank=True)
-    color = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -49,6 +55,7 @@ class Post(models.Model):
     last_published_update_at = models.DateTimeField(null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, related_name='posts', blank=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(blank=True)
     views = models.IntegerField(default=0)
@@ -58,9 +65,10 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-            
+
         if not self.category:
-            self.category, _ = Category.objects.get_or_create(name='Uncategorized')
+            self.category, _ = Category.objects.get_or_create(
+                name='Uncategorized')
 
         if not self._state.adding:
             previous = Post.objects.get(pk=self.pk)

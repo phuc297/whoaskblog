@@ -36,6 +36,7 @@ jobs:
         run: |
           echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
           echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
+          echo "GOOGLE_GENAI_API_KEY=${{ secrets.GOOGLE_GENAI_API_KEY }}" >> .env
 
       - name: Set up Docker Compose
         run: docker compose -f compose.ci.yaml version

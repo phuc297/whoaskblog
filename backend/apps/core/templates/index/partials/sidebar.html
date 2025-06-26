@@ -10,13 +10,13 @@
     <div class="px-2 side-bar-content">
       <h3 class="text-lg font-bold text-gray-800 py-4">Chủ đề thịnh hành</h3>
       <div class="py-2 flex flex-wrap gap-4 mb-4">
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Công nghệ</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Chính trị</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Lập trình</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Quan điểm</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Viết lách</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Góc nhìn</span>
-        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Sách</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Công nghệ</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Chính trị</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Lập trình</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Quan điểm</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Viết lách</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Góc nhìn</span>
+        <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-xl text-sm">Sách</span>
         {% comment %} <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Khởi nghiệp</span>
         <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Phát triển bản thân</span>
         <span class="bg-gray-100 text-gray-700 px-3 py-3 rounded-full text-sm">Trí tuệ nhân tạo</span>
@@ -46,12 +46,12 @@
               <!-- if -->
               {% if user.is_authenticated and user.profile.id != post.author.id %}
                 <!--  -->
-                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500 btn-unfollow">Đang theo dõi</button>
+                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_not_following:profile %}hidden{% endif %} w-30 bg-transparent border font-semibold py-2 px-4 mt-4 rounded-full border-green-500 text-xs text-green-500 btn-unfollow">Đang theo dõi</button>
                 <!--  -->
-                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 btn-follow">+ Theo dõi</button>
+                <button data-url="{% url 'users:follow' profile.id %}" data-user="{{ user.profile.id }}" data-profile="{{ profile.id }}" class="{% if user.profile|is_following:profile %}hidden{% endif %} w-30 bg-transparent border font-semibold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500 btn-follow">+ Theo dõi</button>
                 <!--  -->
               {% else %}
-                <a href="{% url 'users:login' %}" id="btn-follow-login" class="w-30 bg-transparent border font-bold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
+                <a href="{% url 'users:login' %}" id="btn-follow-login" class="w-30 bg-transparent border font-semibold py-2 px-4 mt-4 rounded-full border-gray-500 text-xs text-gray-500">+ Follow</a>
               {% endif %}
               <!-- endif -->
             </div>

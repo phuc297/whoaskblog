@@ -5,9 +5,7 @@ btnBack = document.querySelector('#btn-back')
 btnPublish = document.querySelector('#btn-publish')
 
 postTitleElement = document.querySelector('#id_title')
-
 postMainContentElement = document.querySelector('#post-main-content')
-
 postInfoElement = document.querySelector('#post-info')
 
 btnNext.addEventListener('click', () => {
@@ -25,7 +23,7 @@ btnNext.addEventListener('click', () => {
     }
 
     btnNext.classList.toggle('hidden')
-    if (btnSave != null) {
+    if (btnSave) {
         btnSave.classList.toggle('hidden')
     }
     postMainContentElement.classList.toggle('hidden')
@@ -33,21 +31,22 @@ btnNext.addEventListener('click', () => {
 
     btnBack.classList.toggle('hidden')
     btnPublish.classList.toggle('hidden')
-    postInfoElement.classList.toggle('hidden')
+    postInfoElement.classList.toggle('hidden');
+
 
 })
 
 btnBack.addEventListener('click', () => {
 
     btnNext.classList.toggle('hidden')
-    if (btnSave != null) {
+    if (btnSave) {
         btnSave.classList.toggle('hidden')
     }
     postMainContentElement.classList.toggle('hidden')
 
     btnBack.classList.toggle('hidden')
     btnPublish.classList.toggle('hidden')
-    postInfoElement.classList.toggle('hidden')
+    postInfoElement.classList.toggle('hidden');
 
 })
 
@@ -61,7 +60,6 @@ editorForm.addEventListener('submit', (event) => {
     actionInput.name = "action";
     actionInput.value = event.submitter.value;
     editorForm.appendChild(actionInput);
-
     editorForm.submit()
 
 })

@@ -152,10 +152,10 @@ class PostsAppTestCase(TestCase):
     def test_comment_redirects_to_login_if_not_authenticated(self):
         data = {
             'content': self.fake.sentence(5),
-            'post_id': self.post.id
+            'pk': self.post.id
         }
 
-        url = reverse('posts:comment', kwargs={'post_id': self.post.id})
+        url = reverse('posts:comment', kwargs={'pk': self.post.id})
         response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, 302)
@@ -168,11 +168,11 @@ class PostsAppTestCase(TestCase):
         self.assertTrue(logged_in)
 
         data = {
-            'post_id': self.post.id,
+            'pk': self.post.id,
             'content': self.fake.sentence(1)
         }
 
-        url = reverse('posts:comment', kwargs={'post_id': self.post.id})
+        url = reverse('posts:comment', kwargs={'pk': self.post.id})
         response = self.client.post(url, json.dumps(
             data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -184,7 +184,7 @@ class PostsAppTestCase(TestCase):
             'vote_choice': choice([-1, 1]),
         }
 
-        url = reverse('posts:vote', kwargs={'post_id': self.post.id})
+        url = reverse('posts:vote', kwargs={'pk': self.post.id})
         response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, 302)
@@ -202,7 +202,7 @@ class PostsAppTestCase(TestCase):
             'vote': choice([-1, 1]),
         }
 
-        url = reverse('posts:vote', kwargs={'post_id': self.post.id})
+        url = reverse('posts:vote', kwargs={'pk': self.post.id})
         response = self.client.post(url, json.dumps(
             data), content_type='application/json')
 
