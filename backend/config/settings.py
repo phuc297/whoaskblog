@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'apps.posts',
     'apps.users',
     'apps.notifications',
+    'apps.search'
     'cloudinary_storage',
     'cloudinary',
 ]

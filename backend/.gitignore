@@ -152,10 +152,10 @@ mediafiles/*
 
 
 # Tailwindcss
-static/css/tailwindcss.exe
-static/css/tailwindcss
+static/*
+!static/.gitkeep
+!static/favicon.ico
 staticfiles/*
-
 
 scripts/
 cloudinary_api.py

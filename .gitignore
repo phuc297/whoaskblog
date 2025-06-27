@@ -185,3 +185,5 @@ mycmd.txt
 .idea/
 temp
 temp.py
+
+.vscode/
